@@ -5,8 +5,6 @@ const KEY = 'tichu-trainer:progress';
 const THEME_KEY = 'tichu-trainer:theme';
 const VERSION = 1;
 
-const listeners = new Set();
-
 function emptyState() {
   return { version: VERSION, chapters: {} };
 }
@@ -44,7 +42,6 @@ function load() {
 
 function save() {
   safeWrite(KEY, JSON.stringify(state));
-  for (const fn of listeners) fn(state);
 }
 
 function chapterEntry(chapterId) {
@@ -52,11 +49,6 @@ function chapterEntry(chapterId) {
     state.chapters[chapterId] = { read: false, quizzes: {}, minigames: {} };
   }
   return state.chapters[chapterId];
-}
-
-export function subscribe(fn) {
-  listeners.add(fn);
-  return () => listeners.delete(fn);
 }
 
 export function markRead(chapterId) {
@@ -79,10 +71,6 @@ export function recordMinigame(chapterId, minigameId) {
   if (entry.minigames[minigameId] === 'cleared') return;
   entry.minigames[minigameId] = 'cleared';
   save();
-}
-
-export function quizResult(chapterId, quizId) {
-  return state.chapters[chapterId]?.quizzes?.[quizId] ?? null;
 }
 
 export function isMinigameCleared(chapterId, minigameId) {

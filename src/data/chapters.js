@@ -35,7 +35,3 @@ export function neighbours(id) {
   };
 }
 
-/** 어떤 챕터에 속한 퀴즈인지 찾는다. */
-export function quizById(chapterId, quizId) {
-  return chapterById(chapterId)?.quizzes.find((q) => q.id === quizId) ?? null;
-}

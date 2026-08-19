@@ -135,15 +135,6 @@ export function parseHand(input) {
   return tokens.map((t) => (typeof t === 'string' ? parseCard(t) : t));
 }
 
-/** 카드 배열을 표기 문자열로 (테스트 실패 메시지용). */
-export function formatHand(cards) {
-  return cards.map((c) => c.id).join(' ');
-}
-
-export function isSpecial(card) {
-  return card.special !== null;
-}
-
 export function isPhoenix(card) {
   return card.special === SPECIAL.PHOENIX;
 }
@@ -154,10 +145,6 @@ export function isDragon(card) {
 
 export function isDog(card) {
   return card.special === SPECIAL.DOG;
-}
-
-export function isMahjong(card) {
-  return card.special === SPECIAL.MAHJONG;
 }
 
 /** 조합에 자연 카드로 참여할 수 있는가 (봉황·개·용은 불가, 마작은 스트레이트에서만). */

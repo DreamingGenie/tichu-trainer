@@ -82,9 +82,3 @@ export function scoreRound(round) {
   return { us: totals[TEAM.US], them: totals[TEAM.THEM], doubleVictory, lines };
 }
 
-/** 누적 점수로 게임이 끝났는지. 1000점을 넘겨도 동점이면 계속한다. */
-export function gameResult(us, them) {
-  if (us < WINNING_SCORE && them < WINNING_SCORE) return null;
-  if (us === them) return null;
-  return us > them ? TEAM.US : TEAM.THEM;
-}

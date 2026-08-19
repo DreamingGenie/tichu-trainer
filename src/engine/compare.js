@@ -46,15 +46,7 @@ export function resolvePlayed(candidate, current) {
 }
 
 /**
- * candidate가 current를 이기는가.
- * current가 null이면 리드이므로 유효한 조합은 무엇이든 낼 수 있다.
- */
-export function beats(candidate, current) {
-  return checkPlay(candidate, current).ok;
-}
-
-/**
- * beats()와 같은 판정을 하되, 안 되는 이유까지 돌려준다.
+ * 조합을 낼 수 있는지 판정하되, 안 되는 이유까지 돌려준다.
  * 퀴즈 해설이 "왜 못 내는지"를 상황에 맞게 말할 수 있는 건 이 함수 덕분이다.
  *
  * @param candidate 조합 객체 또는 카드 배열

@@ -237,12 +237,3 @@ function checkRoundEnd(state) {
   return false;
 }
 
-/** 지금 이 자리가 낼 수 있는 상태인지 UI가 묻기 위한 요약. */
-export function turnInfo(state, seat) {
-  return {
-    isTurn: seat === state.turn && !state.done && !state.pendingDragon,
-    canPass: seat === state.turn && Boolean(state.current) && !state.done,
-    mustLead: seat === state.turn && !state.current,
-    wish: state.wish,
-  };
-}
