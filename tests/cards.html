@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>카드 렌더링 확인</title>
+  <link rel="stylesheet" href="../styles/tokens.css">
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/components.css">
+  <style>
+    .main { max-width: 1000px; }
+    .swatch { display: flex; gap: var(--space-4); flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+  <main class="main stack stack--loose">
+    <div class="row">
+      <h1>카드 렌더링 확인</h1>
+      <span class="site-header__spacer"></span>
+      <button class="btn btn--small" id="theme">다크로 보기</button>
+      <button class="btn btn--small" id="size">크게 보기</button>
+    </div>
+
+    <section class="stack">
+      <h2>특수카드 4장</h2>
+      <p class="muted small">그림 대신 카드의 기능을 나타내는 도형을 쓴다. 개는 파트너에게 선을 넘기는 화살표, 용은 왕관, 봉황은 와일드, 마작은 선을 여는 표식.</p>
+      <div id="specials" class="card-row"></div>
+    </section>
+
+    <section class="stack">
+      <h2>수트 4종</h2>
+      <div id="suits" class="card-row"></div>
+    </section>
+
+    <section class="stack">
+      <h2>점수 카드</h2>
+      <p class="muted small">5·10·K와 용·봉황에만 아래쪽 알약 표시가 붙는다.</p>
+      <div id="points" class="card-row"></div>
+    </section>
+
+    <section class="stack">
+      <h2>상태</h2>
+      <div id="states" class="card-row"></div>
+    </section>
+
+    <section class="stack">
+      <h2>손패 14장 (겹침)</h2>
+      <div id="hand" class="card-row card-row--overlap"></div>
+    </section>
+
+    <section class="stack">
+      <h2>전체 덱</h2>
+      <div id="deck" class="card-row"></div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { createDeck, parseHand } from '../src/engine/cards.js';
+    import { cardBackElement, cardElement, cardRow } from '../src/ui/card-view.js';
+
+    const deck = createDeck();
+    const byId = new Map(deck.map((c) => [c.id, c]));
+    const put = (id, node) => document.getElementById(id).replaceChildren(...(Array.isArray(node) ? node : [node]));
+
+    put('specials', parseHand('MAH DOG PHX DRG').map((c) => cardElement(c)));
+    put('suits', parseHand('GA BA UA RA').map((c) => cardElement(c)));
+    put('points', parseHand('G5 G10 GK DRG PHX G7').map((c) => cardElement(c)));
+
+    put('states', [
+      cardElement(byId.get('GK'), { selectable: true }),
+      cardElement(byId.get('BK'), { selectable: true, selected: true }),
+      cardElement(byId.get('UK'), { muted: true }),
+      cardElement(byId.get('RK'), { tag: '소원' }),
+      cardBackElement(),
+    ]);
+
+    document.getElementById('hand').replaceChildren(
+      ...parseHand('MAH G2 B2 G5 B6 U7 R8 G9 G10 GJ BQ GK RA PHX')
+        .map((c) => cardElement(c, { selectable: true })),
+    );
+
+    put('deck', deck.map((c) => cardElement(c)));
+
+    document.getElementById('theme').onclick = (e) => {
+      const dark = document.documentElement.dataset.theme === 'dark';
+      document.documentElement.dataset.theme = dark ? 'light' : 'dark';
+      e.target.textContent = dark ? '다크로 보기' : '라이트로 보기';
+    };
+    document.getElementById('size').onclick = (e) => {
+      const big = document.documentElement.style.getPropertyValue('--card-w') === '110px';
+      document.documentElement.style.setProperty('--card-w', big ? '68px' : '110px');
+      e.target.textContent = big ? '크게 보기' : '작게 보기';
+    };
+  </script>
+</body>
+</html>

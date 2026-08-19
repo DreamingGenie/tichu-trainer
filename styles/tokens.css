@@ -1,0 +1,197 @@
+/* 색·타이포·간격 토큰. 라이트가 기본이고 다크는 시스템 설정 또는 수동 토글을 따른다. */
+
+:root {
+  color-scheme: light dark;
+
+  /* 배경과 표면 */
+  --bg: #f7f5f1;
+  --bg-sunken: #efece6;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --border: #e0dbd2;
+  --border-strong: #c8c1b5;
+
+  /* 글자 */
+  --text: #23201c;
+  --text-muted: #6b6459;
+  --text-faint: #948c7f;
+
+  /* 강조 — 옥(비취)에서 가져온 초록 계열 */
+  --accent: #0f7a58;
+  --accent-hover: #0c6449;
+  --accent-soft: #e2f2ec;
+  --accent-text: #ffffff;
+
+  /* 상태 */
+  --ok: #16794f;
+  --ok-soft: #e3f4ec;
+  --warn: #9a6a00;
+  --warn-soft: #fdf2d9;
+  --bad: #b23b2e;
+  --bad-soft: #fbe9e6;
+
+  /* 테이블 펠트 */
+  --felt: #2f6b52;
+  --felt-deep: #24543f;
+  --felt-text: #eef6f2;
+
+  /* 카드 */
+  --card-face: #ffffff;
+  --card-edge: #d9d3c8;
+  --card-shadow: 0 1px 2px rgb(35 32 28 / 0.14), 0 4px 10px rgb(35 32 28 / 0.08);
+  --card-shadow-lift: 0 4px 8px rgb(35 32 28 / 0.18), 0 12px 24px rgb(35 32 28 / 0.14);
+  --card-back: #35618f;
+  --card-back-line: #6d94bd;
+
+  /* 수트 색 */
+  --suit-jade: #0d8055;
+  --suit-sword: #333c48;
+  --suit-pagoda: #2160b4;
+  --suit-star: #bc3a2c;
+  --suit-special: #6b4ea8;
+
+  /* 치수 */
+  --card-w: 68px;
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 16px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  --font: system-ui, -apple-system, 'Segoe UI', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+  --font-num: 'Segoe UI', system-ui, sans-serif;
+
+  --shadow-panel: 0 1px 2px rgb(35 32 28 / 0.06), 0 6px 20px rgb(35 32 28 / 0.06);
+  --focus: 0 0 0 3px color-mix(in srgb, var(--accent) 40%, transparent);
+
+  --max-w: 940px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16191d;
+    --bg-sunken: #101316;
+    --surface: #1d2126;
+    --surface-raised: #242930;
+    --border: #333a43;
+    --border-strong: #46505c;
+
+    --text: #e9e6e1;
+    --text-muted: #a3a9b2;
+    --text-faint: #79808a;
+
+    --accent: #3fbb8e;
+    --accent-hover: #59cca2;
+    --accent-soft: #17342a;
+    --accent-text: #0c1f18;
+
+    --ok: #4cc38a;
+    --ok-soft: #14301f;
+    --warn: #d7a13a;
+    --warn-soft: #322613;
+    --bad: #e5705f;
+    --bad-soft: #351d1a;
+
+    --felt: #235943;
+    --felt-deep: #1a4232;
+    --felt-text: #dcece4;
+
+    --card-face: #232830;
+    --card-edge: #3a424d;
+    --card-shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 4px 10px rgb(0 0 0 / 0.3);
+    --card-shadow-lift: 0 4px 8px rgb(0 0 0 / 0.5), 0 12px 24px rgb(0 0 0 / 0.4);
+    --card-back: #2b4a6d;
+    --card-back-line: #4a6f97;
+
+    --suit-jade: #43c78d;
+    --suit-sword: #b6c0cd;
+    --suit-pagoda: #6aa5f0;
+    --suit-star: #f0796a;
+    --suit-special: #ab90e8;
+
+    --shadow-panel: 0 1px 2px rgb(0 0 0 / 0.3), 0 6px 20px rgb(0 0 0 / 0.25);
+  }
+}
+
+/* 헤더의 테마 토글이 이 속성을 심고, 두 방향 모두에서 시스템 설정을 이긴다. */
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f7f5f1;
+  --bg-sunken: #efece6;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --border: #e0dbd2;
+  --border-strong: #c8c1b5;
+  --text: #23201c;
+  --text-muted: #6b6459;
+  --text-faint: #948c7f;
+  --accent: #0f7a58;
+  --accent-hover: #0c6449;
+  --accent-soft: #e2f2ec;
+  --accent-text: #ffffff;
+  --ok: #16794f;
+  --ok-soft: #e3f4ec;
+  --warn: #9a6a00;
+  --warn-soft: #fdf2d9;
+  --bad: #b23b2e;
+  --bad-soft: #fbe9e6;
+  --felt: #2f6b52;
+  --felt-deep: #24543f;
+  --felt-text: #eef6f2;
+  --card-face: #ffffff;
+  --card-edge: #d9d3c8;
+  --card-shadow: 0 1px 2px rgb(35 32 28 / 0.14), 0 4px 10px rgb(35 32 28 / 0.08);
+  --card-shadow-lift: 0 4px 8px rgb(35 32 28 / 0.18), 0 12px 24px rgb(35 32 28 / 0.14);
+  --card-back: #35618f;
+  --card-back-line: #6d94bd;
+  --suit-jade: #0d8055;
+  --suit-sword: #333c48;
+  --suit-pagoda: #2160b4;
+  --suit-star: #bc3a2c;
+  --suit-special: #6b4ea8;
+  --shadow-panel: 0 1px 2px rgb(35 32 28 / 0.06), 0 6px 20px rgb(35 32 28 / 0.06);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #16191d;
+  --bg-sunken: #101316;
+  --surface: #1d2126;
+  --surface-raised: #242930;
+  --border: #333a43;
+  --border-strong: #46505c;
+  --text: #e9e6e1;
+  --text-muted: #a3a9b2;
+  --text-faint: #79808a;
+  --accent: #3fbb8e;
+  --accent-hover: #59cca2;
+  --accent-soft: #17342a;
+  --accent-text: #0c1f18;
+  --ok: #4cc38a;
+  --ok-soft: #14301f;
+  --warn: #d7a13a;
+  --warn-soft: #322613;
+  --bad: #e5705f;
+  --bad-soft: #351d1a;
+  --felt: #235943;
+  --felt-deep: #1a4232;
+  --felt-text: #dcece4;
+  --card-face: #232830;
+  --card-edge: #3a424d;
+  --card-shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 4px 10px rgb(0 0 0 / 0.3);
+  --card-shadow-lift: 0 4px 8px rgb(0 0 0 / 0.5), 0 12px 24px rgb(0 0 0 / 0.4);
+  --card-back: #2b4a6d;
+  --card-back-line: #4a6f97;
+  --suit-jade: #43c78d;
+  --suit-sword: #b6c0cd;
+  --suit-pagoda: #6aa5f0;
+  --suit-star: #f0796a;
+  --suit-special: #ab90e8;
+  --shadow-panel: 0 1px 2px rgb(0 0 0 / 0.3), 0 6px 20px rgb(0 0 0 / 0.25);
+}
