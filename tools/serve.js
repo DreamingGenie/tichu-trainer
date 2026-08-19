@@ -43,7 +43,9 @@ createServer((req, res) => {
 
   res.writeHead(200, {
     'content-type': TYPES[extname(target).toLowerCase()] || 'application/octet-stream',
-    'cache-control': 'no-cache',
+    // 개발용이라 캐시를 아예 막는다. no-cache 는 검증만 요구해서, 검증자(ETag 등)를
+    // 안 보내는 이 서버에서는 브라우저가 옛 파일을 계속 쓰는 일이 생긴다.
+    'cache-control': 'no-store',
   });
   createReadStream(target).pipe(res);
 }).listen(port, () => {
