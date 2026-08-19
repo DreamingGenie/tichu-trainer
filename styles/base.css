@@ -2,6 +2,10 @@
 
 html { -webkit-text-size-adjust: 100%; }
 
+/* 브레이크포인트는 두 개만 쓴다. CSS 에서는 미디어쿼리를 변수로 뺄 수 없으니 여기 적어둔다.
+ *   560px — 한 단 배치로 바꾸는 지점 (자리 배치, 카드 교환 슬롯)
+ *   440px — 헤더 로고 글자를 접는 지점
+ */
 body {
   margin: 0;
   background: var(--bg);
@@ -119,4 +123,15 @@ button { font: inherit; color: inherit; }
   .site-header__inner { gap: var(--space-1); padding-inline: var(--space-3); }
   .site-header .btn--small { padding-inline: var(--space-2); }
   .brand__text { display: none; }
+}
+
+code {
+  background: var(--bg-sunken);
+  border-radius: var(--radius-sm);
+  padding: 1px 5px;
+  font-size: 0.9em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }

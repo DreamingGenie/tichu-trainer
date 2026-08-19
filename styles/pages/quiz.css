@@ -1,0 +1,33 @@
+/* 연습문제 화면. */
+
+.quiz__prompt { font-size: 1.06rem; font-weight: 600; line-height: 1.65; }
+
+/* 문제에 딸린 상황판 — 테이블에 무엇이 깔렸는지 보여준다. */
+.quiz__table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  background: var(--bg-sunken);
+}
+.quiz__table .card-row { padding-block: var(--space-1); }
+
+/* 객관식 보기 */
+.choice {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border: var(--edge-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 0.96rem;
+  line-height: 1.6;
+  cursor: pointer;
+  transition: border-color 0.12s ease, background 0.12s ease;
+}
+.choice:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-soft); }
+.choice:disabled { cursor: default; opacity: 0.75; }
+.choice.is-correct { border-color: var(--ok); background: var(--ok-soft); opacity: 1; }
+.choice.is-wrong { border-color: var(--bad); background: var(--bad-soft); }

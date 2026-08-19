@@ -1,0 +1,108 @@
+/* 카드와 손패. 게임 도메인 요소라 화면을 가리지 않고 어디서나 쓰인다.
+ * 카드 크기는 --card-w 하나로 정해지고 라운드도 거기에 비례한다.
+ * 특정 영역의 카드만 키우고 싶으면 그 컨테이너에 --card-w 를 다시 지정하면 된다. */
+
+.card {
+  --suit: var(--suit-sword);
+  position: relative;
+  display: block;
+  flex: 0 0 auto;
+  width: var(--card-w);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--suit);
+  line-height: 0;
+  border-radius: calc(var(--card-w) * 0.09);
+  box-shadow: var(--card-shadow);
+  transition: transform 0.13s ease, box-shadow 0.13s ease, opacity 0.13s ease;
+}
+
+.card__face { display: block; width: 100%; height: auto; font-family: var(--font-num); }
+.card__bg { fill: var(--card-face); stroke: var(--card-edge); stroke-width: 1.5; }
+
+.card.is-muted { opacity: 0.34; filter: saturate(0.5); }
+.card--back { color: var(--card-back); }
+
+button.card { cursor: pointer; }
+button.card:hover { transform: translateY(-5px); box-shadow: var(--card-shadow-lift); }
+button.card:disabled { cursor: not-allowed; }
+button.card:disabled:hover { transform: none; box-shadow: var(--card-shadow); }
+
+.card.is-selected {
+  transform: translateY(-12px);
+  box-shadow: var(--card-shadow-lift), 0 0 0 3px var(--accent);
+}
+
+/* 카드 위에 붙는 짧은 표시 (예: '소원') */
+.card__tag {
+  position: absolute;
+  inset-inline-start: 50%;
+  inset-block-start: -9px;
+  transform: translateX(-50%);
+  background: var(--warn);
+  color: var(--on-solid);
+  font-size: 0.66rem;
+  font-weight: 700;
+  line-height: 1.6;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+/* --- 카드 줄 --------------------------------------------------------- */
+
+.card-row {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  align-items: flex-end;
+  padding-block: var(--space-3);
+}
+
+/* 손패는 겹쳐서 폭을 아낀다. 좁은 화면에 14장을 늘어놓을 수 없기 때문. */
+.card-row--overlap {
+  gap: 0;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: var(--space-5) var(--space-3);
+  scrollbar-width: thin;
+}
+.card-row--overlap > .card { position: relative; }
+.card-row--overlap > .card + .card { margin-inline-start: calc(var(--card-w) * -0.42); }
+.card-row--overlap > .card:hover,
+.card-row--overlap > .card.is-selected { z-index: 2; }
+
+/* --- 빈 자리 --------------------------------------------------------- */
+
+.card-slot {
+  width: var(--card-w);
+  aspect-ratio: 100 / 140;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: calc(var(--card-w) * 0.09);
+  display: grid;
+  place-items: center;
+  color: var(--text-faint);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  text-align: center;
+}
+button.card-slot { cursor: pointer; background: none; font: inherit; }
+button.card-slot:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+button.card-slot:disabled { cursor: not-allowed; }
+
+/* --- 문장 속의 카드 --------------------------------------------------- */
+
+/* 본문에서 [[GK]] 표기가 이걸로 바뀐다. 수트 색을 그대로 쓴다. */
+.card-chip {
+  --suit: var(--text);
+  display: inline-block;
+  padding: 0 6px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--suit) 12%, transparent);
+  color: var(--suit);
+  font-weight: 700;
+  font-size: 0.92em;
+  white-space: nowrap;
+}

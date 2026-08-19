@@ -1,0 +1,50 @@
+/* 레슨 본문. blocks.js 가 만드는 요소들이 여기에 대응한다. */
+
+figure.block-cards { margin: 0; }
+figure.block-cards figcaption { margin-top: calc(var(--space-1) * -1); }
+
+/* --- 되는 예 / 안 되는 예 --------------------------------------------- */
+/* 규칙 설명에서 가장 잘 먹히는 형태라 자주 쓴다. */
+
+.examples {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-3);
+}
+.example {
+  border: var(--edge);
+  border-inline-start-width: 3px;
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface);
+}
+.example.is-ok { border-inline-start-color: var(--ok); }
+.example.is-bad { border-inline-start-color: var(--bad); }
+.example__head { display: flex; gap: var(--space-2); align-items: baseline; }
+.example__mark { font-weight: 800; }
+.example.is-ok .example__mark { color: var(--ok); }
+.example.is-bad .example__mark { color: var(--bad); }
+.example__label { font-weight: 600; font-size: 0.94rem; }
+.example .card-row { padding-block: var(--space-2); }
+
+/* --- 본문에 끼워넣는 데모 ---------------------------------------------- */
+
+.demo {
+  border: var(--edge);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  background: var(--bg-sunken);
+}
+.demo__title { margin-bottom: var(--space-3); }
+
+/* --- 본문 표 ----------------------------------------------------------- */
+
+.table-wrap { overflow-x: auto; }
+table.data { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+table.data th, table.data td { padding: var(--space-2) var(--space-3); text-align: left; border-bottom: var(--edge); }
+table.data th { font-weight: 700; color: var(--text-muted); font-size: 0.84rem; white-space: nowrap; }
+table.data td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* --- 앞뒤 챕터 이동 ---------------------------------------------------- */
+
+.lesson-nav { border-top: var(--edge); padding-top: var(--space-4); }

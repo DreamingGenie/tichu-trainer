@@ -1,0 +1,86 @@
+/* 내용을 담는 그릇과 상태를 알려주는 작은 부품. 화면을 가리지 않고 쓰인다. */
+
+.panel {
+  background: var(--surface);
+  border: var(--edge);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-panel);
+}
+
+/* --- 알림 상자 -------------------------------------------------------- */
+
+.note {
+  border-inline-start: 3px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  font-size: 0.94rem;
+}
+.note--warn { border-color: var(--warn); background: var(--warn-soft); }
+.note--bad { border-color: var(--bad); background: var(--bad-soft); }
+.note__title { font-weight: 700; display: block; margin-bottom: var(--space-1); }
+
+/* --- 배지 ------------------------------------------------------------- */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-pill);
+  font-size: 0.76rem;
+  font-weight: 700;
+  background: var(--bg-sunken);
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+.badge--ok { background: var(--ok-soft); color: var(--ok); }
+.badge--bad { background: var(--bad-soft); color: var(--bad); }
+.badge--warn { background: var(--warn-soft); color: var(--warn); }
+.badge--accent { background: var(--accent-soft); color: var(--accent); }
+
+/* --- 판정 상자 -------------------------------------------------------- */
+/* 맞았는지 틀렸는지와 그 이유를 같은 자리에 계속 보여준다. 퀴즈·미니판·샌드박스 공용. */
+
+.verdict {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  border: var(--edge);
+  background: var(--surface);
+}
+.verdict.is-ok { border-color: var(--ok); background: var(--ok-soft); }
+.verdict.is-bad { border-color: var(--bad); background: var(--bad-soft); }
+.verdict__icon {
+  flex: 0 0 auto;
+  width: 24px; height: 24px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  font-size: 0.86rem;
+  font-weight: 800;
+  background: var(--bg-sunken);
+  margin-top: 2px;
+}
+.verdict.is-ok .verdict__icon { background: var(--ok); color: var(--on-solid); }
+.verdict.is-bad .verdict__icon { background: var(--bad); color: var(--on-solid); }
+.verdict__title { font-weight: 700; }
+.verdict__body { font-size: 0.93rem; }
+.verdict__body:empty { display: none; }
+
+/* --- 진도 막대 -------------------------------------------------------- */
+
+.progress {
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-sunken);
+  overflow: hidden;
+}
+.progress__fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: var(--radius-pill);
+  transition: width 0.3s ease;
+}

@@ -1,0 +1,40 @@
+/* 챕터 목록 화면. */
+
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--grid-min), 1fr));
+  gap: var(--space-3);
+}
+
+.chapter-card {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-4);
+  background: var(--surface);
+  border: var(--edge);
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.13s ease, transform 0.13s ease, box-shadow 0.13s ease;
+}
+.chapter-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-panel);
+}
+
+.chapter-card__num {
+  flex: 0 0 auto;
+  width: 30px; height: 30px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: var(--bg-sunken);
+  color: var(--text-muted);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+.chapter-card.is-done .chapter-card__num { background: var(--ok-soft); color: var(--ok); }
+
+.chapter-card__title { font-weight: 700; line-height: 1.4; }
+.chapter-card__sub { font-size: 0.86rem; color: var(--text-muted); line-height: 1.55; }
