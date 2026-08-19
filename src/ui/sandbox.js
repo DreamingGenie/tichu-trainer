@@ -71,7 +71,7 @@ export function createSandbox(options = {}) {
   const handSection = element('div', 'stack stack--tight');
   const handHead = element('div', 'row');
   handHead.append(element('span', 'small muted', '연습용 손패 — 카드를 눌러 골라보세요'));
-  handHead.append(element('span', 'site-header__spacer'));
+  handHead.append(element('span', 'spacer'));
 
   const clearBtn = element('button', 'btn btn--small btn--ghost', '선택 해제');
   clearBtn.type = 'button';

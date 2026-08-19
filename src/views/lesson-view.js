@@ -66,7 +66,7 @@ export function lessonView({ params }) {
     link.href = `#/chapter/${prev.id}`;
     nav.append(link);
   }
-  nav.append(element('span', 'site-header__spacer'));
+  nav.append(element('span', 'spacer'));
   if (next) {
     const link = element('a', 'btn', `${next.title} →`);
     link.href = `#/chapter/${next.id}`;

@@ -27,12 +27,6 @@ button { font: inherit; color: inherit; }
 
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-.visually-hidden {
-  position: absolute; width: 1px; height: 1px;
-  margin: -1px; padding: 0; border: 0;
-  clip-path: inset(50%); overflow: hidden; white-space: nowrap;
-}
-
 /* --- 뼈대 ------------------------------------------------------------ */
 
 .app {
@@ -47,7 +41,7 @@ button { font: inherit; color: inherit; }
   z-index: 20;
   background: color-mix(in srgb, var(--bg) 88%, transparent);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--edge);
 }
 
 .site-header__inner {
@@ -80,7 +74,7 @@ button { font: inherit; color: inherit; }
   font-weight: 800;
 }
 
-.site-header__spacer { flex: 1; }
+
 
 .main {
   flex: 1;
@@ -91,7 +85,7 @@ button { font: inherit; color: inherit; }
 }
 
 .site-footer {
-  border-top: 1px solid var(--border);
+  border-top: var(--edge);
   color: var(--text-faint);
   font-size: 0.84rem;
 }
@@ -106,6 +100,7 @@ button { font: inherit; color: inherit; }
 .stack--tight { gap: var(--space-2); }
 .stack--loose { gap: var(--space-6); }
 .row { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+.spacer { flex: 1; }
 
 .lede { color: var(--text-muted); font-size: 1.02rem; }
 .muted { color: var(--text-muted); }

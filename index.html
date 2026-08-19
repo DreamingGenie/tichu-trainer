@@ -5,6 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>티츄 배우기 — 읽지 말고 해보면서</title>
   <meta name="description" content="보드게임 티츄의 규칙을 설명하고, 상황별로 무엇이 최선인지 직접 풀어보며 익히는 연습 사이트.">
+  <!-- 첫 페인트 전에 테마를 정한다. 이게 있어야 tokens.css 가 팔레트를 두 벌만 갖고,
+       새로고침할 때 밝은 화면이 번쩍이지 않는다. -->
+  <script>
+    (function () {
+      var theme = 'light';
+      try {
+        theme = localStorage.getItem('tichu-trainer:theme')
+          || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      } catch (e) { /* 저장소를 못 읽으면 라이트로 */ }
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+
   <link rel="stylesheet" href="styles/tokens.css">
   <link rel="stylesheet" href="styles/base.css">
   <link rel="stylesheet" href="styles/components.css">
@@ -18,7 +31,7 @@
           <span class="brand__mark" aria-hidden="true">티</span>
           <span class="brand__text">티츄 배우기</span>
         </a>
-        <span class="site-header__spacer"></span>
+        <span class="spacer"></span>
         <a class="btn btn--small btn--ghost" href="#/sandbox">샌드박스</a>
         <a class="btn btn--small btn--ghost" href="#/minigame">미니판</a>
         <button class="btn btn--small btn--ghost" id="theme-toggle" type="button">다크</button>
