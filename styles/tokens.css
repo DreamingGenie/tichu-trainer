@@ -39,16 +39,16 @@
   --bad: #b23b2e;
   --bad-soft: #fbe9e6;
 
-  /* 테이블 펠트 */
-  --felt: #2f6b52;
-  --felt-deep: #24543f;
-  --felt-text: #eef6f2;
+  /* 테이블 펠트 — 실제 티츄 앱처럼 올리브 그린 */
+  --felt: #5c6b3c;
+  --felt-deep: #39441f;
+  --felt-text: #f2f4ea;
 
   /* 카드 */
   --card-face: #ffffff;
   --card-edge: #d9d3c8;
-  --card-back: #35618f;
-  --card-back-line: #6d94bd;
+  --card-back: #1c1c20;
+  --card-back-line: #f0ede6;
   --card-shadow: 0 1px 2px rgb(35 32 28 / 0.14), 0 4px 10px rgb(35 32 28 / 0.08);
   --card-shadow-lift: 0 4px 8px rgb(35 32 28 / 0.18), 0 12px 24px rgb(35 32 28 / 0.14);
 
@@ -88,14 +88,14 @@
   --bad: #e5705f;
   --bad-soft: #351d1a;
 
-  --felt: #235943;
-  --felt-deep: #1a4232;
-  --felt-text: #dcece4;
+  --felt: #46522e;
+  --felt-deep: #2b3418;
+  --felt-text: #e8ecdd;
 
-  --card-face: #232830;
-  --card-edge: #3a424d;
-  --card-back: #2b4a6d;
-  --card-back-line: #4a6f97;
+  --card-face: #f4f2ec;
+  --card-edge: #cfc9bd;
+  --card-back: #15151a;
+  --card-back-line: #d9d5cc;
   --card-shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 4px 10px rgb(0 0 0 / 0.3);
   --card-shadow-lift: 0 4px 8px rgb(0 0 0 / 0.5), 0 12px 24px rgb(0 0 0 / 0.4);
 
@@ -125,6 +125,18 @@
 
   /* 진한 단색 배경 위에 올라가는 글자. 테마가 바뀌어도 배경이 진한 건 그대로다. */
   --on-solid: #ffffff;
+
+  /* 카드 면은 두 테마 모두 밝다(실물 카드가 그렇다). 그 위의 글자는 늘 어두운 잉크. */
+  --card-ink: #23201c;
+  --card-ink-soft: #8b8377;
+
+  /* 카드에 인쇄되는 수트 색. 밝은 카드 면 위에 얹히므로 테마와 무관하게 진한 쪽으로 고정한다.
+     본문 속 카드 칩은 페이지 배경 위에 놓이므로 --suit-* (테마별) 쪽을 쓴다. */
+  --suit-ink-jade: #0d8055;
+  --suit-ink-sword: #333c48;
+  --suit-ink-pagoda: #2160b4;
+  --suit-ink-star: #bc3a2c;
+  --suit-ink-special: #6b4ea8;
 
   --card-w: 68px;
 
