@@ -14,6 +14,8 @@
   text-align: center;
 }
 
+.hero h1 { text-wrap: balance; }
+
 .hero__eyebrow {
   font-size: var(--fs-micro);
   font-weight: var(--weight-medium);
@@ -21,7 +23,9 @@
   /* 펠트 위 12px 이라 흐리게 깔면 대비가 4.5:1 아래로 떨어진다. 크기와 자간만으로 낮춘다. */
 }
 
-.hero__lede { opacity: 0.92; }
+/* 가운데 정렬된 짧은 글은 balance 로 줄 길이를 고르게 나눈다. pretty 는 마지막 줄만
+   손보기 때문에 "그래서 이" 같은 어정쩡한 끊김이 그대로 남는다. */
+.hero__lede { text-wrap: balance; }
 
 /* 부채는 미니판 손패와 같은 방식으로 편다 — 회전축을 카드 아래에 두고 --i 로 각도를 준다.
  * 저쪽은 20px 뒷면이고 이쪽은 얼굴이 보이는 실제 크기라 겹침과 각도만 다르다. */

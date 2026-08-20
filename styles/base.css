@@ -23,7 +23,9 @@ h1 { font-size: var(--fs-display); line-height: var(--lh-display); font-weight: 
 h2 { font-size: var(--fs-title); line-height: var(--lh-title); font-weight: var(--weight-display); }
 h3 { font-size: var(--fs-section); line-height: var(--lh-section); font-weight: var(--weight-strong); }
 h4 { font-size: var(--fs-body); line-height: var(--lh-section); font-weight: var(--weight-strong); }
-p { margin: 0; }
+/* 한 줄만 남는 고아 줄을 브라우저가 알아서 피하게 한다. keep-all 로 단어를 안 쪼개는
+   한글에서는 이게 없으면 마지막 줄에 두 글자만 떨어지는 일이 잦다. */
+p, li, figcaption, dd { margin: 0; text-wrap: pretty; }
 ul, ol { margin: 0; padding-left: 1.25em; }
 li + li { margin-top: var(--space-2); }
 

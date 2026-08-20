@@ -88,19 +88,15 @@ const RENDERERS = {
 /**
  * 블록 배열을 절 단위로 끊어 본문을 만든다.
  *
- * 절마다 첫 'cards' 블록은 본문에 그리지 않고 spotlight 로 빼낸다 — 레슨 화면이
- * 그걸 옆의 펠트 판에 올려서, 읽고 있는 형태가 늘 테이블 위에 깔려 있게 한다.
- * 캡션은 그 절의 설명 문장이므로 본문에 남는다.
- *
- * @returns {{ body: HTMLElement, spotlights: Array<{index: number, hand: string}> }}
+ * 절이 각각 하나의 면(.lesson-section)을 갖는다. 배경 위에 글이 그냥 얹혀 있으면
+ * 어디서 어디까지가 한 덩어리인지 안 보인다.
  */
 export function renderBlocks(blocks) {
   const body = el('div', 'stack stack--loose');
-  const spotlights = [];
 
   let section = null;
-  const openSection = () => {
-    section = el('section', 'lesson-section stack');
+  const openSection = (extra = '') => {
+    section = el('section', `lesson-section stack${extra}`);
     body.append(section);
     return section;
   };
@@ -110,17 +106,8 @@ export function renderBlocks(blocks) {
       openSection().append(RENDERERS.h(block));
       continue;
     }
-    if (!section) openSection();
-
-    // 절의 첫 카드 묶음만 판으로 올라간다. 두 번째부터는 본문에 그대로 둔다 —
-    // 판은 한 번에 하나만 보여줄 수 있기 때문이다.
-    if (block.kind === 'cards' && !section.dataset.spot) {
-      const index = spotlights.length;
-      spotlights.push({ index, hand: block.hand });
-      section.dataset.spot = String(index);
-      if (block.caption) section.append(el('p', null, inline(block.caption)));
-      continue;
-    }
+    // 첫 제목보다 앞에 오는 블록은 그 챕터의 도입부다. 면을 두르지 않는다.
+    if (!section) openSection(' lesson-section--lede');
 
     const render = RENDERERS[block.kind];
     if (!render) {
@@ -130,5 +117,5 @@ export function renderBlocks(blocks) {
     section.append(render(block));
   }
 
-  return { body, spotlights };
+  return body;
 }
