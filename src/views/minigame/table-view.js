@@ -34,6 +34,9 @@ function fan(count) {
   // 장수가 많아질수록 한 장당 각도를 줄여 부채가 지나치게 벌어지지 않게 한다.
   inner.style.setProperty('--n', String(shown));
   inner.style.setProperty('--fan-step', `${Math.min(6, 62 / Math.max(shown, 1))}deg`);
+  // 회전은 레이아웃 크기를 안 바꾸므로 감싸는 칸을 손으로 잡아 준다. 14장 기준으로
+  // 고정해 두면 3장 남은 자리도 200px 을 차지해 판이 쓸데없이 길어진다.
+  wrap.style.setProperty('--fan-n', String(shown));
   for (let i = 0; i < shown; i += 1) {
     const card = element('span', 'fan__card');
     card.style.setProperty('--i', String(i));

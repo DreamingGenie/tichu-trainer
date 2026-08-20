@@ -1,6 +1,41 @@
 /* 연습문제 화면. */
 
-.quiz__prompt { font-size: var(--fs-section); font-weight: var(--weight-strong); line-height: 1.65; }
+/* 이 화면의 주인공은 지금 풀 문제다. 챕터 제목(h1)은 조용히 두고 문제 문장을 키운다. */
+.quiz__title {
+  font-size: var(--fs-section);
+  font-weight: var(--weight-medium);
+  line-height: var(--lh-section);
+  color: var(--text-muted);
+  letter-spacing: 0;
+}
+
+.quiz__prompt {
+  font-size: var(--fs-title);
+  font-weight: var(--weight-display);
+  line-height: var(--lh-title);
+  letter-spacing: -0.02em;
+  max-width: var(--measure);
+  text-wrap: pretty;
+}
+
+/* 진행 — 막대 대신 문제 수만큼의 칸 */
+.quiz-steps { display: flex; gap: var(--space-1); }
+.quiz-steps__dot {
+  width: 26px;
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--border-strong);
+}
+.quiz-steps__dot.is-done { background: var(--accent); }
+.quiz-steps__dot.is-current { background: var(--accent); opacity: 0.5; }
+
+.quiz__table-eyebrow,
+.quiz__hand-label {
+  font-size: var(--fs-micro);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.16em;
+}
+.quiz__hand-label { color: var(--text-muted); }
 
 /* 문제에 딸린 상황판 — 테이블에 무엇이 깔렸는지 보여준다.
  * 표면은 .felt(components/table.css)를 같이 걸어 미니판과 똑같이 보이게 한다. */
@@ -9,7 +44,7 @@
   flex-direction: column;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--space-4);
+  padding: var(--space-5) var(--space-4);
 }
 .quiz__table .card-row { padding-block: var(--space-1); }
 

@@ -30,10 +30,15 @@ export function minigameView({ params }) {
   let busy = false;
   let recorded = false;
 
-  const root = element('div', 'stack stack--loose');
+  const root = element('div', 'minigame-layout');
 
-  // --- 머리말 ---
-  const header = element('header', 'stack stack--tight');
+  // --- 왼쪽: 무엇을 하는 판인지 ---
+  // 설명이 판 위에 길게 쌓이면 정작 판이 화면 아래로 밀려난다. 옆 단으로 뺀다.
+  //
+  // 제목·목표와 나머지 설명을 갈라 두는 건 좁은 화면 때문이다. 한 단으로 접히면
+  // 설명 전체가 판 앞을 막으므로, 꼭 필요한 제목과 목표만 남기고 상황 설명과 기록은
+  // 판 뒤로 보낸다 (배치는 minigame.css 의 grid-template-areas).
+  const header = element('div', 'minigame-brief stack');
   if (chapter) {
     const crumb = element('div', 'row');
     const back = element('a', 'btn btn--small btn--ghost', `← ${chapter.title}`);
@@ -44,7 +49,9 @@ export function minigameView({ params }) {
   header.append(element('h1', null, game.title));
 
   header.append(noteElement('note', '이 판의 목표', inline(game.goal)));
-  header.append(htmlElement('p', 'lede', inline(game.intro)));
+
+  const more = element('div', 'minigame-more stack');
+  more.append(htmlElement('p', 'measure', inline(game.intro)));
 
   // --- 자리 ---
   const tableSlot = element('div');
@@ -58,7 +65,12 @@ export function minigameView({ params }) {
   const logBody = element('div');
   logSlot.append(logBody);
 
-  root.append(header, tableSlot, hintSlot, handSlot, actionSlot, errorSlot, outcomeSlot, logSlot);
+  // 기록은 판이 아니라 설명 쪽에 붙는다 — 되짚어 보는 것이지 두는 것이 아니다.
+  more.append(logSlot);
+
+  const play = element('div', 'minigame-play stack');
+  play.append(tableSlot, hintSlot, handSlot, actionSlot, errorSlot, outcomeSlot);
+  root.append(header, play, more);
 
   let handView = null;
 
@@ -92,10 +104,10 @@ export function minigameView({ params }) {
       dimUnplayable: myTurn,
       onChange: renderActions,
     });
-    handSlot.replaceChildren(
-      element('div', 'small muted', myTurn ? '내 차례입니다. 낼 카드를 고르세요.' : '내 손패'),
-      handView.element,
-    );
+    const label = element('div', 'minigame-hand-label');
+    label.append(element('span', null, '내 손패'));
+    if (myTurn) label.append(element('span', 'badge badge--warn', '내 차례'));
+    handSlot.replaceChildren(label, handView.element);
   }
 
   function renderActions() {
@@ -223,19 +235,25 @@ export function minigameIndexView() {
   root.append(header);
 
   const grid = element('div', 'chapter-grid');
-  for (const game of MINIGAMES) {
+  const suits = ['--suit-ink-jade', '--suit-ink-sword', '--suit-ink-pagoda', '--suit-ink-star'];
+  MINIGAMES.forEach((game, i) => {
+    const cleared = isMinigameCleared(game.chapterId, game.id);
     const link = element('a', 'chapter-card');
     link.href = `#/minigame/${game.id}`;
+    if (cleared) link.classList.add('is-done');
+
+    // 홈의 챕터 카드와 같은 카드 모양 번호를 쓴다.
+    const rank = element('span', 'chapter-card__rank', cleared ? '✓' : String(i + 1));
+    rank.style.setProperty('--suit', `var(${suits[i % suits.length]})`);
+    link.append(rank);
+
     const text = element('span', 'stack stack--tight');
     text.append(element('span', 'chapter-card__title', game.title));
     text.append(element('span', 'chapter-card__sub', game.goal));
-    if (isMinigameCleared(game.chapterId, game.id)) {
-      link.classList.add('is-done');
-      text.append(element('span', 'badge badge--ok', '클리어'));
-    }
-    link.append(element('span', 'chapter-card__num', isMinigameCleared(game.chapterId, game.id) ? '✓' : '▶'), text);
+    if (cleared) text.append(element('span', 'badge badge--ok', '클리어'));
+    link.append(text);
     grid.append(link);
-  }
+  });
   root.append(grid);
   return root;
 }

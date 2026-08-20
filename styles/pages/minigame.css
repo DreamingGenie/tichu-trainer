@@ -3,6 +3,39 @@
 
 /* 표면과 안쪽 여백은 components/table.css 가 정한다. */
 
+/* --- 두 단: 설명과 판 --------------------------------------------------- */
+/* 설명이 판 위에 쌓이면 판·손패·버튼이 한 화면에 못 들어온다. 설명을 옆으로 뺀다. */
+
+.minigame-layout {
+  display: grid;
+  grid-template-columns: 268px minmax(0, 1fr);
+  grid-template-areas:
+    'brief play'
+    'more  play';
+  gap: var(--space-5) var(--space-6);
+  align-content: start;
+  align-items: start;
+}
+.minigame-brief { grid-area: brief; }
+.minigame-play { grid-area: play; }
+.minigame-more { grid-area: more; }
+
+.minigame-brief { gap: var(--space-4); }
+.minigame-more { gap: var(--space-3); }
+.minigame-brief h1 { font-size: var(--fs-title); line-height: var(--lh-title); }
+
+.minigame-play { gap: var(--space-4); }
+
+.minigame-hand-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-micro);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.16em;
+  color: var(--text-muted);
+}
+
 /* --- 자리에 앉은 사람 --------------------------------------------------- */
 
 .seat__person { display: flex; flex-direction: column; align-items: center; gap: 3px; }
@@ -46,10 +79,10 @@
   transform: rotate(calc((var(--i) - (var(--n) - 1) / 2) * var(--fan-step)));
 }
 
-/* 좌우 자리는 부채를 세운다. 회전은 레이아웃 크기를 바꾸지 않으므로 감싸는 칸을
- * 손으로 잡아 준다 — 14장이면 부채가 실제로 200px 남짓 벌어진다. */
+/* 좌우 자리는 부채를 세운다. 감싸는 칸 높이는 장수를 따라간다 (--fan-n 은 table-view.js).
+ * 14장이면 200px 남짓, 서너 장이면 그만큼만. */
 .seat--west .fan-wrap,
-.seat--east .fan-wrap { width: 62px; height: 200px; }
+.seat--east .fan-wrap { width: 62px; height: calc(58px + var(--fan-n, 14) * 10px); }
 .seat--west .fan { transform: rotate(90deg); }
 .seat--east .fan { transform: rotate(-90deg); }
 
@@ -113,18 +146,40 @@
   padding: var(--space-3) var(--space-4);
 }
 
+/* 한 단으로 접히면 설명 전체가 판 앞을 막는다. 제목과 목표만 남기고 나머지는 판 뒤로. */
+@media (max-width: 900px) {
+  .minigame-layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'brief' 'play' 'more';
+    gap: var(--space-5);
+  }
+}
+
+/* 좁은 화면에서 자리를 사방에 두면 판이 세로로 늘어져 손패와 버튼이 첫 화면 밖으로
+ * 나간다. 상대 셋을 한 줄로 접고 낸 카드만 크게 남긴다. */
 @media (max-width: 560px) {
-  .seats { grid-template-columns: 1fr; grid-template-areas: 'north' 'table' 'west' 'east' 'south'; }
+  .seats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas:
+      'west  north east'
+      'table table table'
+      'south south south';
+    gap: var(--space-2);
+  }
   .table-center { min-width: 0; width: 100%; }
 
-  /* 자리가 세로로 쌓이면 좌우 구분이 의미를 잃는다. 부채를 눕혀 모두 같은 모양으로
-   * 두면 세운 부채가 잡아먹던 세로 200px씩이 사라진다. */
+  /* 부채는 자리마다 200px 씩 잡아먹는데, 장수는 알약이 이미 말해준다. */
+  .seat .fan-wrap { display: none; }
   .seat--west,
-  .seat--east { flex-direction: column-reverse; }
-  .seat--west .fan-wrap,
-  .seat--east .fan-wrap { width: auto; height: auto; }
-  .seat--west .fan,
-  .seat--east .fan { transform: none; }
+  .seat--east,
+  .seat--north { flex-direction: column; }
+  .seat--south { flex-direction: row; justify-content: center; }
+  .seat { padding: var(--space-1); }
+  .seat__avatar { width: 34px; height: 34px; }
+
+  /* 판 위의 카드도 한 치수 줄인다. 손패와 버튼을 조금이라도 위로 끌어올린다. */
+  .minigame-play .felt { --card-w: 54px; padding: var(--space-4) var(--space-3); }
+  .table-drop { min-height: calc(var(--card-w) * 1.4); padding: var(--space-1); }
 }
 
 /* --- 진행 기록 --------------------------------------------------------- */

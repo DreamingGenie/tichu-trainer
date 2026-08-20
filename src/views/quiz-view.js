@@ -48,14 +48,25 @@ export function quizView({ params }) {
     crumb.append(back);
     header.append(crumb);
 
-    header.append(element('h1', null, `${chapter.title} — 연습문제`));
+    // 이 화면의 주인공은 지금 풀고 있는 문제지 챕터 이름이 아니다. 제목은 h1 으로
+    // 두되(스크린리더와 라우터가 이걸 잡는다) 눈에는 조용하게 둔다.
+    header.append(element('h1', 'quiz__title', `${chapter.title} — 연습문제`));
 
-    const bar = element('div', 'progress');
-    const fill = element('div', 'progress__fill');
-    fill.style.width = `${(index / chapter.quizzes.length) * 100}%`;
-    bar.append(fill);
-    header.append(bar);
-    header.append(element('p', 'small muted', `${index + 1} / ${chapter.quizzes.length}`));
+    // 막대 대신 문제 수만큼의 칸. 몇 번째인지가 비율보다 알고 싶은 정보다.
+    const dots = element('div', 'quiz-steps');
+    dots.setAttribute('role', 'img');
+    dots.setAttribute('aria-label', `${chapter.quizzes.length}문제 중 ${Math.min(index + 1, chapter.quizzes.length)}번째`);
+    chapter.quizzes.forEach((_, i) => {
+      const dot = element('span', 'quiz-steps__dot');
+      if (i < index) dot.classList.add('is-done');
+      else if (i === index) dot.classList.add('is-current');
+      dots.append(dot);
+    });
+    const steps = element('div', 'row');
+    steps.append(dots);
+    steps.append(element('span', 'small muted',
+      index >= chapter.quizzes.length ? '끝' : `${index + 1} / ${chapter.quizzes.length}`));
+    header.append(steps);
   }
 
   function renderDone() {
@@ -114,7 +125,7 @@ export function quizView({ params }) {
   // --- 객관식 -------------------------------------------------------
 
   function choiceQuestion(quiz) {
-    const panel = element('div', 'panel stack');
+    const panel = element('div', 'stack stack--loose');
     panel.append(promptNode(quiz.prompt));
 
     const options = element('div', 'stack stack--tight');
@@ -157,7 +168,7 @@ export function quizView({ params }) {
   // --- 카드 고르기 ---------------------------------------------------
 
   function cardQuestion(quiz) {
-    const panel = element('div', 'panel stack');
+    const panel = element('div', 'stack stack--loose');
     panel.append(promptNode(quiz.prompt));
 
     const hand = parseHand(quiz.hand);
@@ -166,7 +177,7 @@ export function quizView({ params }) {
 
     // 테이블 상황
     const table = element('div', 'quiz__table felt');
-    table.append(element('div', 'small muted', current ? '테이블 위' : '새 트릭을 여는 상황입니다'));
+    table.append(element('div', 'quiz__table-eyebrow', current ? '테이블 위' : '새 트릭을 여는 상황입니다'));
     if (current) {
       table.append(element('div', 'table-call', describeCombo(current)));
       const row = element('div', 'card-row');
@@ -188,9 +199,18 @@ export function quizView({ params }) {
       current,
       wish,
       dimUnplayable: false, // 퀴즈에서는 힌트를 주지 않는다. 스스로 판단해야 배운다.
-      onChange: () => { if (!settled) feedback.replaceChildren(); submit.disabled = handView.getSelected().length === 0; },
+      onChange: () => {
+        if (!settled) feedback.replaceChildren();
+        const count = handView.getSelected().length;
+        submit.disabled = count === 0;
+        clear.hidden = count === 0;
+        handLabel.textContent = count ? `내 손패 · ${count}장 골랐음` : '내 손패';
+      },
     });
-    panel.append(handView.element);
+    const handLabel = element('div', 'quiz__hand-label', '내 손패');
+    const handBlock = element('div', 'stack stack--tight');
+    handBlock.append(handLabel, handView.element);
+    panel.append(handBlock);
 
     const submit = element('button', 'btn btn--primary', '이대로 내기');
     submit.type = 'button';
@@ -201,11 +221,19 @@ export function quizView({ params }) {
     actions.append(submit);
 
     if (quiz.allowPass) {
-      const passBtn = element('button', 'btn', '패스');
+      const passBtn = element('button', 'btn', '낼 게 없다');
       passBtn.type = 'button';
       passBtn.addEventListener('click', () => grade(null));
       actions.append(passBtn);
     }
+
+    // 고른 걸 무르는 길이 없으면 카드를 하나씩 다시 눌러 빼야 한다.
+    const clear = element('button', 'btn btn--ghost', '선택 해제');
+    clear.type = 'button';
+    clear.hidden = true;
+    clear.addEventListener('click', () => handView.clear());
+    actions.append(element('span', 'spacer'), clear);
+
     panel.append(actions, feedback);
 
     function settle() {
