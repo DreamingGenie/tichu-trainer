@@ -1,5 +1,60 @@
 /* 챕터 목록 화면. */
 
+/* --- 히어로 ------------------------------------------------------------ */
+/* 첫 화면에서 제일 먼저 보이는 게 텍스트가 아니라 손패여야 한다는 게 이 화면의 주장이다.
+ * 표면은 components/table.css 의 .felt 를 그대로 쓴다. */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-7) var(--space-5) 0;
+  overflow: hidden;   /* 부채 끝이 펠트 밖으로 나가지 않게 */
+  text-align: center;
+}
+
+.hero__eyebrow {
+  font-size: var(--fs-micro);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.2em;
+  /* 펠트 위 12px 이라 흐리게 깔면 대비가 4.5:1 아래로 떨어진다. 크기와 자간만으로 낮춘다. */
+}
+
+.hero__lede { opacity: 0.92; }
+
+/* 부채는 미니판 손패와 같은 방식으로 편다 — 회전축을 카드 아래에 두고 --i 로 각도를 준다.
+ * 저쪽은 20px 뒷면이고 이쪽은 얼굴이 보이는 실제 크기라 겹침과 각도만 다르다. */
+.hero-fan {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-top: var(--space-4);
+  /* 아래쪽 절반을 펠트 밖으로 내보내지 않고, 카드가 테이블에 꽂힌 것처럼 잘리게 둔다. */
+  margin-bottom: calc(var(--card-w) * -0.5);
+}
+.hero-fan .card {
+  margin-inline: calc(var(--card-w) * -0.22);
+  transform-origin: 50% 190%;
+  transform: rotate(calc((var(--i) - (var(--n) - 1) / 2) * var(--fan-step)));
+  box-shadow: var(--card-shadow-lift);
+}
+
+/* --- 구획 머리 --------------------------------------------------------- */
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+.section-head__rule {
+  flex: 1;
+  border-bottom: var(--edge);
+  transform: translateY(-4px);
+}
+
+/* --- 챕터 목록 --------------------------------------------------------- */
+
 .chapter-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--grid-min), 1fr));
@@ -8,7 +63,7 @@
 
 .chapter-card {
   display: flex;
-  gap: var(--space-3);
+  gap: var(--space-4);
   align-items: flex-start;
   padding: var(--space-4);
   background: var(--surface);
@@ -24,17 +79,60 @@
   box-shadow: var(--shadow-panel);
 }
 
-.chapter-card__num {
+/* 번호를 카드 한 장의 모양으로 세운다. 카드 면은 두 테마 모두 밝으므로 --card-face 와
+   테마를 안 타는 수트 잉크를 쓴다 (--suit 는 JS 가 챕터마다 넣는다). */
+.chapter-card__rank {
   flex: 0 0 auto;
-  width: 30px; height: 30px;
-  display: grid; place-items: center;
-  border-radius: 50%;
-  background: var(--bg-sunken);
-  color: var(--text-muted);
-  font-size: var(--fs-small);
-  font-weight: var(--weight-strong);
+  width: 44px;
+  aspect-ratio: 100 / 140;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--suit);
+  border-radius: 5px;
+  background: var(--card-face);
+  color: var(--suit);
+  /* 실제 카드처럼 랭크가 큼직해야 카드로 읽힌다. 다크의 카드 면(#f4f2ec) 위에서
+     수트 잉크가 4.43:1 이라, 큰 글자 기준(24px 이상, 3:1)에 들어가는 크기이기도 하다. */
+  font-size: var(--fs-title);
+  font-weight: var(--weight-display);
+  line-height: 1;
 }
-.chapter-card.is-done .chapter-card__num { background: var(--ok-soft); color: var(--ok); }
+.chapter-card.is-done .chapter-card__rank {
+  border-color: var(--ok);
+  background: var(--ok-soft);
+  color: var(--ok);
+}
 
-.chapter-card__title { font-weight: var(--weight-strong); line-height: 1.4; }
-.chapter-card__sub { font-size: var(--fs-small); color: var(--text-muted); line-height: 1.55; }
+.chapter-card__title { font-size: var(--fs-section); font-weight: var(--weight-strong); line-height: var(--lh-section); }
+.chapter-card__sub { font-size: var(--fs-small); color: var(--text-muted); line-height: var(--lh-small); }
+
+/* --- 펠트 배너 --------------------------------------------------------- */
+/* 샌드박스처럼 '판으로 들어가는' 입구는 종이가 아니라 펠트 위에 앉힌다. */
+
+.banner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-5);
+  flex-wrap: wrap;
+}
+.banner .stack { flex: 1; min-width: 240px; }
+.banner__action {
+  flex: 0 0 auto;
+  background: var(--card-face);
+  border-color: var(--card-face);
+  color: var(--card-ink);
+}
+.banner__action:hover:not(:disabled) {
+  background: var(--felt-text);
+  border-color: var(--felt-text);
+}
+
+@media (max-width: 560px) {
+  .hero { padding: var(--space-6) var(--space-4) 0; }
+  /* 좁은 화면에서는 부채가 펠트보다 넓어져 양끝 카드가 반토막 난다. 카드를 줄이면
+     열한 장이 그대로 한 손에 들어온다 — .card 가 --card-w 하나로 크기를 잡는 덕이다. */
+  .hero-fan { --card-w: 44px; }
+  .section-head { flex-wrap: wrap; }
+  .section-head__rule { display: none; }
+}
