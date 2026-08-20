@@ -63,6 +63,11 @@ const GLYPH = {
     <rect x="3.2" y="18.4" width="17.6" height="2.8" rx="0.9"/>`,
 };
 
+/** 카드가 쓸 수트 색. 카드 얼굴과 문장 속 카드 칩이 같은 값을 본다. */
+export function suitColor(card) {
+  return card.special ? 'var(--suit-special)' : SUIT_VAR[card.suit];
+}
+
 function glyph(card) {
   return GLYPH[card.special ?? card.suit] ?? '';
 }
@@ -132,7 +137,7 @@ export function cardElement(card, options = {}) {
   el.classList.toggle('is-selected', selected);
   el.classList.toggle('is-muted', muted);
   el.dataset.cardId = card.id;
-  el.style.setProperty('--suit', card.special ? 'var(--suit-special)' : SUIT_VAR[card.suit]);
+  el.style.setProperty('--suit', suitColor(card));
   el.setAttribute('aria-label', cardAriaLabel(card));
   el.innerHTML = `<svg class="card__face" viewBox="0 0 100 140" aria-hidden="true">${faceSvg(card)}</svg>`
     + (tag ? `<span class="card__tag">${tag}</span>` : '');

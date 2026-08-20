@@ -9,11 +9,12 @@ import { SEAT, SEAT_LABEL } from '../engine/seats.js';
 import { MINIGAMES, minigameById } from '../data/minigames/index.js';
 import { chapterById } from '../data/chapters.js';
 import { isMinigameCleared, recordMinigame } from '../store/progress.js';
-import { inline } from '../ui/blocks.js';
-import { element, verdictBox } from '../ui/format.js';
+import { element } from '../ui/dom.js';
+import { htmlElement, inline, noteElement } from '../ui/markup.js';
+import { verdictBox } from '../ui/verdict.js';
 import { createHandView } from '../ui/hand-view.js';
-import { renderLog, renderTable } from '../ui/table-view.js';
-import { notFoundPanel } from './lesson-view.js';
+import { renderLog, renderTable } from './minigame/table-view.js';
+import { notFoundPanel } from './not-found-view.js';
 
 const ME = SEAT.SOUTH;
 const BOT_DELAY = 800;
@@ -42,13 +43,8 @@ export function minigameView({ params }) {
   }
   header.append(element('h1', null, game.title));
 
-  const goalNote = element('div', 'note');
-  goalNote.innerHTML = `<strong class="note__title">이 판의 목표</strong>${inline(game.goal)}`;
-  header.append(goalNote);
-
-  const intro = element('p', 'lede');
-  intro.innerHTML = inline(game.intro);
-  header.append(intro);
+  header.append(noteElement('note', '이 판의 목표', inline(game.goal)));
+  header.append(htmlElement('p', 'lede', inline(game.intro)));
 
   // --- 자리 ---
   const tableSlot = element('div');
@@ -83,9 +79,7 @@ export function minigameView({ params }) {
     if (runner.outcome || busy) return;
     for (const hint of game.hints ?? []) {
       if (!hint.when(runner.state)) continue;
-      const note = element('div', 'note note--warn');
-      note.innerHTML = inline(hint.text);
-      hintSlot.append(note);
+      hintSlot.append(htmlElement('div', 'note note--warn', inline(hint.text)));
     }
   }
 
@@ -176,9 +170,7 @@ export function minigameView({ params }) {
       (typeof text === 'function' ? text(runner.state) : text) ?? '',
     ));
 
-    const debrief = element('div', 'note');
-    debrief.innerHTML = `<strong class="note__title">정리</strong>${inline(game.debrief)}`;
-    wrap.append(debrief);
+    wrap.append(noteElement('note', '정리', inline(game.debrief)));
 
     const actions = element('div', 'row');
     actions.append(restartButton('한 번 더'));

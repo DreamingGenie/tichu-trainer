@@ -1,8 +1,9 @@
 import { chapterById, neighbours } from '../data/chapters.js';
 import { minigameById } from '../data/minigames/index.js';
 import { chapterStatus, markRead } from '../store/progress.js';
-import { renderBlocks } from '../ui/blocks.js';
-import { element } from '../ui/format.js';
+import { renderBlocks } from './lesson/blocks.js';
+import { element } from '../ui/dom.js';
+import { notFoundPanel } from './not-found-view.js';
 
 export function lessonView({ params }) {
   const chapter = chapterById(params.id);
@@ -77,14 +78,3 @@ export function lessonView({ params }) {
   return root;
 }
 
-export function notFoundPanel(message) {
-  const panel = element('div', 'panel stack');
-  panel.append(element('h1', null, '길을 잃었습니다'));
-  panel.append(element('p', 'muted', message ?? '없는 주소입니다.'));
-  const link = element('a', 'btn btn--primary', '목록으로 돌아가기');
-  link.href = '#/';
-  const row = element('div', 'row');
-  row.append(link);
-  panel.append(row);
-  return panel;
-}

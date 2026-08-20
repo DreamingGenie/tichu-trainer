@@ -22,11 +22,6 @@ export const SEAT_LABEL = Object.freeze({
 
 export const TEAM = Object.freeze({ US: 'us', THEM: 'them' });
 
-export const TEAM_LABEL = Object.freeze({
-  [TEAM.US]: '우리 팀',
-  [TEAM.THEM]: '상대 팀',
-});
-
 const TEAM_BY_SEAT = Object.freeze({
   [SEAT.SOUTH]: TEAM.US,
   [SEAT.NORTH]: TEAM.US,

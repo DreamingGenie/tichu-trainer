@@ -12,16 +12,16 @@ import { checkWish, wishStatus } from '../engine/wish.js';
 import { chapterById, neighbours } from '../data/chapters.js';
 import { navigate } from '../router.js';
 import { recordQuiz } from '../store/progress.js';
+import { describeCombo } from '../engine/describe.js';
 import { cardElement } from '../ui/card-view.js';
-import { inline } from '../ui/blocks.js';
-import { describeCombo, element, verdictBox } from '../ui/format.js';
+import { element } from '../ui/dom.js';
+import { htmlElement, inline } from '../ui/markup.js';
+import { verdictBox } from '../ui/verdict.js';
 import { createHandView } from '../ui/hand-view.js';
 
 /** 문제 지문. [[GK]] 같은 표기를 카드 이름으로 바꿔 보여준다. */
 function promptNode(text) {
-  const node = element('p', 'quiz__prompt');
-  node.innerHTML = inline(text);
-  return node;
+  return htmlElement('p', 'quiz__prompt', inline(text));
 }
 
 export function quizView({ params }) {
@@ -88,9 +88,10 @@ export function quizView({ params }) {
     body.append(panel);
   }
 
-  function advance(wasCorrect, firstTry) {
-    recordQuiz(chapter.id, chapter.quizzes[index].id, wasCorrect);
-    if (wasCorrect && firstTry) answeredCorrectly += 1;
+  /** 맞혔을 때만 부른다. firstTry 면 '한 번에 맞힌 문제' 로도 센다. */
+  function advance(firstTry) {
+    recordQuiz(chapter.id, chapter.quizzes[index].id);
+    if (firstTry) answeredCorrectly += 1;
   }
 
   function render() {
@@ -122,26 +123,24 @@ export function quizView({ params }) {
     let firstTry = true;
 
     quiz.choices.forEach((choice) => {
-      const button = element('button', 'choice');
+      const button = htmlElement('button', 'choice', inline(choice.text));
       button.type = 'button';
-      button.innerHTML = inline(choice.text);
       button.addEventListener('click', () => {
         if (settled) return;
         button.classList.add(choice.correct ? 'is-correct' : 'is-wrong');
 
-        const box = verdictBox(choice.correct ? 'ok' : 'bad', choice.correct ? '맞습니다' : '아쉽습니다', '');
-        box.querySelector('.verdict__body').innerHTML = inline(choice.why);
-        feedback.replaceChildren(box);
+        feedback.replaceChildren(verdictBox(
+          choice.correct ? 'ok' : 'bad',
+          choice.correct ? '맞습니다' : '아쉽습니다',
+          inline(choice.why),
+          { html: true },
+        ));
 
         if (choice.correct) {
           settled = true;
-          advance(true, firstTry);
+          advance(firstTry);
           for (const b of options.querySelectorAll('.choice')) b.disabled = true;
-          if (quiz.explain) {
-            const note = element('div', 'note');
-            note.innerHTML = inline(quiz.explain);
-            feedback.append(note);
-          }
+          if (quiz.explain) feedback.append(htmlElement('div', 'note', inline(quiz.explain)));
           feedback.append(nextButton());
         } else {
           firstTry = false;
@@ -175,9 +174,8 @@ export function quizView({ params }) {
       table.append(element('div', 'small muted', describeCombo(current)));
     }
     if (wish) {
-      const note = element('div', 'note note--warn');
-      note.innerHTML = inline(`마작의 소원이 **${quiz.wishLabel ?? wish}**로 걸려 있습니다.`);
-      table.append(note);
+      table.append(htmlElement('div', 'note note--warn',
+        inline(`마작의 소원이 **${quiz.wishLabel ?? wish}**로 걸려 있습니다.`)));
     }
     panel.append(table);
 
@@ -210,16 +208,12 @@ export function quizView({ params }) {
     }
     panel.append(actions, feedback);
 
-    function settle(correct) {
+    function settle() {
       settled = true;
-      advance(true, correct && firstTry);
+      advance(firstTry);
       submit.disabled = true;
       for (const b of actions.querySelectorAll('button')) b.disabled = true;
-      if (quiz.explain) {
-        const note = element('div', 'note');
-        note.innerHTML = inline(quiz.explain);
-        feedback.append(note);
-      }
+      if (quiz.explain) feedback.append(htmlElement('div', 'note', inline(quiz.explain)));
       feedback.append(nextButton());
     }
 
@@ -231,7 +225,7 @@ export function quizView({ params }) {
         const canPass = Boolean(current) && !forced;
         if (quiz.expectPass && canPass) {
           feedback.replaceChildren(verdictBox('ok', '맞습니다', '여기서는 패스가 정답입니다.'));
-          settle(true);
+          settle();
         } else {
           firstTry = false;
           feedback.replaceChildren(verdictBox('bad', '패스할 수 없습니다',
@@ -271,7 +265,7 @@ export function quizView({ params }) {
 
       feedback.replaceChildren(verdictBox('ok', `${describeCombo(play.combo)} — 좋습니다`,
         `이 손패로 낼 수 있는 방법은 ${enumerateLegalPlays(hand, current).length}가지였습니다.`));
-      settle(true);
+      settle();
     }
 
     return panel;

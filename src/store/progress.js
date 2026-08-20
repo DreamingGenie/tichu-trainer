@@ -5,8 +5,6 @@ const KEY = 'tichu-trainer:progress';
 const THEME_KEY = 'tichu-trainer:theme';
 const VERSION = 1;
 
-const listeners = new Set();
-
 function emptyState() {
   return { version: VERSION, chapters: {} };
 }
@@ -44,7 +42,6 @@ function load() {
 
 function save() {
   safeWrite(KEY, JSON.stringify(state));
-  for (const fn of listeners) fn(state);
 }
 
 function chapterEntry(chapterId) {
@@ -54,11 +51,6 @@ function chapterEntry(chapterId) {
   return state.chapters[chapterId];
 }
 
-export function subscribe(fn) {
-  listeners.add(fn);
-  return () => listeners.delete(fn);
-}
-
 export function markRead(chapterId) {
   const entry = chapterEntry(chapterId);
   if (entry.read) return;
@@ -66,11 +58,11 @@ export function markRead(chapterId) {
   save();
 }
 
-/** 퀴즈 결과. 한 번 맞힌 문제는 나중에 틀려도 맞힌 것으로 남긴다. */
-export function recordQuiz(chapterId, quizId, correct) {
+/** 맞힌 퀴즈. 오답은 남기지 않는다 — 진도는 '몇 개를 풀어냈나'만 센다. */
+export function recordQuiz(chapterId, quizId) {
   const entry = chapterEntry(chapterId);
   if (entry.quizzes[quizId] === 'correct') return;
-  entry.quizzes[quizId] = correct ? 'correct' : 'wrong';
+  entry.quizzes[quizId] = 'correct';
   save();
 }
 
@@ -79,10 +71,6 @@ export function recordMinigame(chapterId, minigameId) {
   if (entry.minigames[minigameId] === 'cleared') return;
   entry.minigames[minigameId] = 'cleared';
   save();
-}
-
-export function quizResult(chapterId, quizId) {
-  return state.chapters[chapterId]?.quizzes?.[quizId] ?? null;
 }
 
 export function isMinigameCleared(chapterId, minigameId) {

@@ -1,6 +1,6 @@
 import { CHAPTERS } from '../data/chapters.js';
 import { chapterStatus, overallProgress, resetProgress } from '../store/progress.js';
-import { element } from '../ui/format.js';
+import { element } from '../ui/dom.js';
 
 export function homeView() {
   const root = element('div', 'stack stack--loose');

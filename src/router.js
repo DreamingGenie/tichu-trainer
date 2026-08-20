@@ -3,7 +3,6 @@
 
 const routes = [];
 let notFound = null;
-let onNavigate = null;
 
 /**
  * @param pattern '/chapter/:id' 처럼 :파라미터를 쓸 수 있다.
@@ -22,10 +21,6 @@ export function route(pattern, handler) {
 
 export function setNotFound(handler) {
   notFound = handler;
-}
-
-export function setOnNavigate(fn) {
-  onNavigate = fn;
 }
 
 export function currentPath() {
@@ -60,7 +55,6 @@ export function startRouter(outlet) {
     const view = found ? found.handler({ params: found.params, path }) : notFound?.({ path });
 
     outlet.replaceChildren(view ?? document.createTextNode(''));
-    onNavigate?.(path);
 
     // 화면이 바뀌면 맨 위에서 시작하고, 키보드 포커스도 새 화면으로 옮긴다.
     window.scrollTo({ top: 0, behavior: 'instant' });

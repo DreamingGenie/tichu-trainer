@@ -4,7 +4,7 @@
 // 이미 손패를 턴 사람이 있으면 그 사람은 세지 않으므로, 실제로는 "카드가 남은 다른
 // 사람이 전부 패스했는가"로 판정해야 한다. 여기서는 후자로 구현했다.
 
-import { isDog, isDragon, sortCards } from './cards.js';
+import { isDragon, sortCards } from './cards.js';
 import { COMBO, COMBO_LABEL, detectCombo, isBomb } from './combos.js';
 import { checkPlay, resolvePlayed } from './compare.js';
 import { SEAT_LABEL, SEAT_ORDER, arePartners, nextSeat, opponentsOf, partnerOf } from './seats.js';
@@ -237,12 +237,3 @@ function checkRoundEnd(state) {
   return false;
 }
 
-/** 지금 이 자리가 낼 수 있는 상태인지 UI가 묻기 위한 요약. */
-export function turnInfo(state, seat) {
-  return {
-    isTurn: seat === state.turn && !state.done && !state.pendingDragon,
-    canPass: seat === state.turn && Boolean(state.current) && !state.done,
-    mustLead: seat === state.turn && !state.current,
-    wish: state.wish,
-  };
-}

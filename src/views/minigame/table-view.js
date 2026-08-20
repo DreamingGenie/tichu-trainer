@@ -1,12 +1,12 @@
 // 네 자리와 테이블 가운데를 그린다. 미니판에서 지금 누구 차례이고 무엇이 깔렸는지
 // 한눈에 보이는 게 제일 중요하다.
 
-import { sumPoints } from '../engine/cards.js';
-import { rankLabel } from '../engine/cards.js';
-import { CALL_LABEL } from '../engine/scoring.js';
-import { SEAT, SEAT_LABEL } from '../engine/seats.js';
-import { cardElement } from './card-view.js';
-import { describeCombo, element } from './format.js';
+import { rankLabel, sumPoints } from '../../engine/cards.js';
+import { CALL_LABEL } from '../../engine/scoring.js';
+import { SEAT, SEAT_LABEL } from '../../engine/seats.js';
+import { cardElement } from '../../ui/card-view.js';
+import { describeCombo } from '../../engine/describe.js';
+import { element } from '../../ui/dom.js';
 
 function seatBox(state, seat) {
   const box = element('div', `seat seat--${seat}`);

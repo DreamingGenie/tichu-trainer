@@ -73,16 +73,6 @@ export function enumerateLegalPlays(hand, current = null) {
   return found;
 }
 
-/** 손패 안의 폭탄만. 턴 밖 폭탄 판정에 쓴다. */
-export function findBombs(hand) {
-  return enumerateLegalPlays(hand, null).filter(isBomb);
-}
-
-/** 지금 낼 수 있는 수가 하나라도 있는가. */
-export function hasLegalPlay(hand, current) {
-  return enumerateLegalPlays(hand, current).length > 0;
-}
-
 /** 어떤 카드라도 낼 수 있는 수에 포함되는 카드들의 id 집합. UI 하이라이트용. */
 export function playableCardIds(hand, current) {
   const ids = new Set();
@@ -92,15 +82,3 @@ export function playableCardIds(hand, current) {
   return ids;
 }
 
-/** 조합을 종류별로 묶는다. 레슨과 샌드박스에서 목록을 보여줄 때 쓴다. */
-export function groupByType(combos) {
-  const groups = new Map();
-  for (const combo of combos) {
-    if (!groups.has(combo.type)) groups.set(combo.type, []);
-    groups.get(combo.type).push(combo);
-  }
-  for (const list of groups.values()) {
-    list.sort((a, b) => a.length - b.length || a.rank - b.rank);
-  }
-  return groups;
-}
