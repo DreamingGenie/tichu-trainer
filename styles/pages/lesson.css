@@ -115,7 +115,13 @@ figure.block-cards figcaption { margin-top: calc(var(--space-1) * -1); }
 table.data { border-collapse: collapse; width: 100%; font-size: var(--fs-small); }
 table.data th, table.data td { padding: var(--space-2) var(--space-3); text-align: left; border-bottom: var(--edge); }
 table.data th { font-weight: var(--weight-strong); color: var(--text-muted); font-size: var(--fs-small); white-space: nowrap; }
-table.data td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.data td.num,
+table.data th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+/* 표는 내용만큼만 넓힌다. 940px 를 꽉 채우면 '카드'와 '합계'가 화면 양끝으로 갈라져
+   한 줄을 눈으로 잇기가 어렵다. */
+table.data { width: auto; min-width: min(100%, 460px); }
+table.data th:first-child, table.data td:first-child { padding-left: 0; }
+table.data th:last-child, table.data td:last-child { padding-right: 0; }
 
 /* --- 앞뒤 챕터 이동 ---------------------------------------------------- */
 

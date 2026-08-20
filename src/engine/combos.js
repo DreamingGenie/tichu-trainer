@@ -4,9 +4,9 @@
 //   - 봉황은 페어/트리플/풀하우스/계단/스트레이트에서 와일드가 되지만 폭탄에는 못 들어간다.
 //   - 용은 어떤 조합에도 못 들어간다. 단일 전용.
 //   - 개는 단일 전용이고 리드로만 낼 수 있다 (그 제약은 compare.js에서 본다).
-//   - 스트레이트는 5장 이상이고 마작(1)이 최하단에 올 수 있다.
+//   - 스트레이트는 5장 이상이고 참새(1)이 최하단에 올 수 있다.
 //   - 봉황이 대신할 수 있는 것은 자연 카드(2~A)뿐이라 1 자리는 못 메운다.
-//   - 마작은 스트레이트에만 참여한다. 마작 페어 같은 건 없다.
+//   - 참새은 스트레이트에만 참여한다. 참새 페어 같은 건 없다.
 
 import {
   MAHJONG_RANK, MAX_NORMAL_RANK, MIN_NORMAL_RANK, PHOENIX_LEAD_RANK,
@@ -45,7 +45,7 @@ function make(type, rank, cards, extra) {
   return Object.assign({ type, rank, length: cards.length, cards }, extra || {});
 }
 
-/** 랭크별로 카드를 모은다. 봉황과 개는 자연 랭크가 없어 빠지고, 마작도 빠진다. */
+/** 랭크별로 카드를 모은다. 봉황과 개는 자연 랭크가 없어 빠지고, 참새도 빠진다. */
 function groupByRank(cards) {
   const groups = new Map();
   for (const card of cards) {
@@ -101,9 +101,9 @@ export function detectCombo(input) {
   const bomb = detectBomb(cards, hasPhoenix, groups);
   if (bomb) return bomb;
 
-  // 마작은 랭크 그룹에 들어가지 않으므로, 자연 카드가 전부 그룹에 담겼다는 것은
-  // 곧 마작이 섞이지 않았다는 뜻이다. 랭크로 묶는 조합(페어·트리플·풀하우스·계단)은
-  // 마작을 쓸 수 없으니 여기서 한 번에 막는다. 스트레이트만 마작을 받아준다.
+  // 참새은 랭크 그룹에 들어가지 않으므로, 자연 카드가 전부 그룹에 담겼다는 것은
+  // 곧 참새이 섞이지 않았다는 뜻이다. 랭크로 묶는 조합(페어·트리플·풀하우스·계단)은
+  // 참새을 쓸 수 없으니 여기서 한 번에 막는다. 스트레이트만 참새을 받아준다.
   const grouped = [...groups.values()].reduce((sum, g) => sum + g.length, 0);
   const allGrouped = grouped === naturals.length;
 
@@ -130,7 +130,7 @@ function detectBomb(cards, hasPhoenix, groups) {
 
   if (cards.length >= 5) {
     const suit = cards[0].suit;
-    // 마작과 용은 수트가 없으므로 여기서 자동으로 걸러진다.
+    // 참새과 용은 수트가 없으므로 여기서 자동으로 걸러진다.
     if (suit && cards.every((c) => c.suit === suit)) {
       const ranks = cards.map((c) => c.rank).sort((a, b) => a - b);
       if (isConsecutive(ranks)) return make(COMBO.BOMB_SF, ranks[ranks.length - 1], cards);
@@ -145,7 +145,7 @@ function detectPair(cards, naturals, hasPhoenix, groups) {
   if (cards.length !== 2) return null;
   if (hasPhoenix) {
     const card = naturals[0];
-    // 봉황은 자연 카드하고만 짝이 된다. 마작도 용도 페어를 못 만든다.
+    // 봉황은 자연 카드하고만 짝이 된다. 참새도 용도 페어를 못 만든다.
     return hasNaturalRank(card) ? make(COMBO.PAIR, card.rank, cards) : null;
   }
   const entry = groups.size === 1 ? [...groups.entries()][0] : null;
@@ -223,7 +223,7 @@ function detectStraight(cards, naturals, hasPhoenix) {
   if (span === n - 1) {
     // 자연 카드가 이미 연속이라 봉황은 위나 아래로 붙는다. 위쪽이 더 높으니 위를 택한다.
     if (max + 1 <= MAX_NORMAL_RANK) return make(COMBO.STRAIGHT, max + 1, cards);
-    // A까지 찼으면 아래로 붙이는 수밖에 없다. 봉황은 마작(1) 자리는 못 메운다.
+    // A까지 찼으면 아래로 붙이는 수밖에 없다. 봉황은 참새(1) 자리는 못 메운다.
     if (min - 1 >= MIN_NORMAL_RANK) return make(COMBO.STRAIGHT, max, cards);
   }
   return null;

@@ -60,7 +60,11 @@ const RENDERERS = {
     if (block.head) {
       const thead = el('thead');
       const tr = el('tr');
-      for (const cell of block.head) tr.append(el('th', null, inline(cell)));
+      // 머리글도 그 열의 정렬을 따라가야 한다. 숫자는 오른쪽인데 머리글만 왼쪽이면
+      // 어느 머리글이 어느 열인지 눈으로 잇기가 어렵다.
+      block.head.forEach((cell, i) => {
+        tr.append(el('th', block.numeric?.includes(i) ? 'num' : null, inline(cell)));
+      });
       thead.append(tr);
       table.append(thead);
     }

@@ -65,7 +65,7 @@ describe('조합 판정 — 되는 것', () => {
 
   test('스트레이트', () => {
     eq(rank('G5 B6 U7 R8 G9'), 9);
-    eq(rank('MAH G2 B3 U4 R5'), 5, '마작이 최하단에 들어간다');
+    eq(rank('MAH G2 B3 U4 R5'), 5, '참새이 최하단에 들어간다');
     eq(rank('G5 B6 PHX R8 G9'), 9, '봉황이 안쪽 구멍을 메운다');
     eq(rank('G5 B6 U7 R8 PHX'), 9, '봉황이 위로 붙어 9가 된다');
     eq(rank('G10 BJ UQ RK PHX'), 14, '봉황이 A 자리로 올라간다');
@@ -92,12 +92,12 @@ describe('조합 판정 — 안 되는 것', () => {
     eq(sf.type, COMBO.STRAIGHT, '수트가 같아도 봉황이 끼면 그냥 스트레이트다');
   });
 
-  test('마작은 스트레이트에만 참여한다', () => {
-    eq(detectCombo(h('MAH G2')), null, '마작 + 2는 페어가 아니다');
-    eq(detectCombo(h('MAH PHX')), null, '봉황도 마작과 짝이 될 수 없다');
-    eq(detectCombo(h('MAH G7 B7')), null, '마작은 트리플을 못 채운다');
-    eq(detectCombo(h('MAH G7 B7 GK BK')), null, '마작은 풀하우스에 못 들어간다');
-    eq(detectCombo(h('MAH G5 B5 G6 B6')), null, '마작은 연속 페어에 못 들어간다');
+  test('참새은 스트레이트에만 참여한다', () => {
+    eq(detectCombo(h('MAH G2')), null, '참새 + 2는 페어가 아니다');
+    eq(detectCombo(h('MAH PHX')), null, '봉황도 참새과 짝이 될 수 없다');
+    eq(detectCombo(h('MAH G7 B7')), null, '참새은 트리플을 못 채운다');
+    eq(detectCombo(h('MAH G7 B7 GK BK')), null, '참새은 풀하우스에 못 들어간다');
+    eq(detectCombo(h('MAH G5 B5 G6 B6')), null, '참새은 연속 페어에 못 들어간다');
   });
 
   test('개는 혼자만 낼 수 있다', () => {
@@ -197,7 +197,7 @@ describe('합법 수 열거', () => {
   });
 });
 
-describe('마작 소원', () => {
+describe('참새 소원', () => {
   test('낼 수 있으면 강제된다', () => {
     const status = wishStatus(h('GK B5 U9'), detectCombo(h('G3')), 13);
     assert(status.forced, 'K를 낼 수 있으니 반드시 내야 한다');
@@ -278,7 +278,7 @@ describe('라운드 점수', () => {
       finishOrder: [SEAT.EAST, SEAT.SOUTH, SEAT.WEST],
       tricks: {}, hands: {}, calls: { [SEAT.SOUTH]: CALL.GRAND },
     });
-    eq(lose.us, -200, '그랜드 티츄 실패는 -200');
+    eq(lose.us, -200, '라지 티츄 실패는 -200');
   });
 
   test('양 팀 점수 합은 100점이다', () => {

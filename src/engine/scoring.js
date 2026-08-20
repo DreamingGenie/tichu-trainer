@@ -13,7 +13,7 @@ export const CALL = Object.freeze({ TICHU: 'tichu', GRAND: 'grand' });
 
 export const CALL_LABEL = Object.freeze({
   [CALL.TICHU]: '티츄',
-  [CALL.GRAND]: '그랜드 티츄',
+  [CALL.GRAND]: '라지 티츄',
 });
 
 const CALL_VALUE = Object.freeze({ [CALL.TICHU]: 100, [CALL.GRAND]: 200 });

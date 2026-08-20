@@ -3,7 +3,7 @@
 // 표기법: 수트 한 글자 + 랭크. 데이터 파일에서 손패를 문자열로 적기 위한 것.
 //   G=옥(초록) B=검(검정) U=탑(파랑) R=별(빨강)
 //   랭크는 2~10, J, Q, K, A
-//   특수카드는 MAH(마작) DOG(개) PHX(봉황) DRG(용)
+//   특수카드는 MAH(참새) DOG(개) PHX(봉황) DRG(용)
 //   예: 'G5 B5 UK RA MAH'
 
 export const SUIT = Object.freeze({
@@ -43,7 +43,7 @@ const LETTER_BY_SUIT = Object.freeze({
   [SUIT.STAR]: 'R',
 });
 
-// 마작은 랭크 1로 스트레이트 최하단에 들어갈 수 있다. 용은 15로 모든 단일을 이긴다.
+// 참새은 랭크 1로 스트레이트 최하단에 들어갈 수 있다. 용은 15로 모든 단일을 이긴다.
 // 봉황과 개는 고정 랭크가 없어 0으로 두고 조합 판정에서 따로 다룬다.
 export const MAHJONG_RANK = 1;
 export const DRAGON_RANK = 15;
@@ -86,7 +86,7 @@ function makeNormal(suit, rank) {
 const SPECIAL_CARDS = Object.freeze({
   MAH: Object.freeze({
     id: 'MAH', suit: null, rank: MAHJONG_RANK, special: SPECIAL.MAHJONG,
-    points: 0, label: '1', name: '마작',
+    points: 0, label: '1', name: '참새',
   }),
   DOG: Object.freeze({
     id: 'DOG', suit: null, rank: 0, special: SPECIAL.DOG,
@@ -147,7 +147,7 @@ export function isDog(card) {
   return card.special === SPECIAL.DOG;
 }
 
-/** 조합에 자연 카드로 참여할 수 있는가 (봉황·개·용은 불가, 마작은 스트레이트에서만). */
+/** 조합에 자연 카드로 참여할 수 있는가 (봉황·개·용은 불가, 참새은 스트레이트에서만). */
 export function hasNaturalRank(card) {
   return card.rank >= MIN_NORMAL_RANK && card.rank <= MAX_NORMAL_RANK;
 }

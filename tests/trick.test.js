@@ -121,7 +121,7 @@ describe('용', () => {
   });
 });
 
-describe('마작 소원', () => {
+describe('참새 소원', () => {
   function wishRound() {
     const state = round({
       [SEAT.SOUTH]: 'GK GA G2', [SEAT.EAST]: 'B4 B6',

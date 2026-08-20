@@ -17,7 +17,7 @@ export default {
     },
 
     { kind: 'h', text: '특수 카드 4장' },
-    { kind: 'cards', hand: 'MAH DOG PHX DRG', caption: '마작·개·봉황·용. 각각 하는 일이 완전히 달라서 5챕터에서 따로 다룹니다.' },
+    { kind: 'cards', hand: 'MAH DOG PHX DRG', caption: '참새·개·봉황·용. 각각 하는 일이 완전히 달라서 5챕터에서 따로 다룹니다.' },
     {
       kind: 'list',
       items: [

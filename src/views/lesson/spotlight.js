@@ -27,7 +27,7 @@ export function createSpotlight(spotlights) {
   root.setAttribute('aria-label', '지금 보는 카드');
 
   // 조합 이름을 detectCombo 로 붙여봤다가 걷었다. 본문의 카드 묶음이 늘 '조합'인 건
-  // 아니라서 — 덱 챕터의 점수 카드 예시가 '포카드 폭탄 A' 로, 마작 한 장이 '싱글 1'
+  // 아니라서 — 덱 챕터의 점수 카드 예시가 '포카드 폭탄 A' 로, 참새 한 장이 '싱글 1'
   // 로 나온다. 데이터에 없는 의미를 지어내느니 이름을 안 붙인다. 절 제목이 바로 옆에서
   // 그 역할을 한다.
   const head = element('div', 'spotlight__head');

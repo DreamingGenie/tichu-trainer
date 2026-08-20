@@ -186,7 +186,7 @@ export function quizView({ params }) {
     }
     if (wish) {
       table.append(htmlElement('div', 'note note--warn',
-        inline(`마작의 소원이 **${quiz.wishLabel ?? wish}**로 걸려 있습니다.`)));
+        inline(`참새의 소원이 **${quiz.wishLabel ?? wish}**로 걸려 있습니다.`)));
     }
     panel.append(table);
 

@@ -14,7 +14,7 @@ import { element } from './dom.js';
 import { verdictBox } from './verdict.js';
 import { createHandView } from './hand-view.js';
 
-// 폭탄·계단·마작 스트레이트까지 전부 만들어볼 수 있게 고른 18장.
+// 폭탄·계단·참새 스트레이트까지 전부 만들어볼 수 있게 고른 18장.
 const PRACTICE_HAND = 'MAH DOG PHX DRG B2 B3 B4 G5 B5 U5 R5 G6 B6 G7 G8 G9 GK BK';
 
 const TABLE_PRESETS = [

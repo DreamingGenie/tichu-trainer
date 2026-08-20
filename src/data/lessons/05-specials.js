@@ -2,13 +2,13 @@ export default {
   id: 'specials',
   num: 5,
   title: '특수 카드 네 장',
-  subtitle: '마작, 개, 봉황, 용 — 각각 완전히 다른 일을 한다',
+  subtitle: '참새, 개, 봉황, 용 — 각각 완전히 다른 일을 한다',
   minigames: ['dragon-and-dog'],
 
   blocks: [
     { kind: 'p', text: '티츄가 다른 카드 게임과 확 달라지는 지점입니다. 이 네 장은 세기만 다른 게 아니라 **하는 일 자체가** 다릅니다.' },
 
-    { kind: 'h', text: '마작 — 선을 열고, 소원을 건다' },
+    { kind: 'h', text: '참새 — 선을 열고, 소원을 건다' },
     { kind: 'cards', hand: 'MAH' },
     {
       kind: 'list',
@@ -93,7 +93,7 @@ export default {
       id: 'specials-wish-forced',
       mode: 'select-cards',
       goal: 'legal',
-      prompt: '상대가 마작을 내면서 **K를 소원**했습니다. 테이블에는 [[G3]] 한 장이 깔려 있고 내 차례입니다. 무엇을 내야 할까요?',
+      prompt: '상대가 참새을 내면서 **K를 소원**했습니다. 테이블에는 [[G3]] 한 장이 깔려 있고 내 차례입니다. 무엇을 내야 할까요?',
       table: 'G3',
       wish: 13,
       hand: 'GK B5 U9 GA',
