@@ -12,16 +12,18 @@
 
 /* 펠트 위에서는 본문용 색이 안 읽힌다. 밝은 쪽으로 되돌린다. */
 .felt .muted,
-.felt .small { color: inherit; opacity: 0.78; }
+.felt .small { color: inherit; opacity: 0.9; }
 .felt .note {
   background: var(--felt-well);
   border-color: var(--felt-hairline);
   color: var(--felt-text);
 }
 
-/* 지금 테이블에 깔린 조합 이름. 카드 바로 위에 붙는 회색 알약. */
+/* 지금 테이블에 깔린 조합 이름. 카드 바로 위에 붙는 밝은 알약.
+   펠트 위라 페이지 배경 토큰(--bg-sunken)을 쓰면 다크에서 글자와 같이 어두워진다.
+   카드 면과 같은 짝(--card-face + --card-ink)으로 묶어 두 테마 모두 밝은 쪽으로 고정한다. */
 .table-call {
-  background: var(--bg-sunken);
+  background: var(--card-face);
   color: var(--card-ink);
   font-size: 0.78rem;
   font-weight: 700;
