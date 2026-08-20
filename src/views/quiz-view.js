@@ -129,9 +129,12 @@ export function quizView({ params }) {
         if (settled) return;
         button.classList.add(choice.correct ? 'is-correct' : 'is-wrong');
 
-        const box = verdictBox(choice.correct ? 'ok' : 'bad', choice.correct ? '맞습니다' : '아쉽습니다', '');
-        box.querySelector('.verdict__body').innerHTML = inline(choice.why);
-        feedback.replaceChildren(box);
+        feedback.replaceChildren(verdictBox(
+          choice.correct ? 'ok' : 'bad',
+          choice.correct ? '맞습니다' : '아쉽습니다',
+          inline(choice.why),
+          { html: true },
+        ));
 
         if (choice.correct) {
           settled = true;

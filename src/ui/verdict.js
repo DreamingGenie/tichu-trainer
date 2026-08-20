@@ -4,12 +4,11 @@
 import { element } from './dom.js';
 
 /**
- * .verdict__body 는 내용이 비어 있어도 항상 만든다. 부르는 쪽에서 나중에
- * innerHTML 로 채워 넣는 일이 잦은데, 없으면 그 자리에서 터진다.
- *
- * @param tone 'ok' | 'bad' | 'neutral'
+ * @param tone    'ok' | 'bad' | 'neutral'
+ * @param body    본문. 기본은 텍스트고, inline() 을 거친 마크업이면 html 을 켠다.
+ * @param options.html body 를 마크업으로 넣는다
  */
-export function verdictBox(tone, title, body) {
+export function verdictBox(tone, title, body, options = {}) {
   const box = element('div', 'verdict');
   if (tone === 'ok') box.classList.add('is-ok');
   if (tone === 'bad') box.classList.add('is-bad');
@@ -19,7 +18,14 @@ export function verdictBox(tone, title, body) {
 
   const text = element('div', 'stack stack--tight');
   text.append(element('div', 'verdict__title', title));
-  text.append(element('div', 'verdict__body', body ?? ''));
+
+  const bodyNode = element('div', 'verdict__body');
+  if (options.html) {
+    bodyNode.innerHTML = body ?? '';
+  } else {
+    bodyNode.textContent = body ?? '';
+  }
+  text.append(bodyNode);
 
   box.append(icon, text);
   return box;
