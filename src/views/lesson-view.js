@@ -2,7 +2,7 @@ import { chapterById, neighbours } from '../data/chapters.js';
 import { minigameById } from '../data/minigames/index.js';
 import { chapterStatus, markRead } from '../store/progress.js';
 import { renderBlocks } from '../ui/blocks.js';
-import { element } from '../ui/format.js';
+import { element } from '../ui/dom.js';
 
 export function lessonView({ params }) {
   const chapter = chapterById(params.id);

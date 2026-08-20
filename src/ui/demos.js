@@ -3,9 +3,11 @@
 
 import { parseHand, sumPoints } from '../engine/cards.js';
 import { CALL, scoreRound } from '../engine/scoring.js';
-import { SEAT, SEAT_LABEL } from '../engine/seats.js';
+import { SEAT } from '../engine/seats.js';
 import { cardElement } from './card-view.js';
-import { element, formatPoints, verdictBox } from './format.js';
+import { formatPoints } from '../engine/describe.js';
+import { element } from './dom.js';
+import { verdictBox } from './verdict.js';
 import { createSandbox } from './sandbox.js';
 
 /** 2챕터 — 점수 카드만 골라내기. */

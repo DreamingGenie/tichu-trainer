@@ -9,7 +9,9 @@ import { detectCombo } from '../engine/combos.js';
 import { checkPlay } from '../engine/compare.js';
 import { enumerateLegalPlays } from '../engine/legal.js';
 import { cardElement } from './card-view.js';
-import { describeCombo, element, verdictBox } from './format.js';
+import { describeCombo } from '../engine/describe.js';
+import { element } from './dom.js';
+import { verdictBox } from './verdict.js';
 import { createHandView } from './hand-view.js';
 
 // 폭탄·계단·마작 스트레이트까지 전부 만들어볼 수 있게 고른 18장.

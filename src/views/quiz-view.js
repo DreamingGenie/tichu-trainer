@@ -12,16 +12,16 @@ import { checkWish, wishStatus } from '../engine/wish.js';
 import { chapterById, neighbours } from '../data/chapters.js';
 import { navigate } from '../router.js';
 import { recordQuiz } from '../store/progress.js';
+import { describeCombo } from '../engine/describe.js';
 import { cardElement } from '../ui/card-view.js';
-import { inline } from '../ui/blocks.js';
-import { describeCombo, element, verdictBox } from '../ui/format.js';
+import { element } from '../ui/dom.js';
+import { htmlElement, inline } from '../ui/markup.js';
+import { verdictBox } from '../ui/verdict.js';
 import { createHandView } from '../ui/hand-view.js';
 
 /** 문제 지문. [[GK]] 같은 표기를 카드 이름으로 바꿔 보여준다. */
 function promptNode(text) {
-  const node = element('p', 'quiz__prompt');
-  node.innerHTML = inline(text);
-  return node;
+  return htmlElement('p', 'quiz__prompt', inline(text));
 }
 
 export function quizView({ params }) {
@@ -123,9 +123,8 @@ export function quizView({ params }) {
     let firstTry = true;
 
     quiz.choices.forEach((choice) => {
-      const button = element('button', 'choice');
+      const button = htmlElement('button', 'choice', inline(choice.text));
       button.type = 'button';
-      button.innerHTML = inline(choice.text);
       button.addEventListener('click', () => {
         if (settled) return;
         button.classList.add(choice.correct ? 'is-correct' : 'is-wrong');
@@ -138,11 +137,7 @@ export function quizView({ params }) {
           settled = true;
           advance(firstTry);
           for (const b of options.querySelectorAll('.choice')) b.disabled = true;
-          if (quiz.explain) {
-            const note = element('div', 'note');
-            note.innerHTML = inline(quiz.explain);
-            feedback.append(note);
-          }
+          if (quiz.explain) feedback.append(htmlElement('div', 'note', inline(quiz.explain)));
           feedback.append(nextButton());
         } else {
           firstTry = false;
@@ -176,9 +171,8 @@ export function quizView({ params }) {
       table.append(element('div', 'small muted', describeCombo(current)));
     }
     if (wish) {
-      const note = element('div', 'note note--warn');
-      note.innerHTML = inline(`마작의 소원이 **${quiz.wishLabel ?? wish}**로 걸려 있습니다.`);
-      table.append(note);
+      table.append(htmlElement('div', 'note note--warn',
+        inline(`마작의 소원이 **${quiz.wishLabel ?? wish}**로 걸려 있습니다.`)));
     }
     panel.append(table);
 
@@ -216,11 +210,7 @@ export function quizView({ params }) {
       advance(firstTry);
       submit.disabled = true;
       for (const b of actions.querySelectorAll('button')) b.disabled = true;
-      if (quiz.explain) {
-        const note = element('div', 'note');
-        note.innerHTML = inline(quiz.explain);
-        feedback.append(note);
-      }
+      if (quiz.explain) feedback.append(htmlElement('div', 'note', inline(quiz.explain)));
       feedback.append(nextButton());
     }
 

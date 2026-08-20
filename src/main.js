@@ -1,7 +1,7 @@
 import { route, setNotFound, startRouter } from './router.js';
 import { effectiveTheme, setTheme } from './store/progress.js';
 import { createSandbox } from './ui/sandbox.js';
-import { element } from './ui/format.js';
+import { element } from './ui/dom.js';
 import { homeView } from './views/home-view.js';
 import { lessonView, notFoundPanel } from './views/lesson-view.js';
 import { minigameIndexView, minigameView } from './views/minigame-view.js';

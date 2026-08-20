@@ -1,46 +1,10 @@
 // 레슨 본문을 선언형 블록으로 받아 DOM으로 그린다.
 // 콘텐츠(data/lessons/*)와 렌더링을 갈라놔야 글을 고칠 때 코드를 건드리지 않는다.
 
-import { parseCard, parseHand } from '../engine/cards.js';
+import { parseHand } from '../engine/cards.js';
 import { cardElement } from './card-view.js';
 import { renderDemo } from './demos.js';
-
-const SUIT_VAR = {
-  jade: 'var(--suit-jade)', sword: 'var(--suit-sword)',
-  pagoda: 'var(--suit-pagoda)', star: 'var(--suit-star)',
-};
-
-function escapeHtml(text) {
-  return String(text).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
-}
-
-/**
- * 본문에서 쓰는 최소 문법.
- *   **굵게**      강조
- *   `코드`        용어
- *   [[GK]]        카드 이름을 수트 색으로 (예: 옥 K)
- */
-export function inline(text) {
-  return escapeHtml(text)
-    .replace(/\[\[([A-Z0-9]+)\]\]/g, (whole, token) => {
-      try {
-        const card = parseCard(token);
-        const color = card.special ? 'var(--suit-special)' : SUIT_VAR[card.suit];
-        return `<span class="card-chip" style="--suit:${color}">${escapeHtml(card.name)}</span>`;
-      } catch {
-        return whole;
-      }
-    })
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/`(.+?)`/g, '<code>$1</code>');
-}
-
-function el(tag, className, html) {
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (html != null) node.innerHTML = html;
-  return node;
-}
+import { htmlElement as el, inline, noteElement } from './markup.js';
 
 const RENDERERS = {
   p: (block) => el('p', block.muted ? 'muted' : null, inline(block.text)),
@@ -55,10 +19,7 @@ const RENDERERS = {
 
   note: (block) => {
     const tone = block.tone && block.tone !== 'info' ? ` note--${block.tone}` : '';
-    const node = el('div', `note${tone}`);
-    if (block.title) node.append(el('strong', 'note__title', inline(block.title)));
-    node.append(el('span', null, inline(block.text)));
-    return node;
+    return noteElement(`note${tone}`, block.title, inline(block.text));
   },
 
   cards: (block) => {
