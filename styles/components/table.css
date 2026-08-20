@@ -1,0 +1,31 @@
+/* 게임 테이블 표면. 미니판과 퀴즈 상황판이 같이 쓴다.
+ *
+ * 펠트는 테마와 무관하게 늘 어두운 올리브라서, 그 위에 얹는 층은 흰색·검정 알파
+ * (--felt-* 토큰)를 그대로 쓴다. 여기는 '표면'만 정의하고 안쪽 배치는 각 화면이 맡는다. */
+
+.felt {
+  background: radial-gradient(120% 90% at 50% 42%, var(--felt) 0%, var(--felt-deep) 100%);
+  color: var(--felt-text);
+  border-radius: var(--radius-lg);
+  box-shadow: inset 0 1px 0 var(--felt-sheen), var(--shadow-panel);
+}
+
+/* 펠트 위에서는 본문용 색이 안 읽힌다. 밝은 쪽으로 되돌린다. */
+.felt .muted,
+.felt .small { color: inherit; opacity: 0.78; }
+.felt .note {
+  background: var(--felt-well);
+  border-color: var(--felt-hairline);
+  color: var(--felt-text);
+}
+
+/* 지금 테이블에 깔린 조합 이름. 카드 바로 위에 붙는 회색 알약. */
+.table-call {
+  background: var(--bg-sunken);
+  color: var(--card-ink);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.8;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-pill);
+}

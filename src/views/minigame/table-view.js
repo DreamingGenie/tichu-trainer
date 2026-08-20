@@ -8,6 +8,41 @@ import { cardElement } from '../../ui/card-view.js';
 import { describeCombo } from '../../engine/describe.js';
 import { element } from '../../ui/dom.js';
 
+/** 자리에 앉은 사람. 단순한 평면 도형이라 작게 줄여도 뭉개지지 않는다. */
+function avatarSvg() {
+  return `
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M4 64 C4 49 16 42 32 42 C48 42 60 49 60 64 Z" fill="#f6f3ea" stroke="#d5cfc0" stroke-width="1.5"/>
+      <path d="M26 40 h12 v6 a6 6 0 0 1 -12 0 Z" fill="#e8c8a2"/>
+      <circle cx="32" cy="24" r="16" fill="#eecfa8"/>
+      <path d="M16 24 a16 16 0 0 1 32 0 a16 13 0 0 0 -32 0 Z" fill="#e3bf94"/>
+      <ellipse cx="15.5" cy="26" rx="3" ry="4" fill="#eecfa8"/>
+      <ellipse cx="48.5" cy="26" rx="3" ry="4" fill="#eecfa8"/>
+      <g stroke="#4a3b2c" stroke-width="2" stroke-linecap="round" fill="none">
+        <path d="M24 24 q3.5 3 7 0"/>
+        <path d="M33 24 q3.5 3 7 0"/>
+        <path d="M28 32 q4 3.5 8 0"/>
+      </g>
+    </svg>`;
+}
+
+/** 남의 손패. 실제로 든 것처럼 부채꼴로 편다. */
+function fan(count) {
+  const wrap = element('div', 'fan-wrap');
+  const inner = element('div', 'fan');
+  const shown = Math.min(count, 14);
+  // 장수가 많아질수록 한 장당 각도를 줄여 부채가 지나치게 벌어지지 않게 한다.
+  inner.style.setProperty('--n', String(shown));
+  inner.style.setProperty('--fan-step', `${Math.min(6, 62 / Math.max(shown, 1))}deg`);
+  for (let i = 0; i < shown; i += 1) {
+    const card = element('span', 'fan__card');
+    card.style.setProperty('--i', String(i));
+    inner.append(card);
+  }
+  wrap.append(inner);
+  return wrap;
+}
+
 function seatBox(state, seat) {
   const box = element('div', `seat seat--${seat}`);
   const count = state.hands[seat].length;
@@ -16,24 +51,32 @@ function seatBox(state, seat) {
   box.classList.toggle('is-turn', state.turn === seat && !state.done);
   box.classList.toggle('is-out', isOut);
 
-  box.append(element('div', 'seat__name', SEAT_LABEL[seat]));
+  const person = element('div', 'seat__person');
+  const avatar = element('div', 'seat__avatar');
+  avatar.innerHTML = avatarSvg();
+  person.append(avatar);
+  person.append(element('div', 'seat__name', SEAT_LABEL[seat]));
 
   if (isOut) {
     const place = state.finishOrder.indexOf(seat);
-    box.append(element('div', 'seat__meta', place >= 0 ? `${place + 1}등으로 나감` : '손패 없음'));
+    person.append(element('div', 'seat__count', place >= 0 ? `${place + 1}등` : '없음'));
   } else {
-    const mini = element('div', 'mini-cards');
-    for (let i = 0; i < count; i += 1) mini.append(element('span', 'mini-card'));
-    box.append(mini);
-    box.append(element('div', 'seat__meta', `${count}장`));
+    // 남쪽은 나다. 진짜 손패가 펠트 아래에 따로 붙으므로 부채는 그리지 않는다.
+    if (seat !== SEAT.SOUTH) box.append(fan(count));
+    person.append(element('div', 'seat__count', `${count}장`));
+  }
+
+  if (state.turn === seat && !state.done) {
+    person.append(element('div', 'seat__turn', '차례'));
   }
 
   const points = sumPoints(state.tricks[seat]);
   const tags = element('div', 'row');
   if (state.calls?.[seat]) tags.append(element('span', 'badge badge--warn', CALL_LABEL[state.calls[seat]]));
   if (points !== 0) tags.append(element('span', 'badge', `${points}점`));
-  if (tags.children.length) box.append(tags);
+  if (tags.children.length) person.append(tags);
 
+  box.append(person);
   return box;
 }
 
@@ -47,8 +90,14 @@ export function renderTable(state) {
   }
 
   const center = element('div', 'table-center');
-  const drop = element('div', 'table-drop');
 
+  // 무엇이 깔렸는지를 카드 바로 위에 붙여 둔다. 실제 앱이 그렇고,
+  // 카드와 설명이 떨어져 있으면 눈이 두 번 움직인다.
+  if (state.current) {
+    center.append(element('div', 'table-call', describeCombo(state.current)));
+  }
+
+  const drop = element('div', 'table-drop');
   if (state.current && state.current.cards) {
     const row = element('div', 'card-row');
     for (const card of state.current.cards) row.append(cardElement(card));
@@ -59,7 +108,6 @@ export function renderTable(state) {
   center.append(drop);
 
   const meta = element('div', 'row');
-  if (state.current) meta.append(element('span', 'badge badge--accent', describeCombo(state.current)));
   const pilePoints = sumPoints(state.pile);
   if (pilePoints !== 0) meta.append(element('span', 'badge badge--warn', `무더기 ${pilePoints}점`));
   if (state.wish) meta.append(element('span', 'badge badge--bad', `소원 ${rankLabel(state.wish)}`));

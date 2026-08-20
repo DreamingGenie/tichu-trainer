@@ -1,15 +1,55 @@
 /* 미니판 화면 — 펠트 테이블, 네 자리, 진행 기록.
  * 펠트는 테마와 무관하게 항상 어두운 초록이라 그 위의 반투명 층은 --felt-* 토큰을 쓴다. */
 
-.felt {
-  background: linear-gradient(160deg, var(--felt), var(--felt-deep));
-  color: var(--felt-text);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5) var(--space-4);
-  box-shadow: inset 0 1px 0 var(--felt-sheen), var(--shadow-panel);
+/* 표면은 components/table.css 가 그린다. 여기는 안쪽 여백만. */
+.felt { padding: var(--space-5) var(--space-4); }
+
+/* --- 자리에 앉은 사람 --------------------------------------------------- */
+
+.seat__person { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+
+.seat__avatar { width: 46px; height: 46px; line-height: 0; }
+.seat__avatar svg { width: 100%; height: 100%; display: block; }
+
+.felt .seat__name { font-size: 0.8rem; font-weight: 700; opacity: 0.92; }
+
+/* 장수·차례는 실제 앱처럼 작은 알약으로. */
+.seat__count,
+.seat__turn {
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.7;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
 }
-.felt .seat__name { font-size: 0.84rem; font-weight: 700; opacity: 0.9; }
-.felt .seat__meta { font-size: 0.78rem; opacity: 0.7; }
+.seat__count { background: var(--card-face); color: var(--card-ink); }
+.seat__turn { background: var(--warn); color: var(--on-solid); }
+
+/* --- 부채꼴로 든 남의 손패 --------------------------------------------- */
+
+.fan-wrap { display: grid; place-items: center; }
+.fan { display: flex; }
+.fan__card {
+  width: 20px;
+  height: 28px;
+  flex: 0 0 auto;
+  margin-inline: -5px;
+  border-radius: 3px;
+  background: var(--card-back);
+  border: 1px solid var(--card-back-line);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.35);
+  /* 회전축을 카드 한참 아래에 두면 손에 쥔 것처럼 완만한 호가 나온다. */
+  transform-origin: 50% 240%;
+  transform: rotate(calc((var(--i) - (var(--n) - 1) / 2) * var(--fan-step)));
+}
+
+/* 좌우 자리는 부채를 세운다. 회전은 레이아웃 크기를 바꾸지 않으므로 감싸는 칸을
+ * 손으로 잡아 준다 — 14장이면 부채가 실제로 200px 남짓 벌어진다. */
+.seat--west .fan-wrap,
+.seat--east .fan-wrap { width: 62px; height: 200px; }
+.seat--west .fan { transform: rotate(90deg); }
+.seat--east .fan { transform: rotate(-90deg); }
 
 /* --- 자리 배치 --------------------------------------------------------- */
 /* 파트너는 맞은편(북), 상대는 양옆. 좁은 화면에서는 세로로 쌓는다. */
@@ -30,45 +70,58 @@
 .seat--east  { grid-area: east; }
 .seat--south { grid-area: south; }
 
+/* 사람과 부채의 배치는 자리마다 다르다 — 마크업 순서는 [부채, 사람] 하나로 두고
+ * 방향만 뒤집는다. 북쪽은 사람이 위, 좌우는 사람이 바깥쪽. */
 .seat {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: var(--space-1);
-  padding: var(--space-2) var(--space-3);
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
   border-radius: var(--radius);
   text-align: center;
   transition: background 0.15s ease;
 }
+.seat--north { flex-direction: column-reverse; }
+.seat--south { flex-direction: column; }
+.seat--west  { flex-direction: row-reverse; }
+.seat--east  { flex-direction: row; }
+
 .seat.is-turn { background: var(--felt-highlight); box-shadow: 0 0 0 1.5px var(--felt-hairline); }
 .seat.is-out { opacity: 0.5; }
-
-/* 남의 손패는 장수만 보여준다. */
-.mini-cards { display: flex; gap: 2px; }
-.mini-card {
-  width: 9px; height: 13px;
-  border-radius: 2px;
-  background: var(--card-back);
-  border: 1px solid var(--card-back-line);
-}
 
 /* --- 테이블 가운데 ----------------------------------------------------- */
 
 .table-center { grid-area: table; min-width: 190px; display: grid; place-items: center; gap: var(--space-2); }
+
+/* 낸 카드는 펠트 위에 그대로 놓인다 — 실제 테이블처럼. */
 .table-drop {
   min-height: calc(var(--card-w) * 1.4 + var(--space-4));
   display: grid;
   place-items: center;
   padding: var(--space-2);
-  border-radius: var(--radius);
-  background: var(--felt-well);
   width: 100%;
 }
-.table-drop__empty { font-size: 0.86rem; opacity: 0.65; }
+.table-drop__empty {
+  font-size: 0.86rem;
+  opacity: 0.55;
+  border: 1.5px dashed var(--felt-hairline);
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+}
 
 @media (max-width: 560px) {
   .seats { grid-template-columns: 1fr; grid-template-areas: 'north' 'table' 'west' 'east' 'south'; }
   .table-center { min-width: 0; width: 100%; }
+
+  /* 자리가 세로로 쌓이면 좌우 구분이 의미를 잃는다. 부채를 눕혀 모두 같은 모양으로
+   * 두면 세운 부채가 잡아먹던 세로 200px씩이 사라진다. */
+  .seat--west,
+  .seat--east { flex-direction: column-reverse; }
+  .seat--west .fan-wrap,
+  .seat--east .fan-wrap { width: auto; height: auto; }
+  .seat--west .fan,
+  .seat--east .fan { transform: none; }
 }
 
 /* --- 진행 기록 --------------------------------------------------------- */
