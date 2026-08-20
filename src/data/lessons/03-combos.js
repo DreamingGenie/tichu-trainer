@@ -34,7 +34,7 @@ export default {
     {
       kind: 'examples',
       items: [
-        { hand: 'MAH G2 B3 U4 R5', label: '참새을 맨 아래에 끼운 스트레이트', ok: true, why: '[[MAH]]은 랭크 1이라 스트레이트의 최하단이 될 수 있습니다.' },
+        { hand: 'MAH G2 B3 U4 R5', label: '참새를 맨 아래에 끼운 스트레이트', ok: true, why: '[[MAH]]는 랭크 1이라 스트레이트의 최하단이 될 수 있습니다.' },
         { hand: 'G5 B6 U7 R8', label: '네 장짜리', ok: false, why: '스트레이트는 **최소 5장**입니다. 네 장은 아무것도 아닙니다.' },
         { hand: 'GJ BQ UK RA DRG', label: 'A 위에 용을 얹기', ok: false, why: '[[DRG]]은 어떤 조합에도 들어가지 못합니다. 혼자 싱글로만 냅니다.' },
       ],

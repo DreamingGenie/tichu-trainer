@@ -6,7 +6,7 @@
 //   - 개는 단일 전용이고 리드로만 낼 수 있다 (그 제약은 compare.js에서 본다).
 //   - 스트레이트는 5장 이상이고 참새(1)이 최하단에 올 수 있다.
 //   - 봉황이 대신할 수 있는 것은 자연 카드(2~A)뿐이라 1 자리는 못 메운다.
-//   - 참새은 스트레이트에만 참여한다. 참새 페어 같은 건 없다.
+//   - 참새는 스트레이트에만 참여한다. 참새 페어 같은 건 없다.
 
 import {
   MAHJONG_RANK, MAX_NORMAL_RANK, MIN_NORMAL_RANK, PHOENIX_LEAD_RANK,
@@ -101,9 +101,9 @@ export function detectCombo(input) {
   const bomb = detectBomb(cards, hasPhoenix, groups);
   if (bomb) return bomb;
 
-  // 참새은 랭크 그룹에 들어가지 않으므로, 자연 카드가 전부 그룹에 담겼다는 것은
-  // 곧 참새이 섞이지 않았다는 뜻이다. 랭크로 묶는 조합(페어·트리플·풀하우스·계단)은
-  // 참새을 쓸 수 없으니 여기서 한 번에 막는다. 스트레이트만 참새을 받아준다.
+  // 참새는 랭크 그룹에 들어가지 않으므로, 자연 카드가 전부 그룹에 담겼다는 것은
+  // 곧 참새가 섞이지 않았다는 뜻이다. 랭크로 묶는 조합(페어·트리플·풀하우스·계단)은
+  // 참새를 쓸 수 없으니 여기서 한 번에 막는다. 스트레이트만 참새를 받아준다.
   const grouped = [...groups.values()].reduce((sum, g) => sum + g.length, 0);
   const allGrouped = grouped === naturals.length;
 
@@ -130,7 +130,7 @@ function detectBomb(cards, hasPhoenix, groups) {
 
   if (cards.length >= 5) {
     const suit = cards[0].suit;
-    // 참새과 용은 수트가 없으므로 여기서 자동으로 걸러진다.
+    // 참새와 용은 수트가 없으므로 여기서 자동으로 걸러진다.
     if (suit && cards.every((c) => c.suit === suit)) {
       const ranks = cards.map((c) => c.rank).sort((a, b) => a - b);
       if (isConsecutive(ranks)) return make(COMBO.BOMB_SF, ranks[ranks.length - 1], cards);

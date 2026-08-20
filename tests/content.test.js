@@ -134,6 +134,18 @@ describe('미니판 각본', () => {
     }
   });
 
+  // 짧은 판은 자기 챕터의 minigames 에 적혀 있어야 레슨 끝의 '이제 해볼 차례'에서
+  // 이어진다. wish-pressure 가 목록 화면에서만 닿는 고아로 한동안 남아 있었다.
+  test('짧은 판이 자기 챕터에 연결되어 있다', () => {
+    for (const game of MINIGAMES) {
+      const chapter = CHAPTERS.find((c) => c.id === game.chapterId);
+      assert(
+        chapter.minigames.includes(game.id),
+        `${game.id} 가 "${chapter.title}" 챕터의 minigames 에 없다`,
+      );
+    }
+  });
+
   test('한 판 안에서 같은 카드가 두 번 나오지 않는다', () => {
     for (const game of MINIGAMES) {
       const seen = new Map();

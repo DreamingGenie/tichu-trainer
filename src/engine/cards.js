@@ -43,7 +43,7 @@ const LETTER_BY_SUIT = Object.freeze({
   [SUIT.STAR]: 'R',
 });
 
-// 참새은 랭크 1로 스트레이트 최하단에 들어갈 수 있다. 용은 15로 모든 단일을 이긴다.
+// 참새는 랭크 1로 스트레이트 최하단에 들어갈 수 있다. 용은 15로 모든 단일을 이긴다.
 // 봉황과 개는 고정 랭크가 없어 0으로 두고 조합 판정에서 따로 다룬다.
 export const MAHJONG_RANK = 1;
 export const DRAGON_RANK = 15;
@@ -147,7 +147,7 @@ export function isDog(card) {
   return card.special === SPECIAL.DOG;
 }
 
-/** 조합에 자연 카드로 참여할 수 있는가 (봉황·개·용은 불가, 참새은 스트레이트에서만). */
+/** 조합에 자연 카드로 참여할 수 있는가 (봉황·개·용은 불가, 참새는 스트레이트에서만). */
 export function hasNaturalRank(card) {
   return card.rank >= MIN_NORMAL_RANK && card.rank <= MAX_NORMAL_RANK;
 }

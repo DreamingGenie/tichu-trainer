@@ -65,7 +65,7 @@ describe('조합 판정 — 되는 것', () => {
 
   test('스트레이트', () => {
     eq(rank('G5 B6 U7 R8 G9'), 9);
-    eq(rank('MAH G2 B3 U4 R5'), 5, '참새이 최하단에 들어간다');
+    eq(rank('MAH G2 B3 U4 R5'), 5, '참새가 최하단에 들어간다');
     eq(rank('G5 B6 PHX R8 G9'), 9, '봉황이 안쪽 구멍을 메운다');
     eq(rank('G5 B6 U7 R8 PHX'), 9, '봉황이 위로 붙어 9가 된다');
     eq(rank('G10 BJ UQ RK PHX'), 14, '봉황이 A 자리로 올라간다');
@@ -92,12 +92,12 @@ describe('조합 판정 — 안 되는 것', () => {
     eq(sf.type, COMBO.STRAIGHT, '수트가 같아도 봉황이 끼면 그냥 스트레이트다');
   });
 
-  test('참새은 스트레이트에만 참여한다', () => {
+  test('참새는 스트레이트에만 참여한다', () => {
     eq(detectCombo(h('MAH G2')), null, '참새 + 2는 페어가 아니다');
-    eq(detectCombo(h('MAH PHX')), null, '봉황도 참새과 짝이 될 수 없다');
-    eq(detectCombo(h('MAH G7 B7')), null, '참새은 트리플을 못 채운다');
-    eq(detectCombo(h('MAH G7 B7 GK BK')), null, '참새은 풀하우스에 못 들어간다');
-    eq(detectCombo(h('MAH G5 B5 G6 B6')), null, '참새은 연속 페어에 못 들어간다');
+    eq(detectCombo(h('MAH PHX')), null, '봉황도 참새와 짝이 될 수 없다');
+    eq(detectCombo(h('MAH G7 B7')), null, '참새는 트리플을 못 채운다');
+    eq(detectCombo(h('MAH G7 B7 GK BK')), null, '참새는 풀하우스에 못 들어간다');
+    eq(detectCombo(h('MAH G5 B5 G6 B6')), null, '참새는 연속 페어에 못 들어간다');
   });
 
   test('개는 혼자만 낼 수 있다', () => {
