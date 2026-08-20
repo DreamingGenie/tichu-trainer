@@ -31,6 +31,13 @@ button { font: inherit; color: inherit; }
 
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
+/* 라우터가 화면을 바꿀 때마다 제목으로 포커스를 옮긴다(router.js). 크롬은 그 프로그램적
+   포커스에도 :focus-visible 을 매기므로, 아무 조작도 안 했는데 제목에 사각형이 남는다.
+   제목은 조작할 수 있는 요소가 아니니 링만 지운다 — 포커스 자체는 그대로 둬야
+   스크린리더가 새 화면을 읽어준다. */
+h1[tabindex='-1']:focus-visible,
+h2[tabindex='-1']:focus-visible { outline: none; }
+
 /* --- 뼈대 ------------------------------------------------------------ */
 
 .app {
@@ -90,7 +97,7 @@ button { font: inherit; color: inherit; }
 
 .site-footer {
   border-top: var(--edge);
-  color: var(--text-faint);
+  color: var(--text-muted);
   font-size: 0.84rem;
 }
 

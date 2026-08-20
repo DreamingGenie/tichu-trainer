@@ -20,7 +20,7 @@ const DEMOS = {
 export function renderDemo(id, block) {
   const build = DEMOS[id];
   const wrap = element('div', 'demo');
-  if (block?.title) wrap.append(element('h4', 'demo__title', block.title));
+  if (block?.title) wrap.append(element('h3', 'demo__title', block.title));
 
   if (!build) {
     wrap.append(element('div', 'note note--warn', `준비 중인 데모입니다 (${id}).`));

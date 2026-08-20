@@ -13,8 +13,11 @@ function setupTheme() {
   const button = document.getElementById('theme-toggle');
   const apply = (theme) => {
     setTheme(theme);
-    button.textContent = theme === 'dark' ? '라이트' : '다크';
-    button.setAttribute('aria-label', `${theme === 'dark' ? '밝은' : '어두운'} 테마로 바꾸기`);
+    // 접근 이름은 보이는 글자를 그대로 품어야 한다. 음성 제어 사용자가 화면에 보이는
+    // "다크"라고 말했는데 이름이 "어두운 테마로 바꾸기"면 그 버튼을 못 누른다.
+    const label = theme === 'dark' ? '라이트' : '다크';
+    button.textContent = label;
+    button.setAttribute('aria-label', `${label} 테마로 바꾸기`);
   };
   apply(effectiveTheme());
   button.addEventListener('click', () => {

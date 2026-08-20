@@ -9,7 +9,8 @@ import { htmlElement as el, inline, noteElement } from '../../ui/markup.js';
 const RENDERERS = {
   p: (block) => el('p', block.muted ? 'muted' : null, inline(block.text)),
 
-  h: (block) => el('h3', null, inline(block.text)),
+  // 레슨 제목이 h1 이므로 본문 절은 h2 다. h3 으로 두면 계층이 한 단계 건너뛴다.
+  h: (block) => el('h2', null, inline(block.text)),
 
   list: (block) => {
     const list = el(block.ordered ? 'ol' : 'ul');
