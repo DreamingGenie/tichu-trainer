@@ -1,10 +1,10 @@
 // 레슨 본문을 선언형 블록으로 받아 DOM으로 그린다.
 // 콘텐츠(data/lessons/*)와 렌더링을 갈라놔야 글을 고칠 때 코드를 건드리지 않는다.
 
-import { parseHand } from '../engine/cards.js';
-import { cardElement } from './card-view.js';
-import { renderDemo } from './demos.js';
-import { htmlElement as el, inline, noteElement } from './markup.js';
+import { parseHand } from '../../engine/cards.js';
+import { cardElement } from '../../ui/card-view.js';
+import { renderDemo } from './demos/index.js';
+import { htmlElement as el, inline, noteElement } from '../../ui/markup.js';
 
 const RENDERERS = {
   p: (block) => el('p', block.muted ? 'muted' : null, inline(block.text)),

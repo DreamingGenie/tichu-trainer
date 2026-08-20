@@ -13,8 +13,8 @@ import { element } from '../ui/dom.js';
 import { htmlElement, inline, noteElement } from '../ui/markup.js';
 import { verdictBox } from '../ui/verdict.js';
 import { createHandView } from '../ui/hand-view.js';
-import { renderLog, renderTable } from '../ui/table-view.js';
-import { notFoundPanel } from './lesson-view.js';
+import { renderLog, renderTable } from './minigame/table-view.js';
+import { notFoundPanel } from './not-found-view.js';
 
 const ME = SEAT.SOUTH;
 const BOT_DELAY = 800;
