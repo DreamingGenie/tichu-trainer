@@ -165,13 +165,13 @@ export function quizView({ params }) {
     const wish = quiz.wish ?? null;
 
     // 테이블 상황
-    const table = element('div', 'quiz__table');
+    const table = element('div', 'quiz__table felt');
     table.append(element('div', 'small muted', current ? '테이블 위' : '새 트릭을 여는 상황입니다'));
     if (current) {
+      table.append(element('div', 'table-call', describeCombo(current)));
       const row = element('div', 'card-row');
       for (const card of parseHand(quiz.table)) row.append(cardElement(card));
       table.append(row);
-      table.append(element('div', 'small muted', describeCombo(current)));
     }
     if (wish) {
       table.append(htmlElement('div', 'note note--warn',

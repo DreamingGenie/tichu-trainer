@@ -2,14 +2,14 @@
 
 .quiz__prompt { font-size: 1.06rem; font-weight: 600; line-height: 1.65; }
 
-/* 문제에 딸린 상황판 — 테이블에 무엇이 깔렸는지 보여준다. */
+/* 문제에 딸린 상황판 — 테이블에 무엇이 깔렸는지 보여준다.
+ * 표면은 .felt(components/table.css)를 같이 걸어 미니판과 똑같이 보이게 한다. */
 .quiz__table {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--space-2);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius);
-  background: var(--bg-sunken);
+  padding: var(--space-4);
 }
 .quiz__table .card-row { padding-block: var(--space-1); }
 
