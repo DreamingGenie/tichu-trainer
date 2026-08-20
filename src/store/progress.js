@@ -58,11 +58,11 @@ export function markRead(chapterId) {
   save();
 }
 
-/** 퀴즈 결과. 한 번 맞힌 문제는 나중에 틀려도 맞힌 것으로 남긴다. */
-export function recordQuiz(chapterId, quizId, correct) {
+/** 맞힌 퀴즈. 오답은 남기지 않는다 — 진도는 '몇 개를 풀어냈나'만 센다. */
+export function recordQuiz(chapterId, quizId) {
   const entry = chapterEntry(chapterId);
   if (entry.quizzes[quizId] === 'correct') return;
-  entry.quizzes[quizId] = correct ? 'correct' : 'wrong';
+  entry.quizzes[quizId] = 'correct';
   save();
 }
 

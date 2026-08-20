@@ -88,9 +88,10 @@ export function quizView({ params }) {
     body.append(panel);
   }
 
-  function advance(wasCorrect, firstTry) {
-    recordQuiz(chapter.id, chapter.quizzes[index].id, wasCorrect);
-    if (wasCorrect && firstTry) answeredCorrectly += 1;
+  /** 맞혔을 때만 부른다. firstTry 면 '한 번에 맞힌 문제' 로도 센다. */
+  function advance(firstTry) {
+    recordQuiz(chapter.id, chapter.quizzes[index].id);
+    if (firstTry) answeredCorrectly += 1;
   }
 
   function render() {
@@ -135,7 +136,7 @@ export function quizView({ params }) {
 
         if (choice.correct) {
           settled = true;
-          advance(true, firstTry);
+          advance(firstTry);
           for (const b of options.querySelectorAll('.choice')) b.disabled = true;
           if (quiz.explain) {
             const note = element('div', 'note');
@@ -210,9 +211,9 @@ export function quizView({ params }) {
     }
     panel.append(actions, feedback);
 
-    function settle(correct) {
+    function settle() {
       settled = true;
-      advance(true, correct && firstTry);
+      advance(firstTry);
       submit.disabled = true;
       for (const b of actions.querySelectorAll('button')) b.disabled = true;
       if (quiz.explain) {
@@ -231,7 +232,7 @@ export function quizView({ params }) {
         const canPass = Boolean(current) && !forced;
         if (quiz.expectPass && canPass) {
           feedback.replaceChildren(verdictBox('ok', '맞습니다', '여기서는 패스가 정답입니다.'));
-          settle(true);
+          settle();
         } else {
           firstTry = false;
           feedback.replaceChildren(verdictBox('bad', '패스할 수 없습니다',
@@ -271,7 +272,7 @@ export function quizView({ params }) {
 
       feedback.replaceChildren(verdictBox('ok', `${describeCombo(play.combo)} — 좋습니다`,
         `이 손패로 낼 수 있는 방법은 ${enumerateLegalPlays(hand, current).length}가지였습니다.`));
-      settle(true);
+      settle();
     }
 
     return panel;
