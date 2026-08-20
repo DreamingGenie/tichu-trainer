@@ -58,8 +58,9 @@
   --card-shadow: 0 1px 2px rgb(35 32 28 / 0.14), 0 4px 10px rgb(35 32 28 / 0.08);
   --card-shadow-lift: 0 4px 8px rgb(35 32 28 / 0.18), 0 12px 24px rgb(35 32 28 / 0.14);
 
-  /* 수트 색 */
-  --suit-jade: #0d8055;
+  /* 수트 색 — 페이지 배경 위(본문 속 카드 칩)에 쓰이므로 카드 면 위의 --suit-ink-* 보다
+     한 단계 진하다. 옥은 자기 색 12% 를 깔고 그 위에 얹히는데 그 조합이 4.28:1 이었다. */
+  --suit-jade: #0a6b48;
   --suit-sword: #333c48;
   --suit-pagoda: #2160b4;
   --suit-star: #bc3a2c;
@@ -191,6 +192,8 @@
   --weight-body: 400;
 
   --focus: 0 0 0 3px color-mix(in srgb, var(--accent) 40%, transparent);
+
+  --header-h: 68px;   /* 상단 바 높이. 붙어 다니는 요소들이 이 아래에 선다 */
 
   --max-w: 940px;
   --measure: 52ch;    /* 문단 한 줄 상한. 940px 를 그대로 쓰면 한글 55자가 넘어간다 */

@@ -2,6 +2,7 @@ import { chapterById, neighbours } from '../data/chapters.js';
 import { minigameById } from '../data/minigames/index.js';
 import { chapterStatus, markRead } from '../store/progress.js';
 import { renderBlocks } from './lesson/blocks.js';
+import { createSpotlight } from './lesson/spotlight.js';
 import { element } from '../ui/dom.js';
 import { notFoundPanel } from './not-found-view.js';
 
@@ -22,10 +23,30 @@ export function lessonView({ params }) {
   crumb.append(back, element('span', 'small muted', `${chapter.num} / 10`));
   header.append(crumb);
   header.append(element('h1', null, chapter.title));
-  header.append(element('p', 'lede', chapter.subtitle));
+  header.append(element('p', 'lede measure', chapter.subtitle));
   root.append(header);
 
-  root.append(renderBlocks(chapter.blocks));
+  const { body, spotlights } = renderBlocks(chapter.blocks);
+  const spotlight = createSpotlight(spotlights);
+
+  if (spotlight) {
+    const layout = element('div', 'lesson-layout');
+    layout.append(body);
+    const rail = element('div', 'lesson-rail');
+    rail.append(spotlight.element);
+    layout.append(rail);
+    root.append(layout);
+    // 화면이 통째로 교체되면 옵저버도 같이 사라진다. 라우터가 outlet 을
+    // replaceChildren 하므로 노드가 떨어져 나갈 때 끊어 준다.
+    const stop = spotlight.observe(body);
+    new MutationObserver((records, self) => {
+      if (root.isConnected) return;
+      stop();
+      self.disconnect();
+    }).observe(document.getElementById('app'), { childList: true });
+  } else {
+    root.append(body);
+  }
 
   // --- 연습 ---
   const status = chapterStatus(chapter);

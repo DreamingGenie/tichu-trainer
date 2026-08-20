@@ -8,6 +8,9 @@
   color: var(--felt-text);
   border-radius: var(--radius-lg);
   box-shadow: inset 0 1px 0 var(--felt-sheen), var(--shadow-panel);
+  /* 기본 안쪽 여백. 화면별로 다르게 쓰고 싶으면 pages/ 에서 덮는다 — 이 규칙이
+     minigame.css 에 있던 탓에 홈·레슨의 펠트까지 미니판 여백을 따라가고 있었다. */
+  padding: var(--space-5) var(--space-4);
 }
 
 /* 펠트 위에서는 본문용 색이 안 읽힌다. 밝은 쪽으로 되돌린다. */

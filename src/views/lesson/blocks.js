@@ -81,16 +81,50 @@ const RENDERERS = {
   demo: (block) => renderDemo(block.id, block),
 };
 
-/** 블록 배열을 하나의 섹션으로. */
+/**
+ * 블록 배열을 절 단위로 끊어 본문을 만든다.
+ *
+ * 절마다 첫 'cards' 블록은 본문에 그리지 않고 spotlight 로 빼낸다 — 레슨 화면이
+ * 그걸 옆의 펠트 판에 올려서, 읽고 있는 형태가 늘 테이블 위에 깔려 있게 한다.
+ * 캡션은 그 절의 설명 문장이므로 본문에 남는다.
+ *
+ * @returns {{ body: HTMLElement, spotlights: Array<{index: number, hand: string}> }}
+ */
 export function renderBlocks(blocks) {
-  const wrap = el('div', 'stack');
+  const body = el('div', 'stack stack--loose');
+  const spotlights = [];
+
+  let section = null;
+  const openSection = () => {
+    section = el('section', 'lesson-section stack');
+    body.append(section);
+    return section;
+  };
+
   for (const block of blocks) {
+    if (block.kind === 'h') {
+      openSection().append(RENDERERS.h(block));
+      continue;
+    }
+    if (!section) openSection();
+
+    // 절의 첫 카드 묶음만 판으로 올라간다. 두 번째부터는 본문에 그대로 둔다 —
+    // 판은 한 번에 하나만 보여줄 수 있기 때문이다.
+    if (block.kind === 'cards' && !section.dataset.spot) {
+      const index = spotlights.length;
+      spotlights.push({ index, hand: block.hand });
+      section.dataset.spot = String(index);
+      if (block.caption) section.append(el('p', null, inline(block.caption)));
+      continue;
+    }
+
     const render = RENDERERS[block.kind];
     if (!render) {
       console.warn(`알 수 없는 블록 종류: ${block.kind}`);
       continue;
     }
-    wrap.append(render(block));
+    section.append(render(block));
   }
-  return wrap;
+
+  return { body, spotlights };
 }
