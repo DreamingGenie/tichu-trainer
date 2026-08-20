@@ -21,10 +21,10 @@ figure.block-cards figcaption { margin-top: calc(var(--space-1) * -1); }
 .example.is-ok { border-inline-start-color: var(--ok); }
 .example.is-bad { border-inline-start-color: var(--bad); }
 .example__head { display: flex; gap: var(--space-2); align-items: baseline; }
-.example__mark { font-weight: 800; }
+.example__mark { font-weight: var(--weight-display); }
 .example.is-ok .example__mark { color: var(--ok); }
 .example.is-bad .example__mark { color: var(--bad); }
-.example__label { font-weight: 600; font-size: 0.94rem; }
+.example__label { font-weight: var(--weight-strong); font-size: var(--fs-small); }
 .example .card-row { padding-block: var(--space-2); }
 
 /* --- 본문에 끼워넣는 데모 ---------------------------------------------- */
@@ -40,9 +40,9 @@ figure.block-cards figcaption { margin-top: calc(var(--space-1) * -1); }
 /* --- 본문 표 ----------------------------------------------------------- */
 
 .table-wrap { overflow-x: auto; }
-table.data { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+table.data { border-collapse: collapse; width: 100%; font-size: var(--fs-small); }
 table.data th, table.data td { padding: var(--space-2) var(--space-3); text-align: left; border-bottom: var(--edge); }
-table.data th { font-weight: 700; color: var(--text-muted); font-size: 0.84rem; white-space: nowrap; }
+table.data th { font-weight: var(--weight-strong); color: var(--text-muted); font-size: var(--fs-small); white-space: nowrap; }
 table.data td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 /* --- 앞뒤 챕터 이동 ---------------------------------------------------- */

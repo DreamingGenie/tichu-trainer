@@ -1,6 +1,6 @@
 /* 연습문제 화면. */
 
-.quiz__prompt { font-size: 1.06rem; font-weight: 600; line-height: 1.65; }
+.quiz__prompt { font-size: var(--fs-section); font-weight: var(--weight-strong); line-height: 1.65; }
 
 /* 문제에 딸린 상황판 — 테이블에 무엇이 깔렸는지 보여준다.
  * 표면은 .felt(components/table.css)를 같이 걸어 미니판과 똑같이 보이게 한다. */
@@ -22,7 +22,7 @@
   border: var(--edge-strong);
   border-radius: var(--radius);
   background: var(--surface);
-  font-size: 0.96rem;
+  font-size: var(--fs-small);
   line-height: 1.6;
   cursor: pointer;
   transition: border-color 0.12s ease, background 0.12s ease;

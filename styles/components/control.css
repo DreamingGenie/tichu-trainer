@@ -6,12 +6,12 @@
   justify-content: center;
   gap: var(--space-2);
   padding: var(--space-2) var(--space-4);
-  min-height: 40px;
+  min-height: 44px;
   border: var(--edge-strong);
   border-radius: var(--radius);
   background: var(--surface);
-  font-size: 0.94rem;
-  font-weight: 600;
+  font-size: var(--fs-small);
+  font-weight: var(--weight-strong);
   cursor: pointer;
   transition: background 0.12s ease, border-color 0.12s ease, transform 0.06s ease;
 }
@@ -29,15 +29,23 @@
 .btn--ghost { background: none; border-color: transparent; color: var(--text-muted); }
 .btn--ghost:hover:not(:disabled) { background: var(--bg-sunken); color: var(--text); }
 
-.btn--small { min-height: 32px; padding: var(--space-1) var(--space-3); font-size: 0.86rem; }
+/* 상단 바는 어두우므로 그 안의 고스트 버튼만 밝은 쪽 잉크를 쓴다. */
+.site-header .btn--ghost { color: var(--header-ink-muted); }
+.site-header .btn--ghost:hover:not(:disabled) {
+  background: rgb(255 255 255 / 0.1);
+  color: var(--header-ink);
+}
+
+/* 작은 버튼도 손가락에 걸려야 해서 높이는 44px 를 지킨다. 줄이는 건 여백뿐이다. */
+.btn--small { min-height: 44px; padding: var(--space-1) var(--space-3); font-size: var(--fs-small); }
 
 .select {
   padding: var(--space-2) var(--space-3);
-  min-height: 40px;
+  min-height: 44px;
   border: var(--edge-strong);
   border-radius: var(--radius);
   background: var(--surface);
   color: var(--text);
   font: inherit;
-  font-size: 0.94rem;
+  font-size: var(--fs-small);
 }

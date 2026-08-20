@@ -31,10 +31,10 @@
   border-radius: 50%;
   background: var(--bg-sunken);
   color: var(--text-muted);
-  font-size: 0.84rem;
-  font-weight: 700;
+  font-size: var(--fs-small);
+  font-weight: var(--weight-strong);
 }
 .chapter-card.is-done .chapter-card__num { background: var(--ok-soft); color: var(--ok); }
 
-.chapter-card__title { font-weight: 700; line-height: 1.4; }
-.chapter-card__sub { font-size: 0.86rem; color: var(--text-muted); line-height: 1.55; }
+.chapter-card__title { font-weight: var(--weight-strong); line-height: 1.4; }
+.chapter-card__sub { font-size: var(--fs-small); color: var(--text-muted); line-height: 1.55; }

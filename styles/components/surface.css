@@ -15,11 +15,11 @@
   background: var(--accent-soft);
   border-radius: var(--radius-sm);
   padding: var(--space-3) var(--space-4);
-  font-size: 0.94rem;
+  font-size: var(--fs-small);
 }
 .note--warn { border-color: var(--warn); background: var(--warn-soft); }
 .note--bad { border-color: var(--bad); background: var(--bad-soft); }
-.note__title { font-weight: 700; display: block; margin-bottom: var(--space-1); }
+.note__title { font-weight: var(--weight-strong); display: block; margin-bottom: var(--space-1); }
 
 /* --- 배지 ------------------------------------------------------------- */
 
@@ -29,8 +29,8 @@
   gap: var(--space-1);
   padding: 1px var(--space-2);
   border-radius: var(--radius-pill);
-  font-size: 0.76rem;
-  font-weight: 700;
+  font-size: var(--fs-micro);
+  font-weight: var(--weight-strong);
   background: var(--bg-sunken);
   color: var(--text-muted);
   line-height: 1.7;
@@ -59,15 +59,15 @@
   width: 24px; height: 24px;
   display: grid; place-items: center;
   border-radius: 50%;
-  font-size: 0.86rem;
-  font-weight: 800;
+  font-size: var(--fs-small);
+  font-weight: var(--weight-display);
   background: var(--bg-sunken);
   margin-top: 2px;
 }
 .verdict.is-ok .verdict__icon { background: var(--ok); color: var(--on-solid); }
 .verdict.is-bad .verdict__icon { background: var(--bad); color: var(--on-solid); }
-.verdict__title { font-weight: 700; }
-.verdict__body { font-size: 0.93rem; }
+.verdict__title { font-weight: var(--weight-strong); }
+.verdict__body { font-size: var(--fs-small); }
 .verdict__body:empty { display: none; }
 
 /* --- 진도 막대 -------------------------------------------------------- */

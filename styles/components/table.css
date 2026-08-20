@@ -25,8 +25,8 @@
 .table-call {
   background: var(--card-face);
   color: var(--card-ink);
-  font-size: 0.78rem;
-  font-weight: 700;
+  font-size: var(--fs-micro);
+  font-weight: var(--weight-strong);
   line-height: 1.8;
   padding: 0 var(--space-3);
   border-radius: var(--radius-pill);

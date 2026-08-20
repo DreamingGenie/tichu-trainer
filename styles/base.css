@@ -11,16 +11,18 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font);
-  font-size: 16px;
-  line-height: 1.7;
+  font-size: var(--fs-body);
+  font-weight: var(--weight-body);
+  line-height: var(--lh-body);
   word-break: keep-all;
   overflow-wrap: anywhere;
 }
 
-h1, h2, h3, h4 { margin: 0; line-height: 1.35; font-weight: 700; letter-spacing: -0.01em; }
-h1 { font-size: 1.85rem; }
-h2 { font-size: 1.35rem; }
-h3 { font-size: 1.08rem; }
+h1, h2, h3, h4 { margin: 0; letter-spacing: -0.02em; }
+h1 { font-size: var(--fs-display); line-height: var(--lh-display); font-weight: var(--weight-display); }
+h2 { font-size: var(--fs-title); line-height: var(--lh-title); font-weight: var(--weight-display); }
+h3 { font-size: var(--fs-section); line-height: var(--lh-section); font-weight: var(--weight-strong); }
+h4 { font-size: var(--fs-body); line-height: var(--lh-section); font-weight: var(--weight-strong); }
 p { margin: 0; }
 ul, ol { margin: 0; padding-left: 1.25em; }
 li + li { margin-top: var(--space-2); }
@@ -50,9 +52,8 @@ h2[tabindex='-1']:focus-visible { outline: none; }
   position: sticky;
   top: 0;
   z-index: 20;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: blur(10px);
-  border-bottom: var(--edge);
+  background: var(--header-bg);
+  color: var(--header-ink);
 }
 
 .site-header__inner {
@@ -68,21 +69,22 @@ h2[tabindex='-1']:focus-visible { outline: none; }
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  font-weight: 700;
-  font-size: 1.02rem;
-  color: var(--text);
+  font-weight: var(--weight-strong);
+  font-size: var(--fs-body);
+  color: var(--header-ink);
   text-decoration: none;
   letter-spacing: -0.02em;
+  min-height: 44px;
 }
 
 .brand__mark {
-  width: 26px; height: 26px;
+  width: 30px; height: 30px;
   display: grid; place-items: center;
   border-radius: 7px;
-  background: var(--accent);
-  color: var(--accent-text);
-  font-size: 0.78rem;
-  font-weight: 800;
+  background: var(--header-ink);
+  color: var(--header-bg);
+  font-size: var(--fs-small);
+  font-weight: var(--weight-display);
 }
 
 
@@ -98,7 +100,8 @@ h2[tabindex='-1']:focus-visible { outline: none; }
 .site-footer {
   border-top: var(--edge);
   color: var(--text-muted);
-  font-size: 0.84rem;
+  font-size: var(--fs-small);
+  line-height: var(--lh-small);
 }
 
 .site-footer__inner {
@@ -113,15 +116,21 @@ h2[tabindex='-1']:focus-visible { outline: none; }
 .row { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
 .spacer { flex: 1; }
 
-.lede { color: var(--text-muted); font-size: 1.02rem; }
+.lede { color: var(--text-muted); font-size: var(--fs-section); line-height: var(--lh-body); }
 .muted { color: var(--text-muted); }
-.small { font-size: 0.88rem; }
+.small { font-size: var(--fs-small); line-height: var(--lh-small); }
+.micro { font-size: var(--fs-micro); line-height: var(--lh-micro); font-weight: var(--weight-medium); }
+
+/* 문단은 화면 폭이 아니라 읽기 폭으로 묶는다. */
+.measure { max-width: var(--measure); text-wrap: pretty; }
 
 .site-header .btn { white-space: nowrap; }
 
 @media (max-width: 560px) {
-  body { font-size: 15px; }
-  h1 { font-size: 1.5rem; }
+  :root {
+    --fs-display: 2rem;
+    --fs-title: 1.375rem;
+  }
   .main { padding: var(--space-5) var(--space-3) var(--space-6); }
 }
 
@@ -130,6 +139,8 @@ h2[tabindex='-1']:focus-visible { outline: none; }
   .site-header__inner { gap: var(--space-1); padding-inline: var(--space-3); }
   .site-header .btn--small { padding-inline: var(--space-2); }
   .brand__text { display: none; }
+  /* 글자가 빠지면 표식 30px 만 남아 손가락 타깃이 부족해진다. 여백으로 44px 을 채운다. */
+  .brand { justify-content: center; min-width: 44px; padding-inline: var(--space-1); }
 }
 
 code {

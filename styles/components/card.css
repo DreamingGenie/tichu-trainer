@@ -45,8 +45,8 @@ button.card:disabled:hover { transform: none; box-shadow: var(--card-shadow); }
   transform: translateX(-50%);
   background: var(--warn);
   color: var(--on-solid);
-  font-size: 0.66rem;
-  font-weight: 700;
+  font-size: var(--fs-micro);
+  font-weight: var(--weight-strong);
   line-height: 1.6;
   padding: 0 var(--space-2);
   border-radius: var(--radius-pill);
@@ -97,7 +97,7 @@ button.card:disabled:hover { transform: none; box-shadow: var(--card-shadow); }
   display: grid;
   place-items: center;
   color: var(--text-muted);
-  font-size: 0.78rem;
+  font-size: var(--fs-micro);
   line-height: 1.4;
   text-align: center;
 }
@@ -115,7 +115,7 @@ button.card-slot:disabled { cursor: not-allowed; }
   border-radius: var(--radius-sm);
   background: color-mix(in srgb, var(--suit) 12%, transparent);
   color: var(--suit);
-  font-weight: 700;
+  font-weight: var(--weight-strong);
   font-size: 0.92em;
   white-space: nowrap;
 }
