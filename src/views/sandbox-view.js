@@ -9,7 +9,7 @@ import { createSandbox } from '../ui/sandbox.js';
 export function sandboxView() {
   const root = element('div', 'stack stack--loose');
   const header = element('header', 'stack stack--tight');
-  header.append(element('h1', null, '조합 판정 샌드박스'));
+  header.append(element('h1', null, '조합 만들어보기'));
   header.append(element('p', 'lede',
     '규칙이 헷갈릴 때 여기서 직접 확인해보세요. 카드를 고르면 무슨 조합인지, '
     + '테이블에 깔린 걸 이기는지 바로 알려줍니다.'));

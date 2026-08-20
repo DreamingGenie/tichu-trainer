@@ -39,6 +39,16 @@
 /* 작은 버튼도 손가락에 걸려야 해서 높이는 44px 를 지킨다. 줄이는 건 여백뿐이다. */
 .btn--small { min-height: 44px; padding: var(--space-1) var(--space-3); font-size: var(--fs-small); }
 
+/* 아이콘만 있는 버튼. 글자 버튼과 나란히 서므로 정사각형에 테두리를 둘러 생김새로
+   구분되게 한다 — 밑줄만으로는 페이지 이동과 상태 전환이 같아 보인다. */
+.btn--icon {
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: var(--radius);
+}
+.btn--icon svg { width: 20px; height: 20px; display: block; }
+
 .select {
   padding: var(--space-2) var(--space-3);
   min-height: 44px;

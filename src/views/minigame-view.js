@@ -38,16 +38,15 @@ export function minigameView({ params }) {
   // 제목·목표와 나머지 설명을 갈라 두는 건 좁은 화면 때문이다. 한 단으로 접히면
   // 설명 전체가 판 앞을 막으므로, 꼭 필요한 제목과 목표만 남기고 상황 설명과 기록은
   // 판 뒤로 보낸다 (배치는 minigame.css 의 grid-template-areas).
-  const header = element('div', 'minigame-brief stack');
+  const crumb = element('div', 'row minigame-crumb');
   if (chapter) {
-    const crumb = element('div', 'row');
     const back = element('a', 'btn btn--small btn--ghost', `← ${chapter.title}`);
     back.href = `#/chapter/${chapter.id}`;
     crumb.append(back);
-    header.append(crumb);
   }
-  header.append(element('h1', null, game.title));
 
+  const header = element('div', 'minigame-brief stack');
+  header.append(element('h1', null, game.title));
   header.append(noteElement('note', '이 판의 목표', inline(game.goal)));
 
   const more = element('div', 'minigame-more stack');
@@ -70,7 +69,12 @@ export function minigameView({ params }) {
 
   const play = element('div', 'minigame-play stack');
   play.append(tableSlot, hintSlot, handSlot, actionSlot, errorSlot, outcomeSlot);
-  root.append(header, play, more);
+
+  // 넓은 화면에서는 읽는 것이 한 덩어리(.minigame-side)로 묶이고, 좁아지면 이 묶음이
+  // display:contents 로 풀려 목표는 판 앞, 상황·기록은 판 뒤로 갈라진다.
+  const side = element('div', 'minigame-side');
+  side.append(header, more);
+  root.append(crumb, side, play);
 
   let handView = null;
 
@@ -230,7 +234,7 @@ export function minigameView({ params }) {
 export function minigameIndexView() {
   const root = element('div', 'stack stack--loose');
   const header = element('header', 'stack stack--tight');
-  header.append(element('h1', null, '미니판'));
+  header.append(element('h1', null, '짧은 판 연습'));
   header.append(element('p', 'lede', '짧은 판을 직접 두면서 규칙이 몸에 붙었는지 확인해보세요.'));
   root.append(header);
 

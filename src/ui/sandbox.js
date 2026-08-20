@@ -14,10 +14,17 @@ import { element } from './dom.js';
 import { verdictBox } from './verdict.js';
 import { createHandView } from './hand-view.js';
 
-// 폭탄·계단·참새 스트레이트까지 전부 만들어볼 수 있게 고른 18장.
-const PRACTICE_HAND = 'MAH DOG PHX DRG B2 B3 B4 G5 B5 U5 R5 G6 B6 G7 G8 G9 GK BK';
+// 연습용 손패.
+//
+// 고르는 기준은 하나다 — **아래 TABLE_PRESETS 하나하나마다 폭탄이 아닌 답이 적어도
+// 하나씩 있어야 한다.** 예전 손패는 페어가 5·6·K 뿐이라 연속 페어(77 88)와 풀하우스(9)를
+// 이기는 길이 5 폭탄밖에 없었다. 규칙을 배우러 온 사람이 "폭탄만 만들면 다 이긴다"를
+// 배우고 가면 안 된다. tests/sandbox.test.js 가 이 조건을 지킨다.
+//
+// 수트는 프리셋과 겹치지 않게 골랐다(같은 카드가 테이블과 손에 동시에 있을 수 없다).
+export const PRACTICE_HAND = 'MAH DOG PHX DRG B2 B3 B4 B5 G6 G7 G8 G9 G10 GQ BQ UQ RQ GK BK GA';
 
-const TABLE_PRESETS = [
+export const TABLE_PRESETS = [
   { id: 'none', label: '비어 있음 (새 트릭)', hand: null },
   { id: 'single7', label: '싱글 7', hand: 'U7' },
   { id: 'singleK', label: '싱글 K', hand: 'UK' },
@@ -31,11 +38,22 @@ const TABLE_PRESETS = [
 ];
 
 /**
+ * 그 상황에서 내가 들고 있을 수 있는 손패.
+ *
+ * 테이블에 깔린 카드는 손에 있을 수 없다 — 덱에 한 장씩뿐이다. 용 프리셋에서 용이
+ * 테이블과 손에 동시에 보이던 걸 여기서 막는다.
+ */
+export function handForPreset(preset) {
+  const onTable = new Set(preset?.hand ? parseHand(preset.hand).map((c) => c.id) : []);
+  return parseHand(PRACTICE_HAND).filter((card) => !onTable.has(card.id));
+}
+
+/**
  * @param options.compact 레슨 안에 끼워넣을 때 설명을 줄인다
  */
 export function createSandbox(options = {}) {
   const root = element('div', 'stack sandbox');
-  const hand = parseHand(PRACTICE_HAND);
+  let hand = handForPreset(null);
 
   let table = null;
 
@@ -95,6 +113,8 @@ export function createSandbox(options = {}) {
         : [element('div', 'card-slot', '비어 있음')]),
     );
 
+    hand = handForPreset(preset);
+    handView.setCards(hand);
     handView.setCurrent(table);
     update(handView.getSelected());
   }

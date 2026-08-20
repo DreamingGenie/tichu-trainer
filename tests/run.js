@@ -3,6 +3,7 @@ import './engine.test.js';
 import './trick.test.js';
 import './minigame.test.js';
 import './content.test.js';
+import './sandbox.test.js';
 import { runAll } from './harness.js';
 
 const { passed, failed, results } = runAll();

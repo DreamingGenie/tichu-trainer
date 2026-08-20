@@ -46,7 +46,7 @@ function chapterCard(chapter) {
     tags.append(badge);
   }
   if (status.minigameTotal) {
-    const badge = element('span', 'badge', `미니판 ${status.minigameDone}/${status.minigameTotal}`);
+    const badge = element('span', 'badge', `짧은 판 ${status.minigameDone}/${status.minigameTotal}`);
     if (status.minigameDone === status.minigameTotal) badge.classList.add('badge--ok');
     tags.append(badge);
   }
@@ -90,12 +90,12 @@ export function homeView() {
 
   const tools = element('section', 'felt banner');
   const toolText = element('div', 'stack stack--tight');
-  toolText.append(element('h2', null, '조합 판정 샌드박스'));
+  toolText.append(element('h2', null, '조합 만들어보기'));
   toolText.append(element('p', 'measure',
     '카드를 아무렇게나 골라보면 그게 무슨 조합인지, 테이블에 깔린 걸 이기는지 바로 알려줍니다. '
     + '규칙이 헷갈릴 때 여기서 직접 확인해보세요.'));
   tools.append(toolText);
-  const open = element('a', 'btn banner__action', '샌드박스 열기');
+  const open = element('a', 'btn banner__action', '열어보기');
   open.href = '#/sandbox';
   tools.append(open);
   root.append(tools);

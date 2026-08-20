@@ -10,16 +10,29 @@
   display: grid;
   grid-template-columns: 268px minmax(0, 1fr);
   grid-template-areas:
-    'brief play'
-    'more  play';
-  gap: var(--space-5) var(--space-6);
+    'crumb crumb'
+    'side  play';
+  column-gap: var(--space-6);
+  row-gap: 0;
   align-content: start;
   align-items: start;
 }
-.minigame-brief { grid-area: brief; }
+.minigame-crumb { grid-area: crumb; margin-bottom: var(--space-3); }
+.minigame-side { grid-area: side; }
 .minigame-play { grid-area: play; }
-.minigame-more { grid-area: more; }
 
+/* 읽는 것은 왼쪽 한 덩어리로 모은다. 목표·상황·기록이 따로 떨어져 있으면 글이
+   화면 여기저기 흩어진 것처럼 보인다. */
+.minigame-side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  background: var(--surface);
+  border: var(--edge);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-panel);
+}
 .minigame-brief { gap: var(--space-4); }
 .minigame-more { gap: var(--space-3); }
 .minigame-brief h1 { font-size: var(--fs-title); line-height: var(--lh-title); }
@@ -150,8 +163,21 @@
 @media (max-width: 900px) {
   .minigame-layout {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: 'brief' 'play' 'more';
-    gap: var(--space-5);
+    grid-template-areas: 'crumb' 'brief' 'play' 'more';
+    row-gap: var(--space-5);
+  }
+  /* 묶음을 풀어 목표는 판 앞, 상황 설명과 기록은 판 뒤로 보낸다. 한 단으로 접히면
+     설명 전체가 판 앞을 막기 때문이다. 판이 사이에 끼니 각자 면을 갖는다. */
+  .minigame-side { display: contents; }
+  .minigame-brief { grid-area: brief; }
+  .minigame-more { grid-area: more; }
+  .minigame-brief,
+  .minigame-more {
+    background: var(--surface);
+    border: var(--edge);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-panel);
   }
 }
 

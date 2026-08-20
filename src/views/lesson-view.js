@@ -47,7 +47,7 @@ export function lessonView({ params }) {
     const game = minigameById(id);
     if (!game) continue;
     const row = element('div', 'row');
-    const link = element('a', 'btn', `미니판 — ${game.title}`);
+    const link = element('a', 'btn', `짧은 판 — ${game.title}`);
     link.href = `#/minigame/${id}`;
     row.append(link);
     row.append(element('span', 'small muted', game.goal));
