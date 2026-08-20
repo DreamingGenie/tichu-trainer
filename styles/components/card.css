@@ -3,7 +3,7 @@
  * 특정 영역의 카드만 키우고 싶으면 그 컨테이너에 --card-w 를 다시 지정하면 된다. */
 
 .card {
-  --suit: var(--suit-sword);
+  --suit: var(--suit-ink-sword);
   position: relative;
   display: block;
   flex: 0 0 auto;
@@ -19,7 +19,10 @@
 }
 
 .card__face { display: block; width: 100%; height: auto; font-family: var(--font-num); }
-.card__bg { fill: var(--card-face); stroke: var(--card-edge); stroke-width: 1.5; }
+
+/* 카드 면은 흰 종이, 테두리는 수트 색. 실물 카드처럼 색으로 수트를 먼저 읽게 한다. */
+.card__bg { fill: var(--card-face); stroke: var(--suit); stroke-width: 3; }
+.card__rim { fill: none; stroke: var(--suit); stroke-width: 1; stroke-opacity: 0.28; }
 
 .card.is-muted { opacity: 0.34; filter: saturate(0.5); }
 .card--back { color: var(--card-back); }
@@ -73,6 +76,16 @@ button.card:disabled:hover { transform: none; box-shadow: var(--card-shadow); }
 .card-row--overlap > .card + .card { margin-inline-start: calc(var(--card-w) * -0.42); }
 .card-row--overlap > .card:hover,
 .card-row--overlap > .card.is-selected { z-index: 2; }
+
+/* 내 손패는 실제 게임처럼 겹치지 않고 나란히 편다. 14장이면 좁은 화면에서
+ * 두 줄로 감긴다 — 가로로 스크롤해 찾는 것보다 이쪽이 빠르다. */
+.hand {
+  flex-wrap: wrap;
+  justify-content: center;
+  overflow: visible;
+  gap: var(--space-1);
+}
+.hand > .card + .card { margin-inline-start: 0; }
 
 /* --- 빈 자리 --------------------------------------------------------- */
 

@@ -2,3 +2,6 @@ node_modules/
 .DS_Store
 Thumbs.db
 *.log
+
+# 화풍 참고용으로 받아 둔 외부 이미지. 사이트가 쓰지 않고 남의 저작물이라 올리지 않는다.
+assets/ref/

@@ -1,9 +1,8 @@
-// 카드를 SVG로 그린다. 이미지 파일이 없으므로 배포는 파일 복사로 끝나고,
-// 어떤 크기에서도 선명하다.
+// 카드를 SVG로 그린다. 숫자카드는 수트 문양을 벡터로 그려 어떤 크기에서도 선명하고,
+// 특수카드 4장만 assets/cards/*.webp 삽화를 카드 전면에 깐다.
 //
-// 특수카드 4장은 그림 대신 '무슨 일을 하는 카드인지'를 나타내는 도형을 쓴다.
-// 개는 파트너에게 선을 넘기는 화살표, 용은 왕관(최강), 봉황은 와일드 반짝임,
-// 마작은 선을 여는 표식. 학습용 사이트에서는 예쁜 삽화보다 이쪽이 오래 남는다.
+// 삽화 경로는 import.meta.url 기준으로 잡는다. tests/cards.html 처럼 문서 깊이가
+// 다른 페이지에서 불러도 경로가 어긋나지 않게 하기 위해서다.
 
 import { SPECIAL, SUIT } from '../engine/cards.js';
 
@@ -13,6 +12,24 @@ const SUIT_VAR = {
   [SUIT.PAGODA]: 'var(--suit-pagoda)',
   [SUIT.STAR]: 'var(--suit-star)',
 };
+
+/** 본문 속 카드 칩처럼 페이지 배경 위에 놓일 때의 수트 색. 테마를 따라간다. */
+export function suitColor(card) {
+  return card.special ? 'var(--suit-special)' : SUIT_VAR[card.suit];
+}
+
+/** 카드 면에 인쇄되는 수트 색. 카드는 두 테마 모두 밝으므로 진한 쪽으로 고정한다. */
+function suitInk(card) {
+  return card.special ? 'var(--suit-ink-special)' : `var(--suit-ink-${card.suit})`;
+}
+
+/** 특수카드 삽화. SPECIAL 값이 곧 파일 이름이다. */
+function artUrl(special) {
+  return new URL(`../../assets/cards/${special}.webp`, import.meta.url).href;
+}
+
+// clipPath 는 문서 전역에서 id 로 참조되므로 카드마다 다른 이름이 필요하다.
+let clipSeq = 0;
 
 // 각 문양은 24×24 좌표계 안에 그려두고 필요한 자리에 확대해 앉힌다.
 const GLYPH = {
@@ -37,36 +54,7 @@ const GLYPH = {
 
   // 별 — 오각별
   [SUIT.STAR]: '<path d="M12 1 L14.7 8.28 L22.46 8.6 L16.37 13.42 L18.47 20.9 L12 16.6 L5.53 20.9 L7.63 13.42 L1.54 8.6 L9.3 8.28 Z"/>',
-
-  // 마작 — 선을 여는 표식. 가운데 점에서 사방으로 뻗는다.
-  [SPECIAL.MAHJONG]: `
-    <circle cx="12" cy="12" r="7.4" fill="none" stroke="currentColor" stroke-width="1.8"/>
-    <circle cx="12" cy="12" r="3.2"/>
-    <rect x="11.1" y="0.6" width="1.8" height="3.4" rx="0.9"/>
-    <rect x="11.1" y="20" width="1.8" height="3.4" rx="0.9"/>
-    <rect x="0.6" y="11.1" width="3.4" height="1.8" rx="0.9"/>
-    <rect x="20" y="11.1" width="3.4" height="1.8" rx="0.9"/>`,
-
-  // 개 — 선이 맞은편 파트너에게 건너간다
-  [SPECIAL.DOG]: `
-    <circle cx="12" cy="21.2" r="2.6"/>
-    <circle cx="12" cy="3.4" r="2.6" fill="none" stroke="currentColor" stroke-width="1.8"/>
-    <rect x="10.9" y="9.6" width="2.2" height="8.4" rx="1.1"/>
-    <path d="M12 5.6 L15.6 10.4 L8.4 10.4 Z"/>`,
-
-  // 봉황 — 무엇이든 대신하는 와일드
-  [SPECIAL.PHOENIX]: '<path d="M12 0.8 C12.9 7.6 16.4 11.1 23.2 12 C16.4 12.9 12.9 16.4 12 23.2 C11.1 16.4 7.6 12.9 0.8 12 C7.6 11.1 11.1 7.6 12 0.8 Z"/>',
-
-  // 용 — 가장 높은 카드. 왕관.
-  [SPECIAL.DRAGON]: `
-    <path d="M3.2 18.4 L4.3 7 L8.6 12.2 L12 4.6 L15.4 12.2 L19.7 7 L20.8 18.4 Z"/>
-    <rect x="3.2" y="18.4" width="17.6" height="2.8" rx="0.9"/>`,
 };
-
-/** 카드가 쓸 수트 색. 카드 얼굴과 문장 속 카드 칩이 같은 값을 본다. */
-export function suitColor(card) {
-  return card.special ? 'var(--suit-special)' : SUIT_VAR[card.suit];
-}
 
 function glyph(card) {
   return GLYPH[card.special ?? card.suit] ?? '';
@@ -78,34 +66,67 @@ function placeGlyph(card, cx, cy, scale) {
   return `<g transform="translate(${cx - offset} ${cy - offset}) scale(${scale})" fill="currentColor">${glyph(card)}</g>`;
 }
 
-function pointsPill(card, cy) {
+/** 점수 표시. 숫자를 가리지 않게 아래쪽 모서리에 작게 둔다. */
+function pointsMark(card) {
   if (card.points === 0) return '';
   const text = card.points < 0 ? `−${Math.abs(card.points)}` : `${card.points}`;
   return `
     <g class="card__points">
-      <rect x="30" y="${cy - 11}" width="40" height="22" rx="11"
-            fill="currentColor" fill-opacity="0.13" stroke="currentColor" stroke-opacity="0.4" stroke-width="1"/>
-      <text x="50" y="${cy + 5.5}" text-anchor="middle" font-size="15" font-weight="700" fill="currentColor">${text}</text>
+      <rect x="62" y="118" width="30" height="16" rx="8"
+            fill="currentColor" fill-opacity="0.12"/>
+      <text x="77" y="129.5" text-anchor="middle" font-size="11" font-weight="700"
+            fill="currentColor" fill-opacity="0.85">${text}</text>
     </g>`;
 }
 
-function faceSvg(card) {
-  const body = `<rect class="card__bg" x="1.5" y="1.5" width="97" height="137" rx="9"/>`;
-
-  if (card.special) {
-    return `
-      ${body}
-      ${placeGlyph(card, 50, 56, 1.9)}
-      <text x="50" y="102" text-anchor="middle" font-size="19" font-weight="700" fill="currentColor">${card.name}</text>
-      ${pointsPill(card, 122)}`;
-  }
+/**
+ * 특수카드. 삽화가 카드를 가득 채우고, 이름은 아래쪽 반투명 띠 위에 얹는다.
+ * 점수는 삽화를 가리지 않도록 오른쪽 위 모서리로 뺀다.
+ */
+function specialFaceSvg(card) {
+  const clip = `cardclip-${clipSeq += 1}`;
+  const points = card.points === 0 ? '' : `
+    <g class="card__points">
+      <rect x="62" y="6" width="32" height="19" rx="9.5" fill="var(--card-face)" fill-opacity="0.86"/>
+      <text x="78" y="19.5" text-anchor="middle" font-size="13" font-weight="700"
+            fill="${card.points < 0 ? 'var(--suit-ink-star)' : 'var(--card-ink)'}">${card.points < 0 ? `−${Math.abs(card.points)}` : card.points}</text>
+    </g>`;
 
   return `
-    ${body}
-    <text x="11" y="33" font-size="29" font-weight="700" fill="currentColor">${card.label}</text>
-    ${placeGlyph(card, 17, 47, 0.55)}
-    ${placeGlyph(card, 50, 78, 1.55)}
-    ${pointsPill(card, 120)}`;
+    <defs>
+      <clipPath id="${clip}"><rect x="1.5" y="1.5" width="97" height="137" rx="9"/></clipPath>
+    </defs>
+    <g clip-path="url(#${clip})">
+      <rect x="1.5" y="1.5" width="97" height="137" fill="var(--card-face)"/>
+      <image href="${artUrl(card.special)}" x="1.5" y="1.5" width="97" height="137"
+             preserveAspectRatio="xMidYMid slice"/>
+      <rect x="1.5" y="112" width="97" height="26.5" fill="var(--card-face)" fill-opacity="0.88"/>
+      ${points}
+    </g>
+    <text x="50" y="130" text-anchor="middle" font-size="17" font-weight="700"
+          fill="var(--card-ink)">${card.name}</text>
+    <rect x="1.5" y="1.5" width="97" height="137" rx="9"
+          fill="none" stroke="var(--card-edge)" stroke-width="1.5"/>`;
+}
+
+/**
+ * 숫자카드. 수트 색 테두리 + 위쪽에 작은 문양 + 큰 숫자 하나.
+ * 겹쳐 놓거나 작게 줄여도 무엇인지 바로 읽히는 게 이 배치의 목적이다.
+ */
+function faceSvg(card) {
+  if (card.special) return specialFaceSvg(card);
+
+  // 두 글자('10')는 카드 폭에 맞춰 조금 좁힌다.
+  const wide = card.label.length > 1;
+
+  return `
+    <rect class="card__bg" x="1.5" y="1.5" width="97" height="137" rx="9"/>
+    <rect class="card__rim" x="3" y="3" width="94" height="134" rx="7.5"/>
+    ${placeGlyph(card, 50, 40, 1.0)}
+    <text x="50" y="104" text-anchor="middle" font-size="${wide ? 46 : 52}"
+          font-weight="700" fill="currentColor"
+          ${wide ? 'textLength="62" lengthAdjust="spacingAndGlyphs"' : ''}>${card.label}</text>
+    ${pointsMark(card)}`;
 }
 
 /** 스크린리더가 읽을 이름. 점수 카드는 점수까지 알려준다. */
@@ -137,7 +158,7 @@ export function cardElement(card, options = {}) {
   el.classList.toggle('is-selected', selected);
   el.classList.toggle('is-muted', muted);
   el.dataset.cardId = card.id;
-  el.style.setProperty('--suit', suitColor(card));
+  el.style.setProperty('--suit', suitInk(card));
   el.setAttribute('aria-label', cardAriaLabel(card));
   el.innerHTML = `<svg class="card__face" viewBox="0 0 100 140" aria-hidden="true">${faceSvg(card)}</svg>`
     + (tag ? `<span class="card__tag">${tag}</span>` : '');
@@ -152,11 +173,20 @@ export function cardBackElement() {
   el.setAttribute('aria-hidden', 'true');
   el.innerHTML = `
     <svg class="card__face" viewBox="0 0 100 140">
-      <rect x="1.5" y="1.5" width="97" height="137" rx="9" fill="var(--card-back)" stroke="var(--card-edge)"/>
-      <g stroke="var(--card-back-line)" stroke-width="2.4" fill="none" opacity="0.85">
-        <circle cx="50" cy="70" r="26"/>
-        <circle cx="50" cy="70" r="14"/>
-        <path d="M50 32 L50 108 M12 70 L88 70"/>
+      <rect x="0.75" y="0.75" width="98.5" height="138.5" rx="9" fill="var(--card-back-line)"/>
+      <rect x="4" y="4" width="92" height="132" rx="6.5" fill="var(--card-back)"/>
+      <g stroke="var(--card-back-line)" fill="none" opacity="0.9">
+        <rect x="8.5" y="8.5" width="83" height="123" rx="4" stroke-width="1"/>
+        <circle cx="50" cy="70" r="24" stroke-width="1.6"/>
+        <circle cx="50" cy="70" r="16" stroke-width="1"/>
+        <circle cx="50" cy="70" r="6.5" stroke-width="1.6"/>
+        <path stroke-width="1.3" d="M50 46 L50 30 M50 94 L50 110 M26 70 L14 70 M74 70 L86 70"/>
+        <path stroke-width="1.1" d="M33 53 L22 42 M67 53 L78 42 M33 87 L22 98 M67 87 L78 98"/>
+      </g>
+      <g fill="var(--card-back-line)" opacity="0.9">
+        <circle cx="50" cy="70" r="2.6"/>
+        <circle cx="50" cy="26" r="2"/><circle cx="50" cy="114" r="2"/>
+        <circle cx="10" cy="70" r="2"/><circle cx="90" cy="70" r="2"/>
       </g>
     </svg>`;
   return el;
