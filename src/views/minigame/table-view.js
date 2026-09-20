@@ -33,7 +33,7 @@ function fan(count) {
   const shown = Math.min(count, 14);
   // 장수가 많아질수록 한 장당 각도를 줄여 부채가 지나치게 벌어지지 않게 한다.
   inner.style.setProperty('--n', String(shown));
-  inner.style.setProperty('--fan-step', `${Math.min(6, 62 / Math.max(shown, 1))}deg`);
+  inner.style.setProperty('--fan-step', `${Math.min(4.5, 46 / Math.max(shown, 1))}deg`);
   // 회전은 레이아웃 크기를 안 바꾸므로 감싸는 칸을 손으로 잡아 준다. 14장 기준으로
   // 고정해 두면 3장 남은 자리도 200px 을 차지해 판이 쓸데없이 길어진다.
   wrap.style.setProperty('--fan-n', String(shown));
@@ -64,8 +64,7 @@ function seatBox(state, seat) {
     const place = state.finishOrder.indexOf(seat);
     person.append(element('div', 'seat__count', place >= 0 ? `${place + 1}등` : '없음'));
   } else {
-    // 남쪽은 나다. 진짜 손패가 펠트 아래에 따로 붙으므로 부채는 그리지 않는다.
-    if (seat !== SEAT.SOUTH) box.append(fan(count));
+    box.append(fan(count));
     person.append(element('div', 'seat__count', `${count}장`));
   }
 
@@ -83,12 +82,18 @@ function seatBox(state, seat) {
   return box;
 }
 
-/** 테이블 전체. 남쪽(나)의 실제 손패는 이 밑에 따로 붙는다. */
-export function renderTable(state) {
-  const felt = element('div', 'felt');
+/**
+ * 테이블 전체. 남쪽은 자리를 그리지 않는다 — 내 진짜 손패가 곧 내 자리라서,
+ * 아바타와 부채를 또 그리면 같은 말을 두 번 하면서 판만 세로로 길어진다.
+ *
+ * @param mine 펠트 안쪽 아래에 붙일 내 자리(손패·버튼). 판과 조작이 한 면 위에
+ *             있어야 판을 본 채로 카드를 낼 수 있다.
+ */
+export function renderTable(state, mine = null) {
+  const felt = element('div', 'felt felt--play');
   const seats = element('div', 'seats');
 
-  for (const seat of [SEAT.NORTH, SEAT.WEST, SEAT.EAST, SEAT.SOUTH]) {
+  for (const seat of [SEAT.NORTH, SEAT.WEST, SEAT.EAST]) {
     seats.append(seatBox(state, seat));
   }
 
@@ -118,7 +123,32 @@ export function renderTable(state) {
 
   seats.append(center);
   felt.append(seats);
+  if (mine) felt.append(mine);
   return felt;
+}
+
+/**
+ * 자리 대신 손패 줄 머리에 붙는 내 상태 — 장수·차례·선언·점수.
+ * 남들에게는 자리 밑에 달리는 것들이라 같은 부품(.seat__*)을 쓴다.
+ */
+export function mineStatus(state) {
+  const row = element('div', 'row');
+  const count = state.hands[SEAT.SOUTH].length;
+
+  if (count === 0) {
+    const place = state.finishOrder.indexOf(SEAT.SOUTH);
+    row.append(element('span', 'seat__count', place >= 0 ? `${place + 1}등` : '없음'));
+  } else {
+    row.append(element('span', 'seat__count', `${count}장`));
+  }
+
+  if (state.turn === SEAT.SOUTH && !state.done) row.append(element('span', 'seat__turn', '차례'));
+  if (state.calls?.[SEAT.SOUTH]) row.append(element('span', 'badge badge--warn', CALL_LABEL[state.calls[SEAT.SOUTH]]));
+
+  const points = sumPoints(state.tricks[SEAT.SOUTH]);
+  if (points !== 0) row.append(element('span', 'badge', `${points}점`));
+
+  return row;
 }
 
 /** 진행 기록. 무슨 일이 있었는지 되짚을 수 있어야 미니판이 학습이 된다. */

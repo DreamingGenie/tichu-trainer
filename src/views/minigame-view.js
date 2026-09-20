@@ -13,7 +13,7 @@ import { element } from '../ui/dom.js';
 import { htmlElement, inline, noteElement } from '../ui/markup.js';
 import { verdictBox } from '../ui/verdict.js';
 import { createHandView } from '../ui/hand-view.js';
-import { renderLog, renderTable } from './minigame/table-view.js';
+import { mineStatus, renderLog, renderTable } from './minigame/table-view.js';
 import { notFoundPanel } from './not-found-view.js';
 
 const ME = SEAT.SOUTH;
@@ -53,12 +53,18 @@ export function minigameView({ params }) {
   more.append(htmlElement('p', 'measure', inline(game.intro)));
 
   // --- 자리 ---
+  // 손패·버튼·힌트는 펠트 안쪽에 들어간다. 매 수마다 판을 새로 그리므로 이 칸들은
+  // 한 번 만들어 두고 새 펠트로 옮겨 붙인다 (append 는 옮기기다).
   const tableSlot = element('div');
   const hintSlot = element('div', 'stack stack--tight');
   const handSlot = element('div', 'stack stack--tight');
   const actionSlot = element('div', 'row');
   const errorSlot = element('div');
   const outcomeSlot = element('div', 'stack');
+
+  const mineSlot = element('div', 'table-mine');
+  const mineHead = element('div', 'minigame-hand-label');
+  mineSlot.append(mineHead, handSlot, hintSlot, actionSlot, errorSlot);
   const logSlot = element('details', 'log-details');
   logSlot.append(element('summary', 'small muted', '진행 기록'));
   const logBody = element('div');
@@ -68,7 +74,7 @@ export function minigameView({ params }) {
   more.append(logSlot);
 
   const play = element('div', 'minigame-play stack');
-  play.append(tableSlot, hintSlot, handSlot, actionSlot, errorSlot, outcomeSlot);
+  play.append(tableSlot, outcomeSlot);
 
   // 넓은 화면에서는 읽는 것이 한 덩어리(.minigame-side)로 묶이고, 좁아지면 이 묶음이
   // display:contents 로 풀려 목표는 판 앞, 상황·기록은 판 뒤로 갈라진다.
@@ -82,7 +88,7 @@ export function minigameView({ params }) {
 
   function render() {
     const state = runner.state;
-    tableSlot.replaceChildren(renderTable(state));
+    tableSlot.replaceChildren(renderTable(state, mineSlot));
     logBody.replaceChildren(renderLog(state));
     renderHints();
     renderHand();
@@ -108,10 +114,8 @@ export function minigameView({ params }) {
       dimUnplayable: myTurn,
       onChange: renderActions,
     });
-    const label = element('div', 'minigame-hand-label');
-    label.append(element('span', null, '내 손패'));
-    if (myTurn) label.append(element('span', 'badge badge--warn', '내 차례'));
-    handSlot.replaceChildren(label, handView.element);
+    mineHead.replaceChildren(element('span', 'minigame-hand-label__name', '내 손패'), mineStatus(runner.state));
+    handSlot.replaceChildren(handView.element);
   }
 
   function renderActions() {
