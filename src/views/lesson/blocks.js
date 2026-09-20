@@ -89,14 +89,15 @@ const RENDERERS = {
  * 블록 배열을 절 단위로 끊어 본문을 만든다.
  *
  * 절이 각각 하나의 면(.lesson-section)을 갖는다. 배경 위에 글이 그냥 얹혀 있으면
- * 어디서 어디까지가 한 덩어리인지 안 보인다.
+ * 어디서 어디까지가 한 덩어리인지 안 보인다. 예외를 두지 않는다 — 한 챕터 안에서
+ * 면 있는 절과 면 없는 절이 섞이는 게 제일 안 읽힌다.
  */
 export function renderBlocks(blocks) {
   const body = el('div', 'stack stack--loose');
 
   let section = null;
-  const openSection = (extra = '') => {
-    section = el('section', `lesson-section stack${extra}`);
+  const openSection = () => {
+    section = el('section', 'lesson-section stack');
     body.append(section);
     return section;
   };
@@ -106,8 +107,9 @@ export function renderBlocks(blocks) {
       openSection().append(RENDERERS.h(block));
       continue;
     }
-    // 첫 제목보다 앞에 오는 블록은 그 챕터의 도입부다. 면을 두르지 않는다.
-    if (!section) openSection(' lesson-section--lede');
+    // 첫 제목보다 앞에 오는 도입부도 같은 면 위에 올린다. 도입부만 배경에 그냥
+    // 얹혀 있으면 같은 본문인데 어떤 절은 면 안에, 어떤 절은 면 밖에 있게 된다.
+    if (!section) openSection();
 
     const render = RENDERERS[block.kind];
     if (!render) {

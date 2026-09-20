@@ -13,19 +13,10 @@
   box-shadow: var(--shadow-panel);
 }
 
-/* 제목 없이 시작하는 도입부는 면 없이 둔다 — 리드 문장이라 본문과 성격이 다르다. */
-.lesson-section--lede {
-  background: none;
-  border: 0;
-  box-shadow: none;
-  padding: 0;
-}
-
 /* 문단은 면 폭이 아니라 읽기 폭으로 묶는다. */
 .lesson-section > p,
 .lesson-section > ul,
 .lesson-section > ol { max-width: var(--measure); }
-.lesson-section > p { text-wrap: pretty; }
 
 figure.block-cards { margin: 0; }
 figure.block-cards figcaption { margin-top: calc(var(--space-1) * -1); max-width: var(--measure); }
@@ -38,12 +29,14 @@ figure.block-cards figcaption { margin-top: calc(var(--space-1) * -1); max-width
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: var(--space-3);
 }
+/* 절과 같은 --surface 를 쓰면 면 위의 면이 같은 색이라 경계가 안 보인다.
+   안쪽으로 한 단 내려앉는 --bg-sunken 을 쓴다. */
 .example {
   border: var(--edge);
   border-inline-start-width: 3px;
   border-radius: var(--radius);
   padding: var(--space-3) var(--space-4);
-  background: var(--surface);
+  background: var(--bg-sunken);
 }
 .example.is-ok { border-inline-start-color: var(--ok); }
 .example.is-bad { border-inline-start-color: var(--bad); }
