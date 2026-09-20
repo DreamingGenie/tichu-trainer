@@ -62,9 +62,13 @@ export default function passingDemo() {
         node.title = '눌러서 되돌리기';
         box.append(node);
       } else {
-        const drop = element('button', 'card-slot', picked ? '여기에 놓기' : '카드를 먼저 고르세요');
+        // 카드 한 장 크기(68px)라 문장이 못 들어간다. 넣었더니 '고르세/요' 로 쪼개졌다.
+        // 무엇을 하라는 말은 데모 머리말이 이미 하고 있으므로 여기는 상태만 알린다.
+        const drop = element('button', 'card-slot', picked ? '여기에' : '빈 자리');
         drop.type = 'button';
         drop.disabled = !picked;
+        // 보이는 글자를 두 글자로 줄였으니 누구에게 주는 자리인지는 접근 이름이 말한다.
+        drop.setAttribute('aria-label', `${target.label}에게 주기`);
         drop.addEventListener('click', () => {
           given[target.id] = picked;
           picked = null;

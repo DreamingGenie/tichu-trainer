@@ -101,7 +101,10 @@ button.card:disabled:hover { transform: none; box-shadow: var(--card-shadow); }
   line-height: 1.4;
   text-align: center;
 }
-button.card-slot { cursor: pointer; background: none; font: inherit; }
+/* font 단축 속성을 쓰면 .card-slot 의 font-size(--fs-micro)까지 같이 지워져
+   68px 짜리 카드 자리에 16px 글자가 들어간다. 글자체는 base.css 의
+   button { font: inherit } 이 이미 물려주므로 여기서는 건드리지 않는다. */
+button.card-slot { cursor: pointer; background: none; }
 button.card-slot:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
 button.card-slot:disabled { cursor: not-allowed; }
 
