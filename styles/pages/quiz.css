@@ -15,7 +15,6 @@
   line-height: var(--lh-title);
   letter-spacing: -0.02em;
   max-width: var(--measure);
-  text-wrap: pretty;
 }
 
 /* 진행 — 막대 대신 문제 수만큼의 칸 */

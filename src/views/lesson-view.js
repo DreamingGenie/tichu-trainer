@@ -13,7 +13,9 @@ export function lessonView({ params }) {
   // 진도가 안 올라가서 답답해지고, 어차피 퀴즈와 미니판이 진짜 진도를 잰다.
   markRead(chapter.id);
 
-  const root = element('article', 'stack stack--loose');
+  // lesson-page 는 읽는 폭을 잡는 데 쓴다 (base.css 의 .main:has). 레슨은 글이 주인공이라
+  // 다른 화면보다 단이 좁다.
+  const root = element('article', 'lesson-page stack stack--loose');
 
   const header = element('header', 'stack stack--tight');
   const crumb = element('div', 'row');
@@ -22,7 +24,7 @@ export function lessonView({ params }) {
   crumb.append(back, element('span', 'small muted', `${chapter.num} / 10`));
   header.append(crumb);
   header.append(element('h1', null, chapter.title));
-  header.append(element('p', 'lede measure', chapter.subtitle));
+  header.append(element('p', 'lede', chapter.subtitle));
   root.append(header);
 
   root.append(renderBlocks(chapter.blocks));

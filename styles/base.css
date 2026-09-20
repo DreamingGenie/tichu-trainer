@@ -16,16 +16,29 @@ body {
   line-height: var(--lh-body);
   word-break: keep-all;
   overflow-wrap: anywhere;
+
+  /* 화면마다 필요한 폭이 다르다. 940px 하나로 맞추면 레슨은 608px 짜리 글이 908px 짜리
+     면 안에서 왼쪽에 붙어 보이고, 미니판은 설명 단이 268px 로 눌린다.
+       레슨  700px — 절 안쪽이 620px 이 되어 글 폭(608px)과 거의 같아진다. 표(min-content
+              460px)와 데모(615px)도 다 들어간다
+       미니판 1180px — 읽는 화면이 아니라 조작하는 화면이라 두 단이 다 필요하다
+     상단 바·푸터가 같은 값을 쓰므로 왼쪽 끝이 화면마다 어긋나지 않는다. */
+  --page-w: var(--max-w);
 }
+body:has(.lesson-page) { --page-w: 700px; }
+body:has(.minigame-layout) { --page-w: 1180px; }
 
 h1, h2, h3, h4 { margin: 0; letter-spacing: -0.02em; }
 h1 { font-size: var(--fs-display); line-height: var(--lh-display); font-weight: var(--weight-display); }
 h2 { font-size: var(--fs-title); line-height: var(--lh-title); font-weight: var(--weight-display); }
 h3 { font-size: var(--fs-section); line-height: var(--lh-section); font-weight: var(--weight-strong); }
 h4 { font-size: var(--fs-body); line-height: var(--lh-section); font-weight: var(--weight-strong); }
-/* 한 줄만 남는 고아 줄을 브라우저가 알아서 피하게 한다. keep-all 로 단어를 안 쪼개는
-   한글에서는 이게 없으면 마지막 줄에 두 글자만 떨어지는 일이 잦다. */
-p, li, figcaption, dd { margin: 0; text-wrap: pretty; }
+/* text-wrap: pretty 를 쓰지 않는다. 크롬에서 pretty 는 마지막 줄이 짧아지지 않게
+   끝쪽 줄들의 폭을 다시 나누는데, keep-all 로 어절을 통째로 옮기는 한글에서는 그
+   조정 폭이 어절 하나(50~100px)라 첫 줄이 눈에 띄게 짧아진다. 칸은 812px 까지
+   있는데 703px 에서 끊겨, 이유 없이 줄이 넘어간 것처럼 보였다.
+   고아 줄은 balance 를 쓸 수 있는 제목에서만 다룬다. */
+p, li, figcaption, dd { margin: 0; }
 ul, ol { margin: 0; padding-left: 1.25em; }
 li + li { margin-top: var(--space-2); }
 
@@ -59,7 +72,7 @@ h2[tabindex='-1']:focus-visible { outline: none; }
 }
 
 .site-header__inner {
-  max-width: var(--max-w);
+  max-width: var(--page-w);
   margin: 0 auto;
   padding: var(--space-3) var(--space-4);
   display: flex;
@@ -94,10 +107,12 @@ h2[tabindex='-1']:focus-visible { outline: none; }
 .main {
   flex: 1;
   width: 100%;
-  max-width: var(--max-w);
+  max-width: var(--page-w);
   margin: 0 auto;
   padding: var(--space-6) var(--space-4) var(--space-7);
 }
+
+
 
 .site-footer {
   border-top: var(--edge);
@@ -107,7 +122,7 @@ h2[tabindex='-1']:focus-visible { outline: none; }
 }
 
 .site-footer__inner {
-  max-width: var(--max-w);
+  max-width: var(--page-w);
   margin: 0 auto;
   padding: var(--space-4);
 }
@@ -118,13 +133,27 @@ h2[tabindex='-1']:focus-visible { outline: none; }
 .row { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
 .spacer { flex: 1; }
 
-.lede { color: var(--text-muted); font-size: var(--fs-section); line-height: var(--lh-body); }
+/* 리드 문장은 언제나 문단이므로 읽기 폭을 스스로 갖는다. 붙이는 걸 잊으면 940px 를
+   그대로 써서 한글 52자짜리 줄이 된다 — 샌드박스와 미니판 목록이 그랬다. */
+.lede {
+  color: var(--text-muted);
+  font-size: var(--fs-section);
+  line-height: var(--lh-body);
+  max-width: var(--measure);
+}
 .muted { color: var(--text-muted); }
 .small { font-size: var(--fs-small); line-height: var(--lh-small); }
 .micro { font-size: var(--fs-micro); line-height: var(--lh-micro); font-weight: var(--weight-medium); }
 
 /* 문단은 화면 폭이 아니라 읽기 폭으로 묶는다. */
-.measure { max-width: var(--measure); text-wrap: pretty; }
+.measure { max-width: var(--measure); }
+
+/* 부품 안에 담긴 문단·목록도 마찬가지다. 레슨 본문만 묶어 뒀더니 데모와 샌드박스의
+   설명이 940px 를 그대로 써서 한 줄에 한글 61자가 들어갔다. 표나 카드 줄처럼 폭이
+   내용에 달린 것은 p·li 가 아니라 여기 걸리지 않는다. */
+.panel p, .panel li,
+.demo p, .demo li,
+.sandbox p, .sandbox li { max-width: var(--measure); }
 
 .site-header .btn { white-space: nowrap; }
 

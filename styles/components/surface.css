@@ -10,12 +10,15 @@
 
 /* --- 알림 상자 -------------------------------------------------------- */
 
+/* 글은 <span> 안에 들어가므로 p·li 를 묶는 규칙에 걸리지 않는다. 그래서 혼자
+   858px 를 그대로 써서 한 줄에 한글 55자가 들어가고 있었다. */
 .note {
   border-inline-start: 3px solid var(--accent);
   background: var(--accent-soft);
   border-radius: var(--radius-sm);
   padding: var(--space-3) var(--space-4);
   font-size: var(--fs-small);
+  max-width: var(--measure);
 }
 .note--warn { border-color: var(--warn); background: var(--warn-soft); }
 .note--bad { border-color: var(--bad); background: var(--bad-soft); }
