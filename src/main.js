@@ -38,6 +38,20 @@ function setupTheme() {
   });
 }
 
+// --- 상단 메뉴: 지금 있는 곳 ---
+
+// 레슨·퀴즈는 '규칙 열 장' 아래에 있다. 주소 첫 마디로 메뉴 항목을 고른다.
+const NAV_SECTION = { '': '#/', chapter: '#/', quiz: '#/', sandbox: '#/sandbox', minigame: '#/minigame' };
+
+function markCurrentNav() {
+  const first = (location.hash.replace(/^#\/?/, '').split('/')[0]) || '';
+  const target = NAV_SECTION[first];
+  for (const link of document.querySelectorAll('.site-nav a')) {
+    if (link.getAttribute('href') === target) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
+  }
+}
+
 // --- 라우트 ---
 
 route('/', homeView);
@@ -49,4 +63,6 @@ route('/sandbox', sandboxView);
 setNotFound(({ path }) => notFoundPanel(`"${path}" 라는 주소는 없습니다.`));
 
 setupTheme();
+addEventListener('hashchange', markCurrentNav);
+markCurrentNav();
 startRouter(document.getElementById('app'));

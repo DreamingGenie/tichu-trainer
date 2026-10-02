@@ -12,24 +12,31 @@
 :root {
   color-scheme: light;
 
-  /* 배경과 표면 */
-  --bg: #f7f5f1;
-  --bg-sunken: #efece6;
+  /* 배경과 표면 — 종이는 흰색 그대로. 색은 테이블(펠트)과 상단 바가 맡는다. */
+  --bg: #ffffff;
+  --bg-sunken: #f5f1f1;
   --surface: #ffffff;
   --surface-raised: #ffffff;
-  --border: #e0dbd2;
-  --border-strong: #c8c1b5;
+  --border: #e6dfe0;
+  --border-strong: #cfc4c6;
 
   /* 글자 */
-  --text: #23201c;
-  --text-muted: #6b6459;
-  --text-faint: #948c7f;
+  --text: #1a1214;
+  --text-muted: #5c4f52;
+  --text-faint: #8a7b7e;
 
-  /* 강조 — 옥(비취)에서 가져온 초록 계열 */
-  --accent: #0f7a58;
-  --accent-hover: #0c6449;
-  --accent-soft: #e2f2ec;
+  /* 강조 — 펠트에서 가져온 진홍. 흰 종이 위에서 9:1 이라 링크·버튼 글자로 그대로 쓴다.
+     펠트 위에서는 진홍이 묻히므로 table.css 의 .felt 가 금색으로 바꿔 쥔다. */
+  --accent: #8e1f2c;
+  --accent-hover: #6e1824;
+  --accent-soft: #f8e9eb;
   --accent-text: #ffffff;
+
+  /* 금색 — 펠트 위의 강조. 고른 카드의 테두리, 펠트 위 주 버튼, 판정 띠.
+     흰 종이 위에서는 대비가 1.9:1 이라 글자로 쓰지 않는다. */
+  --gold: #e8b84a;
+  --gold-hover: #f0c86a;
+  --gold-ink: #2a1a05;
 
   /* 상태 */
   --ok: #16794f;
@@ -39,16 +46,16 @@
   --bad: #b23b2e;
   --bad-soft: #fbe9e6;
 
-  /* 테이블 펠트 — 실제 티츄 앱처럼 올리브 그린 */
-  --felt: #5c6b3c;
-  --felt-deep: #39441f;
-  --felt-text: #f2f4ea;
+  /* 테이블 펠트 — 진한 진홍. 예전 올리브 그린은 크림 바탕과 붙어 화면 전체가 탁해 보였다. */
+  --felt: #a3283a;
+  --felt-deep: #4a0f18;
+  --felt-text: #ffffff;
+  --felt-text-muted: #f6e4e6;
 
-  /* 상단 바 — 두 테마 모두 어둡다. 펠트와 같은 계열의 진한 초록회색이라
-     화면 위쪽이 테이블의 테두리처럼 읽힌다. */
-  --header-bg: #23271e;
-  --header-ink: #f2f4ea;
-  --header-ink-muted: #c3cbb4;
+  /* 상단 바 — 두 테마 모두 펠트의 가장 어두운 쪽. 홈에서는 히어로 펠트와 이어져 보인다. */
+  --header-bg: #4a0f18;
+  --header-ink: #ffffff;
+  --header-ink-muted: #f3d9dc;
 
   /* 카드 */
   --card-face: #ffffff;
@@ -72,21 +79,26 @@
 :root[data-theme='dark'] {
   color-scheme: dark;
 
-  --bg: #16191d;
-  --bg-sunken: #101316;
-  --surface: #1d2126;
-  --surface-raised: #242930;
-  --border: #333a43;
-  --border-strong: #46505c;
+  --bg: #141012;
+  --bg-sunken: #0e0b0c;
+  --surface: #1e181a;
+  --surface-raised: #261f21;
+  --border: #3a3033;
+  --border-strong: #554649;
 
-  --text: #e9e6e1;
-  --text-muted: #a3a9b2;
-  --text-faint: #79808a;
+  --text: #efe7e8;
+  --text-muted: #b5a7aa;
+  --text-faint: #85777a;
 
-  --accent: #3fbb8e;
-  --accent-hover: #59cca2;
-  --accent-soft: #17342a;
-  --accent-text: #0c1f18;
+  /* 어두운 종이 위에서는 진홍이 안 읽힌다. 금색을 그대로 강조로 쓴다. */
+  --accent: #e8b84a;
+  --accent-hover: #f0c86a;
+  --accent-soft: #33280f;
+  --accent-text: #2a1a05;
+
+  --gold: #e8b84a;
+  --gold-hover: #f0c86a;
+  --gold-ink: #2a1a05;
 
   --ok: #4cc38a;
   --ok-soft: #14301f;
@@ -95,13 +107,14 @@
   --bad: #e5705f;
   --bad-soft: #351d1a;
 
-  --felt: #46522e;
-  --felt-deep: #2b3418;
-  --felt-text: #e8ecdd;
+  --felt: #8e2232;
+  --felt-deep: #3a0b13;
+  --felt-text: #ffffff;
+  --felt-text-muted: #f1dfe1;
 
-  --header-bg: #1f241a;
-  --header-ink: #e8ecdd;
-  --header-ink-muted: #b3bca4;
+  --header-bg: #2a080e;
+  --header-ink: #ffffff;
+  --header-ink-muted: #e9cfd2;
 
   --card-face: #f4f2ec;
   --card-edge: #cfc9bd;
@@ -127,7 +140,7 @@
   --edge: 1px solid var(--border);
   --edge-strong: 1px solid var(--border-strong);
 
-  /* 펠트 위에 얹는 반투명 층. 펠트는 테마와 무관하게 항상 어두운 초록이라
+  /* 펠트 위에 얹는 반투명 층. 펠트는 테마와 무관하게 항상 어두운 진홍이라
      흰색·검정 알파를 그대로 쓴다. */
   --felt-sheen: rgb(255 255 255 / 0.08);
   --felt-highlight: rgb(255 255 255 / 0.14);
@@ -139,7 +152,7 @@
 
   /* 카드 면은 두 테마 모두 밝다(실물 카드가 그렇다). 그 위의 글자는 늘 어두운 잉크. */
   --card-ink: #23201c;
-  --card-ink-soft: #8b8377;
+  --card-ink-soft: #625a54;   /* 다크의 카드 면(#f4f2ec) 위에서도 6:1 — 챕터 카드 부제가 이 색이다 */
 
   /* 카드에 인쇄되는 수트 색. 밝은 카드 면 위에 얹히므로 테마와 무관하게 진한 쪽으로 고정한다.
      본문 속 카드 칩은 페이지 배경 위에 놓이므로 --suit-* (테마별) 쪽을 쓴다. */
@@ -164,9 +177,10 @@
   --space-6: 32px;
   --space-7: 48px;
 
-  /* 서체는 Gothic A1 한 벌. 카드에 인쇄되는 랭크와 화면의 제목이 같은 언어를 쓰게 하려는
-     선택이라, 위계는 크기와 무게가 만든다. 웹폰트가 안 뜨면 system-ui 로 떨어진다. */
+  /* 본문은 Gothic A1, 화면 제목(h1·h2)만 Black Han Sans. 제목 서체는 무게가 한 벌(400)뿐이라
+     굵기 대신 서체 자체가 위계를 만든다. 웹폰트가 안 뜨면 둘 다 system-ui 로 떨어진다. */
   --font: 'Gothic A1', system-ui, -apple-system, 'Segoe UI', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+  --font-display: 'Black Han Sans', var(--font);
   --font-num: var(--font);
 
   /* 타이포 6단. 이 여섯 개 밖의 크기는 쓰지 않는다.
@@ -177,6 +191,10 @@
   --fs-body: 1rem;
   --fs-small: 0.875rem;
   --fs-micro: 0.75rem;
+
+  /* 여섯 단 밖의 예외는 하나 — 홈 히어로 제목. 첫 화면이 테이블 그 자체라 제목도
+     테이블 크기에 맞춘다. 다른 화면에서 쓰지 않는다. */
+  --fs-hero: 4rem;
 
   --lh-display: 1.2;
   --lh-title: 1.3;
