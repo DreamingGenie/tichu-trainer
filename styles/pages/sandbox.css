@@ -1,7 +1,100 @@
-/* 조합 판정 샌드박스와, 7챕터의 카드 교환 데모. 둘 다 카드를 골라 자리에 놓는 화면이다. */
+/* 조합 판정 샌드박스와, 7챕터의 카드 교환 데모. 둘 다 카드를 골라 자리에 놓는 화면이다.
+ *
+ * 샌드박스 부품(ui/sandbox.js)은 두 곳에 앉는다 — 레슨 안의 종이(.demo)와 '조합 만들어보기'
+ * 화면의 펠트(.sandbox-board). 색은 전부 토큰으로 잡아서, 펠트가 강조색을 금색으로 바꿔
+ * 쥐면(table.css) 같은 규칙이 그대로 펠트용이 된다. */
 
 /* 판정 결과가 나타났다 사라질 때 아래 내용이 튀지 않게 자리를 잡아둔다. */
 .sandbox__verdict { min-height: 64px; }
+
+/* --- 깔 것 고르기 ------------------------------------------------------- */
+
+.preset-chips {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+.preset-chips__legend {
+  float: left;            /* legend 를 칩과 같은 줄에 세운다 */
+  margin-inline-end: var(--space-2);
+  padding: 0;
+  font-weight: var(--weight-strong);
+  color: var(--text-muted);
+  line-height: 44px;
+}
+
+.chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  border: var(--edge-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text);
+  font-size: var(--fs-small);
+  font-weight: var(--weight-strong);
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+/* 라디오 자체는 숨기고 칩 전체가 누르는 자리가 된다. 키보드 포커스는 칩 테두리로 보여준다. */
+.chip input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.chip:hover { border-color: var(--accent); }
+.chip:has(input:checked) { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+.chip:has(input:focus-visible) { box-shadow: var(--focus); }
+
+/* --- 깔린 것 · 고른 것 --------------------------------------------------- */
+
+.sandbox__compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+}
+.sandbox__side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.sandbox__side .card-row { min-height: calc(var(--card-w) * 1.4 + var(--space-3) * 2); }
+.sandbox__label { font-weight: var(--weight-strong); color: var(--text-muted); }
+.sandbox__name { color: var(--text-muted); }
+
+/* --- '조합 만들어보기' 화면의 테이블 ------------------------------------- */
+
+body:has(.sandbox-page) { --page-w: 1180px; }
+
+.sandbox-board {
+  padding: var(--space-5) var(--space-5) var(--space-4);
+}
+.sandbox-board .preset-chips__legend,
+.sandbox-board .sandbox__label,
+.sandbox-board .sandbox__name { color: var(--felt-text-muted); }
+.sandbox-board .sandbox__name { font-weight: var(--weight-strong); color: var(--felt-text); }
+
+.sandbox-board .chip {
+  background: var(--felt-well);
+  border-color: var(--felt-hairline);
+  color: var(--felt-text);
+}
+.sandbox-board .chip:has(input:checked) { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+
+.sandbox-board .card-slot { border-color: var(--felt-hairline); color: var(--felt-text-muted); }
+
+/* 스무 장을 한 줄에 펴려고 카드를 조금 줄이고 살짝 겹친다. 1100px 칸에 64px × 20장이
+   1052px 로 들어간다. 좁아지면 .hand 의 줄바꿈이 그대로 일한다. */
+.sandbox-board .hand { --card-w: 64px; gap: 2px; }
+.sandbox-board .hand > .card + .card { margin-inline-start: calc(var(--card-w) * -0.22); }
+
+.sandbox-board .btn--ghost { color: var(--felt-text); }
+.sandbox-board .btn--ghost:hover:not(:disabled) { background: var(--felt-sheen); color: var(--felt-text); }
+
+/* --- 카드 교환 데모 ------------------------------------------------------ */
 
 .passing-slots {
   display: grid;
@@ -22,4 +115,7 @@
 
 @media (max-width: 560px) {
   .passing-slots { grid-template-columns: 1fr; }
+  .sandbox__compare { grid-template-columns: 1fr; gap: var(--space-3); }
+  .sandbox-board { padding: var(--space-4) var(--space-3); }
+  .preset-chips__legend { float: none; width: 100%; line-height: var(--lh-small); }
 }

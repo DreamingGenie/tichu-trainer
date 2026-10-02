@@ -10,7 +10,7 @@ import scoringWalkthrough from './scoring-walkthrough.js';
 import passingDemo from './passing.js';
 
 const DEMOS = {
-  sandbox: () => createSandbox({ compact: true }),
+  sandbox: () => createSandbox(),
   'point-picker': pointPicker,
   'scoring-walkthrough': scoringWalkthrough,
   passing: passingDemo,

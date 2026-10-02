@@ -7,7 +7,7 @@ import { element } from '../ui/dom.js';
 import { createSandbox } from '../ui/sandbox.js';
 
 export function sandboxView() {
-  const root = element('div', 'stack stack--loose');
+  const root = element('div', 'stack stack--loose sandbox-page');
   const header = element('header', 'stack stack--tight');
   header.append(element('h1', null, '조합 만들어보기'));
   header.append(element('p', 'lede',
@@ -15,8 +15,10 @@ export function sandboxView() {
     + '테이블에 깔린 걸 이기는지 바로 알려줍니다.'));
   root.append(header);
 
-  const panel = element('div', 'panel');
-  panel.append(createSandbox());
-  root.append(panel);
+  // 이 화면에서는 샌드박스를 종이가 아니라 테이블 위에 펼친다. 레슨 안에서는 같은
+  // 부품이 종이(.demo) 위에 앉는다.
+  const board = element('div', 'felt sandbox-board');
+  board.append(createSandbox());
+  root.append(board);
   return root;
 }
