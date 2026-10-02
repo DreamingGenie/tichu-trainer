@@ -97,16 +97,8 @@ export function chapterStatus(chapter) {
     quizTotal,
     minigameDone: Math.min(minigameDone, minigameTotal),
     minigameTotal,
-    ratio: steps === 0 ? 0 : done / steps,
     complete: done >= steps,
   };
-}
-
-/** 전체 진도 비율. */
-export function overallProgress(chapters) {
-  if (!chapters.length) return 0;
-  const sum = chapters.reduce((total, ch) => total + chapterStatus(ch).ratio, 0);
-  return sum / chapters.length;
 }
 
 export function resetProgress() {

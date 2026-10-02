@@ -1,45 +1,89 @@
 /* 챕터 목록 화면. */
 
-/* --- 히어로 ------------------------------------------------------------ */
-/* 첫 화면에서 제일 먼저 보이는 게 텍스트가 아니라 손패여야 한다는 게 이 화면의 주장이다.
- * 표면은 components/table.css 의 .felt 를 그대로 쓴다. */
+/* 홈은 카드 열 장을 다섯 칸씩 세우려고 미니판과 같은 폭을 쓴다. 히어로가 상단 바에 바로
+   붙어야 해서 본문 위쪽 여백도 없앤다. */
+body:has(.home-page),
+body:has(.minigame-index) { --page-w: 1180px; }   /* 짧은 판 목록도 같은 카드를 다섯 칸으로 */
+body:has(.home-page) .main { padding-top: 0; }
 
-.hero {
+/* --- 히어로 ------------------------------------------------------------ */
+/* 첫 화면은 테이블 그 자체다. 펠트를 화면 양끝까지 깔고, 왼쪽에 글, 오른쪽에 손패.
+ *
+ * 양끝까지 까는 건 border-image 의 바깥 뻗기(outset)로 한다. 100vw 로 폭을 늘리면 세로
+ * 스크롤바 폭만큼 가로 스크롤이 생기는데, border-image 는 칠하기만 하고 자리를 차지하지
+ * 않아서 그런 일이 없다. 위쪽이 상단 바와 같은 --felt-deep 이라 둘이 한 면으로 이어진다. */
+.hero.felt {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-7) 0 calc(var(--space-7) + var(--space-4));
+  border-radius: 0;
+  box-shadow: none;
+  background: none;
+  border-image: radial-gradient(70% 90% at 72% 62%, var(--felt) 0%, var(--felt-deep) 100%) fill 0 / / 0 100vw;
+}
+
+.hero__text {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-7) var(--space-5) 0;
-  overflow: hidden;   /* 부채 끝이 펠트 밖으로 나가지 않게 */
-  text-align: center;
+  gap: var(--space-4);
 }
 
-.hero h1 { text-wrap: balance; }
+.hero h1 {
+  font-size: var(--fs-hero);
+  line-height: var(--lh-display);
+  text-wrap: balance;
+}
 
+/* 금색 글자는 밝은 펠트(#a3283a) 위에서 3.9:1 이라 14px 에 못 쓴다. 글자는 밝게 두고
+   금색은 앞에 붙는 짧은 막대가 맡는다. */
 .hero__eyebrow {
-  font-size: var(--fs-micro);
-  font-weight: var(--weight-medium);
-  letter-spacing: 0.2em;
-  /* 펠트 위 12px 이라 흐리게 깔면 대비가 4.5:1 아래로 떨어진다. 크기와 자간만으로 낮춘다. */
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--felt-text-muted);
+  font-size: var(--fs-small);
+  font-weight: var(--weight-strong);
+}
+.hero__eyebrow::before {
+  content: '';
+  width: 24px;
+  height: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--gold);
 }
 
-/* 가운데 정렬된 짧은 글은 balance 로 줄 길이를 고르게 나눈다. pretty 는 마지막 줄만
-   손보기 때문에 "그래서 이" 같은 어정쩡한 끊김이 그대로 남는다. */
-.hero__lede { text-wrap: balance; }
+.hero__lede {
+  color: var(--felt-text-muted);
+  font-size: var(--fs-section);
+  line-height: var(--lh-body);
+  max-width: var(--measure);
+}
+
+.hero__actions { padding-top: var(--space-2); }
+.hero__actions .btn { font-size: var(--fs-body); padding-inline: var(--space-5); border-radius: var(--radius-pill); }
+/* 펠트 위 보조 버튼은 테두리만 밝게 둔다. */
+.hero__actions .btn--ghost {
+  color: var(--felt-text);
+  border-color: var(--felt-hairline);
+}
+.hero__actions .btn--ghost:hover:not(:disabled) { background: var(--felt-sheen); color: var(--felt-text); }
 
 /* 부채는 미니판 손패와 같은 방식으로 편다 — 회전축을 카드 아래에 두고 --i 로 각도를 준다.
- * 저쪽은 20px 뒷면이고 이쪽은 얼굴이 보이는 실제 크기라 겹침과 각도만 다르다. */
+ * 예전에는 아래 절반을 펠트 밖으로 내보내 잘린 채로 두었는데, 숫자가 반쯤 잘려 미완성처럼
+ * 보였다. 이제 카드 전체가 펠트 안에 들어온다. */
 .hero-fan {
+  --card-w: 96px;
+  --fan-step: 6deg;
   display: flex;
   justify-content: center;
   align-items: flex-end;
   padding-top: var(--space-4);
-  /* 아래쪽 절반을 펠트 밖으로 내보내지 않고, 카드가 테이블에 꽂힌 것처럼 잘리게 둔다. */
-  margin-bottom: calc(var(--card-w) * -0.5);
 }
 .hero-fan .card {
   margin-inline: calc(var(--card-w) * -0.22);
-  transform-origin: 50% 190%;
+  transform-origin: 50% 150%;
   transform: rotate(calc((var(--i) - (var(--n) - 1) / 2) * var(--fan-step)));
   box-shadow: var(--card-shadow-lift);
 }
@@ -58,85 +102,133 @@
 }
 
 /* --- 챕터 목록 --------------------------------------------------------- */
+/* 한 장 한 장이 트럼프 카드다. 왼쪽 위 모서리에 번호와 수트, 그 아래 제목. */
 
 .chapter-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--grid-min), 1fr));
-  gap: var(--space-3);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-4);
 }
 
 .chapter-card {
   display: flex;
-  gap: var(--space-4);
-  align-items: flex-start;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-height: 236px;
   padding: var(--space-4);
-  background: var(--surface);
+  background: var(--card-face);
+  color: var(--card-ink);
   border: var(--edge);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 2px 0 var(--border);
   text-decoration: none;
-  color: inherit;
   transition: border-color 0.13s ease, transform 0.13s ease, box-shadow 0.13s ease;
 }
 .chapter-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-panel);
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow-lift);
+}
+/* 다음에 할 장. 진홍 테두리 하나로 '여기부터' 를 말한다. 카드 면은 늘 밝으므로 테마를 안 타는
+   잉크를 쓴다 — 다크에서 --accent 는 금색이라 흰 카드 위에서 안 읽힌다. */
+.chapter-card.is-current {
+  border: 2px solid var(--suit-ink-star);
+  box-shadow: 0 10px 24px -12px color-mix(in srgb, var(--suit-ink-star) 55%, transparent);
 }
 
-/* 번호를 카드 한 장의 모양으로 세운다. 카드 면은 두 테마 모두 밝으므로 --card-face 와
-   테마를 안 타는 수트 잉크를 쓴다 (--suit 는 JS 가 챕터마다 넣는다). */
-.chapter-card__rank {
-  flex: 0 0 auto;
-  width: 44px;
-  aspect-ratio: 100 / 140;
-  display: grid;
-  place-items: center;
-  border: 1.5px solid var(--suit);
-  border-radius: 5px;
-  background: var(--card-face);
+.chapter-card__corner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
   color: var(--suit);
-  /* 실제 카드처럼 랭크가 큼직해야 카드로 읽힌다. 다크의 카드 면(#f4f2ec) 위에서
-     수트 잉크가 4.43:1 이라, 큰 글자 기준(24px 이상, 3:1)에 들어가는 크기이기도 하다. */
-  font-size: var(--fs-title);
-  font-weight: var(--weight-display);
   line-height: 1;
 }
-.chapter-card.is-done .chapter-card__rank {
-  border-color: var(--ok);
-  background: var(--ok-soft);
-  color: var(--ok);
+/* 카드 랭크는 페이지 위계와 별개다(카드 면 예외) — 다만 크기는 6단 안에서 고른다. */
+.chapter-card__rank {
+  font-family: var(--font-display);
+  font-size: var(--fs-title);
+}
+.chapter-card__suit { width: 16px; height: 16px; }
+.chapter-card__suit svg { display: block; width: 100%; height: 100%; }
+
+.chapter-card__title {
+  margin-top: var(--space-2);
+  font-size: var(--fs-body);
+  font-weight: var(--weight-display);
+  line-height: var(--lh-section);
+}
+.chapter-card__sub {
+  font-size: var(--fs-small);
+  line-height: var(--lh-small);
+  color: var(--card-ink-soft);
 }
 
-.chapter-card__title { font-size: var(--fs-section); font-weight: var(--weight-strong); line-height: var(--lh-section); }
-.chapter-card__sub { font-size: var(--fs-small); color: var(--text-muted); line-height: var(--lh-small); }
-
-/* --- 펠트 배너 --------------------------------------------------------- */
-/* 샌드박스처럼 '판으로 들어가는' 입구는 종이가 아니라 펠트 위에 앉힌다. */
-
-.banner {
+.chapter-card__foot {
+  margin-top: auto;
+  padding-top: var(--space-2);
   display: flex;
-  align-items: center;
-  gap: var(--space-5);
-  padding: var(--space-5);
   flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-micro);
+  line-height: var(--lh-micro);
+  font-weight: var(--weight-medium);
+  color: var(--card-ink-soft);
 }
-.banner .stack { flex: 1; min-width: 240px; }
-.banner__action {
-  flex: 0 0 auto;
-  background: var(--card-face);
-  border-color: var(--card-face);
-  color: var(--card-ink);
+.chapter-card__state { color: var(--card-ink); font-weight: var(--weight-strong); }
+.chapter-card.is-done .chapter-card__state { color: var(--ok); }
+
+.pips { display: inline-flex; gap: 5px; }
+.pip {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--card-edge);
 }
-.banner__action:hover:not(:disabled) {
-  background: var(--felt-text);
-  border-color: var(--felt-text);
+.pip.is-on { background: var(--suit-ink-star); border-color: var(--suit-ink-star); }
+
+/* --- 손으로 해 보기 ---------------------------------------------------- */
+/* 판으로 들어가는 두 입구. 종이가 아니라 펠트의 가장 어두운 쪽에 앉힌다. */
+
+.practice {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+.practice-tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-5) var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--felt-deep);
+  color: var(--felt-text);
+  text-decoration: none;
+  transition: transform 0.13s ease, box-shadow 0.13s ease;
+}
+.practice-tile:hover { transform: translateY(-3px); box-shadow: var(--shadow-panel); }
+.practice-tile__title { font-family: var(--font-display); font-size: var(--fs-title); line-height: var(--lh-title); }
+.practice-tile__title::after { content: ' →'; color: var(--gold); }
+.practice-tile__body { color: var(--felt-text-muted); font-size: var(--fs-small); line-height: var(--lh-small); max-width: var(--measure); }
+
+@media (max-width: 1000px) {
+  .chapter-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* 760px 아래에서는 히어로를 한 단으로 접고 부채를 글 아래로 내린다. */
+@media (max-width: 760px) {
+  .hero.felt { grid-template-columns: 1fr; gap: var(--space-5); padding: var(--space-6) 0 var(--space-7); }
+  .hero-fan { --card-w: 64px; --fan-step: 5deg; }
+  .chapter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+  .chapter-card { min-height: 200px; padding: var(--space-3); }
+  .practice { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 560px) {
-  .hero { padding: var(--space-6) var(--space-4) 0; }
-  /* 좁은 화면에서는 부채가 펠트보다 넓어져 양끝 카드가 반토막 난다. 카드를 줄이면
-     열한 장이 그대로 한 손에 들어온다 — .card 가 --card-w 하나로 크기를 잡는 덕이다. */
-  .hero-fan { --card-w: 44px; }
   .section-head { flex-wrap: wrap; }
   .section-head__rule { display: none; }
+}
+
+/* 아주 좁은 화면에서는 부채 아홉 장이 펠트보다 넓어진다. 카드를 줄여 한 손에 넣는다. */
+@media (max-width: 400px) {
+  .hero-fan { --card-w: 52px; }
 }
