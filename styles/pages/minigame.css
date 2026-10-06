@@ -200,6 +200,18 @@
 }
 
 /* 한 단으로 접히면 설명 전체가 판 앞을 막는다. 제목과 목표만 남기고 나머지는 판 뒤로. */
+/* 넓은 화면에서는 판 위의 이름·장수·차례·'내 손패' 를 14px 로. 게임 판단에 쓰는 정보라 12px 은
+   작았다. 900px 아래는 판을 첫 화면에 들이려고 줄여 둔 상태라 그대로 12px 이다 —
+   375px 에서 버튼 아래끝이 816~863px 로 이미 화면 밖이라 더 키우면 더 밀린다. */
+@media (min-width: 901px) {
+  .felt .seat__name,
+  .seat__count,
+  .seat__turn,
+  .minigame-hand-label__name,
+  .felt--play .table-call { font-size: var(--fs-small); }
+  .minigame-hand-label__name { letter-spacing: 0.04em; }
+}
+
 @media (max-width: 900px) {
   .minigame-layout {
     grid-template-columns: minmax(0, 1fr);
@@ -255,7 +267,8 @@
      제목을 앞줄에 붙인 한 문단으로 둔다 — 글은 그대로 남고 높이만 준다. */
   .minigame-crumb { margin-bottom: var(--space-2); }
   .minigame-brief { padding: var(--space-3) var(--space-4); }
-  .minigame-brief h1 { font-size: var(--fs-section); line-height: var(--lh-section); }
+  /* 18px 로 줄어드는 제목은 제목 서체 대신 본문 서체로 — Black Han Sans 는 작으면 뭉친다. */
+  .minigame-brief h1 { font-family: var(--font); font-weight: var(--weight-display); font-size: var(--fs-section); line-height: var(--lh-section); }
   .minigame-brief .note {
     background: none;
     border: 0;

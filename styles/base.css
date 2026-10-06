@@ -49,6 +49,10 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
 
 button { font: inherit; color: inherit; }
 
+/* hidden 속성은 브라우저 기본 display:none 이라, display 를 정하는 클래스(.btn 의 inline-flex)가
+   붙으면 그쪽이 이긴다. 퀴즈의 '선택 해제' 가 고른 카드가 없을 때도 보이던 이유다. */
+[hidden] { display: none !important; }
+
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* 라우터가 화면을 바꿀 때마다 제목으로 포커스를 옮긴다(router.js). 크롬은 그 프로그램적
@@ -172,21 +176,35 @@ h2[tabindex='-1']:focus-visible { outline: none; }
 
 /* 상단 메뉴는 버튼 모양을 빌리지만 링크다. 밑줄을 걷고, 지금 있는 곳은 금색 밑줄로만
    표시한다 — main.js 가 aria-current 를 붙인다. */
-.site-nav a[aria-current='page'] {
-  color: var(--header-ink);
-  box-shadow: inset 0 -3px 0 var(--gold);
-  border-radius: var(--radius) var(--radius) 0 0;
+.site-nav a { position: relative; }
+.site-nav a[aria-current='page'] { color: var(--header-ink); }
+/* 막대는 가상 요소로 긋는다. 안쪽 그림자로 그었더니 위쪽 둥근 모서리와 겹쳐 오른쪽 끝에
+   세로 실선이 남았고, 호버 배경(control.css)이 그림자를 덮어쓰기도 했다. */
+.site-nav a[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  inset-inline: var(--space-3);
+  bottom: 4px;
+  height: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--gold);
 }
+
+/* 상단 바는 펠트처럼 진홍이라 종이 위 강조색(진홍) 포커스 링이 묻힌다(1.6:1). 금색으로. */
+.site-header :focus-visible { outline-color: var(--gold); }
 
 /* 페이지 이동은 왼쪽에 한 묶음, 테마 전환은 떼어 오른쪽 끝에. 셋이 나란히 있으면
    어느 것이 이동이고 어느 것이 상태 전환인지 구분되지 않는다. */
 .site-nav { display: flex; align-items: center; gap: var(--space-1); }
 .site-nav + .theme-toggle { margin-inline-start: var(--space-3); }
-.theme-toggle {
+/* .site-header 를 붙여 control.css 의 .btn 보다 세게 건다. 이 파일이 먼저 읽혀서, 같은 무게로는
+   .btn 의 흰 배경·회색 테두리가 이겨 어두운 바 위에 흰 상자가 떠 있었다(아이콘 대비 1.3:1). */
+.site-header .theme-toggle {
+  background: none;
   color: var(--header-ink-muted);
   border-color: rgb(255 255 255 / 0.22);
 }
-.theme-toggle:hover:not(:disabled) {
+.site-header .theme-toggle:hover:not(:disabled) {
   background: rgb(255 255 255 / 0.1);
   color: var(--header-ink);
   border-color: rgb(255 255 255 / 0.4);

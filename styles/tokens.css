@@ -43,6 +43,7 @@
   --ok-soft: #e3f4ec;
   --warn: #8a5f00;
   --warn-soft: #fdf2d9;
+  --on-warn: #ffffff;      /* --warn 을 단색 배경으로 쓸 때의 글자(카드 위 '소원' 표시) */
   --bad: #b23b2e;
   --bad-soft: #fbe9e6;
 
@@ -104,6 +105,7 @@
   --ok-soft: #14301f;
   --warn: #d7a13a;
   --warn-soft: #322613;
+  --on-warn: #1f1606;      /* 다크의 --warn 은 밝은 앰버라 흰 글자를 얹으면 2.3:1 이었다 */
   --bad: #e5705f;
   --bad-soft: #351d1a;
 
@@ -161,6 +163,10 @@
   --suit-ink-pagoda: #2160b4;
   --suit-ink-star: #bc3a2c;
   --suit-ink-special: #6b4ea8;
+
+  /* 카드 면 위의 '끝냄' 같은 완료 표시. --ok 는 테마를 타서 다크에서 밝은 초록이 되는데,
+     카드 면은 늘 밝아서 1.98:1 로 떨어졌다. 카드 잉크처럼 진한 쪽으로 고정한다. */
+  --card-ink-ok: #0a6b48;
 
   --card-w: 68px;
 

@@ -25,6 +25,9 @@
 .card__rim { fill: none; stroke: var(--suit); stroke-width: 1; stroke-opacity: 0.28; }
 
 .card.is-muted { opacity: 0.34; filter: saturate(0.5); }
+/* 펠트 위에서 투명도로 흐리면 카드 면에 진홍이 비쳐 분홍 카드가 된다 — '못 냄' 이 아니라
+   다른 색 카드처럼 읽혔다. 펠트 위에서는 흐리는 대신 어둡게 가라앉힌다. */
+.felt .card.is-muted { opacity: 1; filter: brightness(0.5) saturate(0.35); }
 .card--back { color: var(--card-back); }
 
 button.card { cursor: pointer; }
@@ -44,7 +47,7 @@ button.card:disabled:hover { transform: none; box-shadow: var(--card-shadow); }
   inset-block-start: -9px;
   transform: translateX(-50%);
   background: var(--warn);
-  color: var(--on-solid);
+  color: var(--on-warn);
   font-size: var(--fs-micro);
   font-weight: var(--weight-strong);
   line-height: 1.6;

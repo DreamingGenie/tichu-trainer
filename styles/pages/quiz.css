@@ -2,6 +2,9 @@
 
 /* 이 화면의 주인공은 지금 풀 문제다. 챕터 제목(h1)은 조용히 두고 문제 문장을 키운다. */
 .quiz__title {
+  /* h1 이지만 제목 서체를 쓰지 않는다. Black Han Sans 는 18px 에서 획이 뭉쳐 답답하다 —
+     제목 서체는 화면의 큰 제목에만 쓴다. */
+  font-family: var(--font);
   font-size: var(--fs-section);
   font-weight: var(--weight-medium);
   line-height: var(--lh-section);
@@ -30,9 +33,10 @@
 
 .quiz__table-eyebrow,
 .quiz__hand-label {
-  font-size: var(--fs-micro);
-  font-weight: var(--weight-medium);
-  letter-spacing: 0.16em;
+  /* 판단에 쓰는 정보라 12px 은 작았다. 한글에 0.16em 자간을 주면 글자가 흩어져서 거의 뺀다. */
+  font-size: var(--fs-small);
+  font-weight: var(--weight-strong);
+  letter-spacing: 0.02em;
 }
 .quiz__hand-label { color: var(--text-muted); }
 
@@ -43,7 +47,7 @@
   flex-direction: column;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--space-5) var(--space-4);
+  padding: var(--space-4);
 }
 .quiz__table .card-row { padding-block: var(--space-1); }
 
@@ -56,7 +60,8 @@
   border: var(--edge-strong);
   border-radius: var(--radius);
   background: var(--surface);
-  font-size: var(--fs-small);
+  /* 실제로 누르는 건 보기다. 질문(26px) 옆에서 14px 은 작아 보여 본문 크기로 올린다. */
+  font-size: var(--fs-body);
   line-height: 1.6;
   cursor: pointer;
   transition: border-color 0.12s ease, background 0.12s ease;
@@ -65,3 +70,14 @@
 .choice:disabled { cursor: default; opacity: 0.75; }
 .choice.is-correct { border-color: var(--ok); background: var(--ok-soft); opacity: 1; }
 .choice.is-wrong { border-color: var(--bad); background: var(--bad-soft); }
+
+/* 카드 문제의 버튼 줄. 화면 아래에 붙어 있다가 제자리에 오면 거기 선다. 위쪽 가는 선과
+   종이색 바탕으로, 스크롤되는 손패 위에 떠 있어도 경계가 보이게 한다. */
+.quiz__actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  background: var(--bg);
+  border-top: var(--edge);
+  padding-block: var(--space-3);
+}
