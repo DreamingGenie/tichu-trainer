@@ -44,12 +44,24 @@ src/
 **예외는 `--fs-hero` 하나** — 홈 히어로 제목(4rem, 560px 아래 2.5rem)이다. 첫 화면이 테이블
 그 자체라 제목도 테이블 크기에 맞췄다. 다른 화면에서 쓰지 않는다.
 
-서체는 두 벌이다(Google Fonts, `index.html` 의 `<link>`). 본문은 **Gothic A1**, 화면 제목
-(`h1`·`h2`)과 로고·챕터 카드 번호만 **Black Han Sans**(`--font-display`). Black Han Sans 는
-무게가 400 한 벌이라 제목에 `--weight-display` 를 주면 가짜 굵기가 덧칠된다 — `base.css` 가
-`h1, h2` 를 `--weight-body` 로 둔다. 본문 쪽 위계는 여전히 무게가 맡는다 —
-`--weight-display(900) / strong(700) / medium(500) / body(400)`.
-웹폰트가 안 뜨면 둘 다 `--font` 의 폴백(system-ui)으로 떨어지고 화면은 그대로 선다.
+서체는 세 벌이다(2026-10-06 사용자가 비교 페이지에서 골랐다).
+
+| 토큰 | 서체 | 어디에 | 불러오는 곳 |
+|---|---|---|---|
+| `--font` | **고운돋움** | 본문·버튼·라벨 전부 | Google Fonts (`index.html`) |
+| `--font-display` | **Black Han Sans** | `h1`·`h2`(26px 이상), 로고 | Google Fonts |
+| `--font-num` | **마루 부리** | 카드 면(랭크·이름·점수), 홈의 카드 모양 챕터 번호 | `card.css` 의 `@font-face` (hangeul.pstatic.net) |
+
+- **고운돋움은 굵기가 400 한 벌뿐이다.** 700·900 은 브라우저가 덧칠한 굵기로 나온다. 26·18·16·14·12px
+  에서 읽힘을 확인하고 위계 토큰(`--weight-display(900) / strong(700) / medium(500) / body(400)`)은
+  그대로 뒀다 — 900 과 700 은 같은 굵기로 보인다는 것만 알아 둔다. 500 은 400 과 같다.
+- **Black Han Sans 도 400 한 벌**이라 `base.css` 가 `h1, h2` 를 `--weight-body` 로 둔다.
+- **마루 부리 배포 CSS 를 그대로 쓰지 않는다.** 굵기마다 패밀리 이름이 달라(MaruBuriBold 등) 카드 SVG 의
+  `font-weight="700"` 과 만나면 진짜 굵기 위에 가짜 굵기가 또 덧칠된다. `card.css` 가 같은 woff2 를
+  `'Maru Buri Card'` 한 패밀리의 400·700 으로 다시 묶는다.
+
+웹폰트가 안 뜨면 모두 `--font` 의 폴백(system-ui)으로 떨어지고 화면은 그대로 선다.
+비교에 쓴 후보는 Gothic A1(이전)·Pretendard·SUIT·Wanted Sans·IBM Plex Sans KR·고운돋움·마루 부리·고운바탕.
 
 **제목 서체는 26px(`--fs-title`) 이상에서만 쓴다.** 18px 로 줄면 획이 뭉친다 — 퀴즈 머리의
 챕터 이름(`.quiz__title`)과 좁은 화면의 미니판 제목은 본문 서체 900 으로 되돌린다. 레슨 안의
