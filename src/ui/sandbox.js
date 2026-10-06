@@ -48,34 +48,49 @@ export function handForPreset(preset) {
   return parseHand(PRACTICE_HAND).filter((card) => !onTable.has(card.id));
 }
 
-/**
- * @param options.compact 레슨 안에 끼워넣을 때 설명을 줄인다
- */
-export function createSandbox(options = {}) {
+// 한 화면에 샌드박스가 둘 이상 뜰 수 있다(레슨 안). 라디오 묶음 이름이 겹치면 안 된다.
+let groupSeq = 0;
+
+export function createSandbox() {
   const root = element('div', 'stack sandbox');
   let hand = handForPreset(null);
 
   let table = null;
 
-  // --- 테이블 위 ---
-  const tableSection = element('div', 'stack stack--tight');
-  const tableHead = element('div', 'row');
-  const label = element('label', 'small muted', '테이블 위에 깔린 것');
-  label.htmlFor = 'sandbox-table';
-
-  const select = document.createElement('select');
-  select.id = 'sandbox-table';
-  select.className = 'select';
+  // --- 테이블 위에 깔 것 ---
+  // 예전에는 select 하나였는데, 열어 보기 전에는 무엇을 깔 수 있는지 보이지 않았다.
+  // 열 개를 칩으로 다 펼쳐 둔다.
+  const presetGroup = element('fieldset', 'preset-chips');
+  presetGroup.append(element('legend', 'small preset-chips__legend', '테이블 위에 깔린 것'));
+  const groupName = `sandbox-table-${groupSeq += 1}`;
+  let presetId = TABLE_PRESETS[0].id;
   for (const preset of TABLE_PRESETS) {
-    const option = document.createElement('option');
-    option.value = preset.id;
-    option.textContent = preset.label;
-    select.append(option);
+    const chip = element('label', 'chip');
+    const input = document.createElement('input');
+    input.type = 'radio';
+    input.name = groupName;
+    input.value = preset.id;
+    input.checked = preset.id === presetId;
+    input.addEventListener('change', () => {
+      presetId = preset.id;
+      renderTable();
+    });
+    chip.append(input, element('span', null, preset.label));
+    presetGroup.append(chip);
   }
-  tableHead.append(label, select);
 
+  // --- 깔린 것과 고른 것을 나란히 ---
+  const compare = element('div', 'sandbox__compare');
+  const tableSide = element('div', 'sandbox__side');
   const tableCards = element('div', 'card-row');
-  tableSection.append(tableHead, tableCards);
+  const tableName = element('span', 'small sandbox__name');
+  tableSide.append(element('span', 'small sandbox__label', '깔린 것'), tableCards, tableName);
+
+  const pickedSide = element('div', 'sandbox__side');
+  const pickedCards = element('div', 'card-row');
+  const pickedName = element('span', 'small sandbox__name');
+  pickedSide.append(element('span', 'small sandbox__label', '내가 고른 것'), pickedCards, pickedName);
+  compare.append(tableSide, pickedSide);
 
   // --- 판정 ---
   const verdict = element('div', 'sandbox__verdict');
@@ -104,14 +119,15 @@ export function createSandbox(options = {}) {
   const hint = element('p', 'small muted');
 
   function renderTable() {
-    const preset = TABLE_PRESETS.find((p) => p.id === select.value);
+    const preset = TABLE_PRESETS.find((p) => p.id === presetId);
     table = preset.hand ? detectCombo(parseHand(preset.hand)) : null;
 
     tableCards.replaceChildren(
       ...(preset.hand
         ? parseHand(preset.hand).map((card) => cardElement(card))
-        : [element('div', 'card-slot', '비어 있음')]),
+        : [element('div', 'card-slot', '빈 자리')]),
     );
+    tableName.textContent = table ? describeCombo(table) : '새 트릭 — 무엇이든 낼 수 있음';
 
     hand = handForPreset(preset);
     handView.setCards(hand);
@@ -119,7 +135,19 @@ export function createSandbox(options = {}) {
     update(handView.getSelected());
   }
 
+  function renderPicked(selected) {
+    pickedCards.replaceChildren(
+      ...(selected.length
+        ? selected.map((card) => cardElement(card))
+        : [element('div', 'card-slot', '빈 자리')]),
+    );
+    const combo = selected.length ? detectCombo(selected) : null;
+    pickedName.textContent = !selected.length ? '손패에서 카드를 누르세요'
+      : combo ? describeCombo(combo) : '조합이 아님';
+  }
+
   function update(selected) {
+    renderPicked(selected);
     if (!selected.length) {
       verdict.replaceChildren(verdictBox('neutral', '카드를 골라보세요',
         table
@@ -150,13 +178,7 @@ export function createSandbox(options = {}) {
       : `이 손패로 만들 수 있는 조합은 ${count}가지입니다.`;
   }
 
-  select.addEventListener('change', renderTable);
-
-  if (!options.compact) {
-    root.append(element('p', 'lede',
-      '카드를 눌러 골라보세요. 무슨 조합인지, 테이블에 깔린 것을 이기는지 바로 알려줍니다.'));
-  }
-  root.append(tableSection, verdict, handSection, hint);
+  root.append(presetGroup, compare, verdict, handSection, hint);
   renderTable();
 
   return root;

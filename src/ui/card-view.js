@@ -56,6 +56,11 @@ const GLYPH = {
   [SUIT.STAR]: '<path d="M12 1 L14.7 8.28 L22.46 8.6 L16.37 13.42 L18.47 20.9 L12 16.6 L5.53 20.9 L7.63 13.42 L1.54 8.6 L9.3 8.28 Z"/>',
 };
 
+/** 카드 밖에서 수트 문양만 쓸 때(홈의 챕터 카드). 색은 감싸는 요소의 color 를 따른다. */
+export function suitGlyphSvg(suit) {
+  return `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${GLYPH[suit] ?? ''}</svg>`;
+}
+
 function glyph(card) {
   return GLYPH[card.special ?? card.suit] ?? '';
 }

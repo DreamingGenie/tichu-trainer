@@ -4,11 +4,13 @@
 // 각본이 어긋나면(적힌 수가 더 이상 합법이 아니면) 진행기가 알아서 봇 정책으로
 // 넘어가므로, 학습자가 예상 밖의 수를 둬도 화면이 멈추지 않는다.
 
+import { SUIT_ORDER } from '../engine/cards.js';
 import { createScenarioRunner } from '../engine/scenario.js';
 import { SEAT, SEAT_LABEL } from '../engine/seats.js';
 import { MINIGAMES, minigameById } from '../data/minigames/index.js';
 import { chapterById } from '../data/chapters.js';
 import { isMinigameCleared, recordMinigame } from '../store/progress.js';
+import { suitGlyphSvg } from '../ui/card-view.js';
 import { element } from '../ui/dom.js';
 import { htmlElement, inline, noteElement } from '../ui/markup.js';
 import { verdictBox } from '../ui/verdict.js';
@@ -236,30 +238,38 @@ export function minigameView({ params }) {
 
 /** 미니판 전체 목록. */
 export function minigameIndexView() {
-  const root = element('div', 'stack stack--loose');
+  const root = element('div', 'stack stack--loose minigame-index');
   const header = element('header', 'stack stack--tight');
   header.append(element('h1', null, '짧은 판 연습'));
   header.append(element('p', 'lede', '짧은 판을 직접 두면서 규칙이 몸에 붙었는지 확인해보세요.'));
   root.append(header);
 
   const grid = element('div', 'chapter-grid');
-  const suits = ['--suit-ink-jade', '--suit-ink-sword', '--suit-ink-pagoda', '--suit-ink-star'];
   MINIGAMES.forEach((game, i) => {
     const cleared = isMinigameCleared(game.chapterId, game.id);
+    const chapter = chapterById(game.chapterId);
     const link = element('a', 'chapter-card');
     link.href = `#/minigame/${game.id}`;
     if (cleared) link.classList.add('is-done');
 
-    // 홈의 챕터 카드와 같은 카드 모양 번호를 쓴다.
-    const rank = element('span', 'chapter-card__rank', cleared ? '✓' : String(i + 1));
-    rank.style.setProperty('--suit', `var(${suits[i % suits.length]})`);
-    link.append(rank);
+    // 홈의 챕터 카드와 같은 모양 — 왼쪽 위에 번호와 수트.
+    const suit = SUIT_ORDER[i % SUIT_ORDER.length];
+    const corner = element('span', 'chapter-card__corner');
+    corner.style.setProperty('--suit', `var(--suit-ink-${suit})`);
+    corner.setAttribute('aria-hidden', 'true');
+    corner.append(element('span', 'chapter-card__rank', String(i + 1)));
+    const glyph = element('span', 'chapter-card__suit');
+    glyph.innerHTML = suitGlyphSvg(suit);
+    corner.append(glyph);
+    link.append(corner);
 
-    const text = element('span', 'stack stack--tight');
-    text.append(element('span', 'chapter-card__title', game.title));
-    text.append(element('span', 'chapter-card__sub', game.goal));
-    if (cleared) text.append(element('span', 'badge badge--ok', '클리어'));
-    link.append(text);
+    link.append(element('span', 'chapter-card__title', game.title));
+    link.append(element('span', 'chapter-card__sub', game.goal));
+
+    const foot = element('span', 'chapter-card__foot');
+    if (chapter) foot.append(element('span', null, `${chapter.num}장 · ${chapter.title}`));
+    if (cleared) foot.append(element('span', 'chapter-card__state', '클리어'));
+    link.append(foot);
     grid.append(link);
   });
   root.append(grid);
