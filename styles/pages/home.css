@@ -151,7 +151,9 @@ body:has(.home-page) .main { padding-top: 0; }
 }
 /* 카드 랭크는 페이지 위계와 별개다(카드 면 예외) — 다만 크기는 6단 안에서 고른다. */
 .chapter-card__rank {
-  font-family: var(--font-display);
+  /* 카드 면과 같은 마루 부리 — 홈의 챕터도 트럼프 카드 모양이라 숫자를 맞춘다. */
+  font-family: var(--font-num);
+  font-weight: var(--weight-strong);
   font-size: var(--fs-title);
 }
 .chapter-card__suit { width: 16px; height: 16px; }

@@ -183,11 +183,16 @@
   --space-6: 32px;
   --space-7: 48px;
 
-  /* 본문은 Gothic A1, 화면 제목(h1·h2)만 Black Han Sans. 제목 서체는 무게가 한 벌(400)뿐이라
-     굵기 대신 서체 자체가 위계를 만든다. 웹폰트가 안 뜨면 둘 다 system-ui 로 떨어진다. */
-  --font: 'Gothic A1', system-ui, -apple-system, 'Segoe UI', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+  /* 서체 세 벌.
+       본문  고운돋움 — 손글씨 느낌의 부드러운 고딕. 굵기가 400 한 벌뿐이라 700·900 은 브라우저가
+             덧칠한 굵기로 나온다(26px~12px 에서 읽힘을 확인). 위계 토큰은 그대로 둔다
+       제목  Black Han Sans — h1·h2 의 26px 이상에서만(base.css)
+       카드  마루 부리 — 카드 면의 랭크·이름·점수, 홈의 카드 모양 챕터 번호. 실물 카드처럼 부리가 있는
+             숫자. @font-face 는 card.css 에 있다
+     웹폰트가 안 뜨면 모두 system-ui 로 떨어지고 화면은 그대로 선다. */
+  --font: 'Gowun Dodum', system-ui, -apple-system, 'Segoe UI', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
   --font-display: 'Black Han Sans', var(--font);
-  --font-num: var(--font);
+  --font-num: 'Maru Buri Card', var(--font);
 
   /* 타이포 6단. 이 여섯 개 밖의 크기는 쓰지 않는다.
      레슨 한 화면에 크기가 15종 섞여 위계가 안 읽히던 걸 여기로 묶었다. */
