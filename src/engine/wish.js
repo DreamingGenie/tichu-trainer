@@ -8,7 +8,7 @@
 //   - 봉황은 소원을 이행하지 못한다. 어떤 랭크도 대신할 수 없다.
 //   - 턴 밖에서 터뜨리는 폭탄은 소원 의무를 면제받는다. 대신 다음 자기 차례에 이행해야 한다.
 
-import { MAX_NORMAL_RANK, MIN_NORMAL_RANK, rankLabel } from './cards.js';
+import { MAX_NORMAL_RANK, MIN_NORMAL_RANK, rankWithJosa } from './cards.js';
 import { enumerateLegalPlays } from './legal.js';
 
 export function isWishableRank(rank) {
@@ -54,7 +54,8 @@ export function checkWish(hand, current, wishRank, chosen, options = {}) {
   return {
     ok: false,
     reason: 'WISH_UNFULFILLED',
-    message: `소원이 ${rankLabel(wishRank)}로 걸려 있어요. ${rankLabel(wishRank)}를 포함해서 낼 수 있는 수가 있으면 반드시 그걸 내야 합니다.`,
+    // 조사를 랭크마다 고른다. 고정으로 붙이면 3·6·7·8·10 에서 '3로'·'7를' 이 된다.
+    message: `소원이 ${rankWithJosa(wishRank, '로')} 걸려 있습니다. ${rankWithJosa(wishRank, '를')} 포함해서 낼 수 있는 수가 있으면 반드시 그걸 내야 합니다.`,
     plays: status.plays,
   };
 }

@@ -7,7 +7,7 @@
 
 ```bash
 node tools/serve.js 8000     # 의존성 없는 정적 서버 (no-store)
-node tests/run.js            # 84개 테스트. 엔진 로직 + 콘텐츠 정합성
+node tests/run.js            # 85개 테스트. 엔진 로직 + 콘텐츠 정합성
 ```
 
 - 카드 56장을 한눈에 보려면 `http://localhost:8000/tests/cards.html`
