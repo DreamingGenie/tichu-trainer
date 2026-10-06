@@ -43,6 +43,7 @@
   --ok-soft: #e3f4ec;
   --warn: #8a5f00;
   --warn-soft: #fdf2d9;
+  --on-warn: #ffffff;      /* --warn 을 단색 배경으로 쓸 때의 글자(카드 위 '소원' 표시) */
   --bad: #b23b2e;
   --bad-soft: #fbe9e6;
 
@@ -104,6 +105,7 @@
   --ok-soft: #14301f;
   --warn: #d7a13a;
   --warn-soft: #322613;
+  --on-warn: #1f1606;      /* 다크의 --warn 은 밝은 앰버라 흰 글자를 얹으면 2.3:1 이었다 */
   --bad: #e5705f;
   --bad-soft: #351d1a;
 
