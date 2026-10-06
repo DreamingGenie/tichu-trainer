@@ -74,14 +74,20 @@ body:has(.home-page) .main { padding-top: 0; }
  * 예전에는 아래 절반을 펠트 밖으로 내보내 잘린 채로 두었는데, 숫자가 반쯤 잘려 미완성처럼
  * 보였다. 이제 카드 전체가 펠트 안에 들어온다. */
 .hero-fan {
-  --card-w: 96px;
   --fan-step: 6deg;
+  /* 카드 크기를 이 칸의 폭에서 정한다(아래 .card 의 cqi). */
+  container-type: inline-size;
   display: flex;
   justify-content: center;
   align-items: flex-end;
   padding-top: var(--space-4);
 }
+/* 부채가 퍼지는 폭은 카드 폭의 약 7.1배다(아홉 장, 0.44 겹침, 6° 회전 — 1440px 에서 96px 카드가
+   681px). 96px 로 고정했더니 두 단이 유지되는 761~1100px 에서 부채가 칸을 넘어 글을 덮고 가로
+   스크롤이 생겼다(1000px 에서 1079px). 칸 폭(+ 양옆 간격 16px)을 7.1 로 나눠 카드를 정하고 96px 에서
+   멈춘다. 한 단이 되는 좁은 화면도 같은 식이 맡는다. */
 .hero-fan .card {
+  --card-w: min(96px, calc((100cqi + 32px) / 7.1));
   margin-inline: calc(var(--card-w) * -0.22);
   transform-origin: 50% 150%;
   transform: rotate(calc((var(--i) - (var(--n) - 1) / 2) * var(--fan-step)));
@@ -217,7 +223,7 @@ body:has(.home-page) .main { padding-top: 0; }
 /* 760px 아래에서는 히어로를 한 단으로 접고 부채를 글 아래로 내린다. */
 @media (max-width: 760px) {
   .hero.felt { grid-template-columns: 1fr; gap: var(--space-5); padding: var(--space-6) 0 var(--space-7); }
-  .hero-fan { --card-w: 64px; --fan-step: 5deg; }
+  .hero-fan { --fan-step: 5deg; }
   .chapter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
   .chapter-card { min-height: 200px; padding: var(--space-3); }
   .practice { grid-template-columns: 1fr; }
@@ -226,9 +232,4 @@ body:has(.home-page) .main { padding-top: 0; }
 @media (max-width: 560px) {
   .section-head { flex-wrap: wrap; }
   .section-head__rule { display: none; }
-}
-
-/* 아주 좁은 화면에서는 부채 아홉 장이 펠트보다 넓어진다. 카드를 줄여 한 손에 넣는다. */
-@media (max-width: 400px) {
-  .hero-fan { --card-w: 52px; }
 }
