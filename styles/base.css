@@ -49,6 +49,10 @@ a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset:
 
 button { font: inherit; color: inherit; }
 
+/* hidden 속성은 브라우저 기본 display:none 이라, display 를 정하는 클래스(.btn 의 inline-flex)가
+   붙으면 그쪽이 이긴다. 퀴즈의 '선택 해제' 가 고른 카드가 없을 때도 보이던 이유다. */
+[hidden] { display: none !important; }
+
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* 라우터가 화면을 바꿀 때마다 제목으로 포커스를 옮긴다(router.js). 크롬은 그 프로그램적

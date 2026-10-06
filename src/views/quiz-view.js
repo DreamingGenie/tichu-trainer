@@ -4,7 +4,7 @@
 // 그래야 정답이 여러 개인 문제를 다룰 수 있고, 틀렸을 때 "장수가 다르다 / 소원을
 // 안 지켰다 / 못 이긴다"를 구분해서 알려줄 수 있다. 그 구분이 이 사이트의 핵심이다.
 
-import { parseHand } from '../engine/cards.js';
+import { parseHand, rankLabel } from '../engine/cards.js';
 import { detectCombo } from '../engine/combos.js';
 import { checkPlay } from '../engine/compare.js';
 import { enumerateLegalPlays } from '../engine/legal.js';
@@ -168,7 +168,9 @@ export function quizView({ params }) {
   // --- 카드 고르기 ---------------------------------------------------
 
   function cardQuestion(quiz) {
-    const panel = element('div', 'stack stack--loose');
+    // 문제·판·손패·버튼이 한 화면에 들어와야 카드를 고른 손으로 바로 낸다. 간격을 넓게
+    // (stack--loose) 두었더니 1280x800 에서 '이대로 내기' 가 화면 아래로 밀려 있었다.
+    const panel = element('div', 'stack');
     panel.append(promptNode(quiz.prompt));
 
     const hand = parseHand(quiz.hand);
@@ -186,7 +188,8 @@ export function quizView({ params }) {
     }
     if (wish) {
       table.append(htmlElement('div', 'note note--warn',
-        inline(`참새의 소원이 **${quiz.wishLabel ?? wish}**로 걸려 있습니다.`)));
+        // 랭크는 숫자(13)로 저장돼 있다. 그대로 찍으면 'K' 가 '13' 으로 보인다.
+        inline(`참새의 소원은 **${rankLabel(wish)}**입니다.`)));
     }
     panel.append(table);
 
@@ -217,7 +220,9 @@ export function quizView({ params }) {
     submit.disabled = true;
     submit.addEventListener('click', () => grade(handView.getSelected()));
 
-    const actions = element('div', 'row');
+    // 고른 뒤 바로 낼 수 있게 화면 아래에 붙여 둔다(quiz.css). 판에 소원 안내가 붙으면
+    // 1280x800 에서도 버튼이 화면 밖으로 밀렸다.
+    const actions = element('div', 'row quiz__actions');
     actions.append(submit);
 
     if (quiz.allowPass) {
