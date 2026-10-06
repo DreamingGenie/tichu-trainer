@@ -50,14 +50,3 @@
   border-radius: var(--radius);
 }
 .btn--icon svg { width: 20px; height: 20px; display: block; }
-
-.select {
-  padding: var(--space-2) var(--space-3);
-  min-height: 44px;
-  border: var(--edge-strong);
-  border-radius: var(--radius);
-  background: var(--surface);
-  color: var(--text);
-  font: inherit;
-  font-size: var(--fs-small);
-}
