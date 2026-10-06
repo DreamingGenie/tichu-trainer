@@ -62,6 +62,22 @@ export function rankLabel(rank) {
   return RANK_LABEL[rank] ?? String(rank);
 }
 
+// 읽었을 때 받침으로 끝나는 랭크와 그 받침. 3(삼)·6(육)·7(칠)·8(팔)·10(십) 다섯뿐이다.
+// 나머지(2 이, 4 사, 5 오, 9 구, J 제이, Q 큐, K 케이, A 에이)는 모음으로 끝난다.
+const RANK_FINAL = Object.freeze({ 3: 'ㅁ', 6: 'ㄱ', 7: 'ㄹ', 8: 'ㄹ', 10: 'ㅂ' });
+
+/**
+ * 랭크 표기 + 조사. 숫자 뒤 조사는 글자가 아니라 읽는 소리로 갈린다 — '3로' 가 아니라 '3으로'.
+ * @param josa '로' | '를'  ('으로'·'을' 은 받침에 따라 여기서 고른다)
+ */
+export function rankWithJosa(rank, josa) {
+  const label = rankLabel(rank);
+  const final = RANK_FINAL[rank];
+  if (josa === '로') return label + (final && final !== 'ㄹ' ? '으로' : '로');
+  if (josa === '를') return label + (final ? '을' : '를');
+  throw new Error(`rankWithJosa: 모르는 조사 '${josa}'`);
+}
+
 /** 카드 한 장의 점수. 5=5점, 10=10점, K=10점, 용=+25, 봉황=-25, 나머지 0. */
 function pointsFor(rank, special) {
   if (special === SPECIAL.DRAGON) return 25;

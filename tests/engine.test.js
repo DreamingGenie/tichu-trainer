@@ -3,7 +3,7 @@
 // 잘못된 정답을 가르치는 것이 가장 나쁜 실패이기 때문이다.
 
 import { assert, describe, eq, test } from './harness.js';
-import { createDeck, parseHand, sumPoints } from '../src/engine/cards.js';
+import { createDeck, parseHand, rankWithJosa, sumPoints } from '../src/engine/cards.js';
 import { COMBO, detectCombo } from '../src/engine/combos.js';
 import { REJECT, checkPlay, resolvePlayed } from '../src/engine/compare.js';
 import { enumerateLegalPlays, playableCardIds } from '../src/engine/legal.js';
@@ -230,6 +230,17 @@ describe('참새 소원', () => {
     const hand = h('GK B7 U7 R7 G7');
     const bomb = detectCombo(h('B7 U7 R7 G7'));
     eq(checkWish(hand, detectCombo(h('G3')), 13, bomb, { outOfTurnBomb: true }).ok, true);
+  });
+
+  test('안내 문장의 조사는 랭크를 읽는 소리를 따른다', () => {
+    // 소원으로 걸 수 있는 2~A 전부. 받침 없음 → 로·를, ㄹ 받침 → 로·을, 그 밖의 받침 → 으로·을
+    const want = {
+      2: '2로 2를', 3: '3으로 3을', 4: '4로 4를', 5: '5로 5를', 6: '6으로 6을', 7: '7로 7을',
+      8: '8로 8을', 9: '9로 9를', 10: '10으로 10을', 11: 'J로 J를', 12: 'Q로 Q를', 13: 'K로 K를', 14: 'A로 A를',
+    };
+    for (const [r, s] of Object.entries(want)) {
+      eq(`${rankWithJosa(Number(r), '로')} ${rankWithJosa(Number(r), '를')}`, s, `랭크 ${r}`);
+    }
   });
 });
 
