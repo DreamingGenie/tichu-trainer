@@ -164,6 +164,10 @@
   --suit-ink-star: #bc3a2c;
   --suit-ink-special: #6b4ea8;
 
+  /* 카드 면 위의 '끝냄' 같은 완료 표시. --ok 는 테마를 타서 다크에서 밝은 초록이 되는데,
+     카드 면은 늘 밝아서 1.98:1 로 떨어졌다. 카드 잉크처럼 진한 쪽으로 고정한다. */
+  --card-ink-ok: #0a6b48;
+
   --card-w: 68px;
 
   --radius-sm: 6px;
