@@ -49,6 +49,6 @@
 .felt .btn:disabled {
   opacity: 1;
   background: none;
-  border: 1.5px dashed var(--felt-hairline);
+  border: 1px dashed var(--felt-hairline);   /* 켜진 버튼과 같은 두께 — 켜고 꺼질 때 폭이 흔들리지 않게 */
   color: var(--felt-text-muted);
 }
