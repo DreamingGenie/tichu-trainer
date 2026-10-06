@@ -81,3 +81,8 @@
   border-top: var(--edge);
   padding-block: var(--space-3);
 }
+.quiz__actions.is-settled { position: static; }
+
+/* 판정을 화면에 들일 때(quiz-view.js 의 reveal) 아래에 붙은 버튼 줄(약 70px)에 가리지 않게
+   여유를 둔다. */
+.quiz__feedback { scroll-margin-bottom: 96px; }

@@ -124,12 +124,20 @@ export function quizView({ params }) {
 
   // --- 객관식 -------------------------------------------------------
 
+  // 판정은 버튼 아래에 붙는다. 좁은 화면이나, 버튼 줄이 화면 아래에 붙어 있는 카드 문제에서는
+  // 그 자리가 화면 밖이라 눌러도 아무 일이 없는 것처럼 보였다. 판정이 보이는 데까지 내린다.
+  function reveal(feedback) {
+    if (!feedback.firstChild) return;
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    feedback.scrollIntoView({ block: 'nearest', behavior: still ? 'auto' : 'smooth' });
+  }
+
   function choiceQuestion(quiz) {
     const panel = element('div', 'stack stack--loose');
     panel.append(promptNode(quiz.prompt));
 
     const options = element('div', 'stack stack--tight');
-    const feedback = element('div', 'stack stack--tight');
+    const feedback = element('div', 'stack stack--tight quiz__feedback');
     let settled = false;
     let firstTry = true;
 
@@ -157,6 +165,7 @@ export function quizView({ params }) {
           firstTry = false;
           button.disabled = true;
         }
+        reveal(feedback);
       });
       options.append(button);
     });
@@ -193,7 +202,7 @@ export function quizView({ params }) {
     }
     panel.append(table);
 
-    const feedback = element('div', 'stack stack--tight');
+    const feedback = element('div', 'stack stack--tight quiz__feedback');
     let settled = false;
     let firstTry = true;
 
@@ -218,7 +227,7 @@ export function quizView({ params }) {
     const submit = element('button', 'btn btn--primary', '이대로 내기');
     submit.type = 'button';
     submit.disabled = true;
-    submit.addEventListener('click', () => grade(handView.getSelected()));
+    submit.addEventListener('click', () => { grade(handView.getSelected()); reveal(feedback); });
 
     // 고른 뒤 바로 낼 수 있게 화면 아래에 붙여 둔다(quiz.css). 판에 소원 안내가 붙으면
     // 1280x800 에서도 버튼이 화면 밖으로 밀렸다.
@@ -228,7 +237,7 @@ export function quizView({ params }) {
     if (quiz.allowPass) {
       const passBtn = element('button', 'btn', '낼 게 없다');
       passBtn.type = 'button';
-      passBtn.addEventListener('click', () => grade(null));
+      passBtn.addEventListener('click', () => { grade(null); reveal(feedback); });
       actions.append(passBtn);
     }
 
@@ -246,6 +255,9 @@ export function quizView({ params }) {
       advance(firstTry);
       submit.disabled = true;
       for (const b of actions.querySelectorAll('button')) b.disabled = true;
+      // 다 풀었으면 꺼진 버튼 줄이 화면 아래에 떠 있을 이유가 없다. 제자리로 내려
+      // 바로 아래의 판정·'다음 문제' 와 붙게 한다.
+      actions.classList.add('is-settled');
       if (quiz.explain) feedback.append(htmlElement('div', 'note', inline(quiz.explain)));
       feedback.append(nextButton());
     }
