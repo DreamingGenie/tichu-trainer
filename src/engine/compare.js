@@ -81,7 +81,7 @@ export function checkPlay(candidate, current) {
   if (combo.type !== current.type) {
     return fail(
       REJECT.TYPE_MISMATCH,
-      `테이블에는 ${COMBO_LABEL[current.type]}이(가) 깔려 있어요. 같은 종류로 받아쳐야 합니다.`,
+      `테이블에 깔린 ${COMBO_LABEL[current.type]} 위에는 같은 종류만 낼 수 있어요.`,
       combo,
     );
   }

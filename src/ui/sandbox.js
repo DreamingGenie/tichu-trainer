@@ -151,7 +151,7 @@ export function createSandbox() {
     if (!selected.length) {
       verdict.replaceChildren(verdictBox('neutral', '카드를 골라보세요',
         table
-          ? `지금은 ${describeCombo(table)}이(가) 깔려 있습니다. 이걸 받아칠 수 있는 카드는 진하게 보입니다.`
+          ? `지금 깔린 것은 ${describeCombo(table)}입니다. 이걸 받아칠 수 있는 카드는 진하게 보입니다.`
           : '새 트릭을 여는 상황이라 유효한 조합이면 무엇이든 낼 수 있습니다.'));
       renderHint();
       return;
