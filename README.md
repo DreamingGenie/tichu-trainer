@@ -57,6 +57,7 @@ src/
   store/            진도 저장 (localStorage)
 assets/cards/       특수카드 4장 삽화
 tests/              테스트와 테스트 러너
+docs/               설계 노트(design-notes.md) · 리팩토링 기록(refactoring.md)
 tools/serve.js      개발용 정적 서버
 ```
 
