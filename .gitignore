@@ -5,3 +5,8 @@ Thumbs.db
 
 # 화풍 참고용으로 받아 둔 외부 이미지. 사이트가 쓰지 않고 남의 저작물이라 올리지 않는다.
 assets/ref/
+
+# 로컬 작업 설정(에이전트 지침·MCP·미리보기)이라 올리지 않는다. 사람이 읽는 규칙은 docs/design-notes.md.
+CLAUDE.md
+.mcp.json
+.claude/
